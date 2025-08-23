@@ -1,0 +1,22 @@
+slug: room-1
+title: "Room 1 — Abstrakce"
+text_md: |
+  **Úvod**
+  Tato místnost představuje základní principy abstraktního vyjádření.
+  Vnímejte barvy, tvary a rytmus bez nutnosti hledat figurativní význam.
+
+audio: "audio/room1.mp3"
+
+images:
+  - path: "img/room1/a.jpg"
+    alt: "Detail A"
+  - path: "img/room1/b.jpg"
+    alt: "Detail B"
+
+questions:
+  - type: "likert"
+    text: "Jak na vás expozice působila?"
+    options: [1, 2, 3, 4, 5]
+    required: true
+  - type: "text"
+    text: "Krátká zpětná vazba?"

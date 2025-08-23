@@ -1,0 +1,25 @@
+slug: room-3
+title: "Room 3 — Barva a emoce"
+text_md: |
+  **Barva a emoce**
+  Zaměřte se na emocionální odezvu vyvolanou barevnými kontrasty a sytostí.
+
+audio: "audio/room3.mp3"
+
+images:
+  - path: "img/room3/a.jpg"
+    alt: "Spektrum A"
+  - path: "img/room3/b.jpg"
+    alt: "Spektrum B"
+  - path: "img/room3/c.jpg"
+    alt: "Spektrum C"
+
+questions:
+  - type: "multi"
+    text: "Jaké emoce jste cítili?"
+    options: ["radost", "klid", "napětí", "nostalgie", "jiné"]
+  - type: "text"
+    text: "Popište stručně, co ve vás barvy vyvolaly."
+  - type: "likert"
+    text: "Jak intenzivní byl celkový dojem?"
+    options: [1, 2, 3, 4, 5]

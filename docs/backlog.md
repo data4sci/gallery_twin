@@ -32,11 +32,11 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M2: YAML Content Loader (0.5 dne)
 
-- [ ] **CONTENT-1**: Vytvořit YAML loader službu (services/content_loader.py)
+- [x] **CONTENT-1**: Vytvořit YAML loader službu (services/content_loader.py)
   - Akceptační kritéria: Načte YAML soubory a parsuje je do Pydantic modelů
-- [ ] **CONTENT-2**: Implementovat ukládání obsahu do databáze
+- [x] **CONTENT-2**: Implementovat ukládání obsahu do databáze
   - Akceptační kritéria: Idempotentní operace, content se načte při startu
-- [ ] **CONTENT-3**: Vytvořit ukázkový obsah (content/exhibits/)
+- [x] **CONTENT-3**: Vytvořit ukázkový obsah (content/exhibits/)
   - 2-3 ukázkové exhibit YAML soubory s obrázky, textem, audio, otázkami
   - Akceptační kritéria: Obsah se úspěšně načte do databáze
 
@@ -144,9 +144,9 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ## Aktuální status
 
-- **Celkový pokrok**: 8/44 úkolů dokončeno (18%)
-- **Aktuální milník**: M2 - YAML Content Loader
-- **Další úkol**: CONTENT-1 - Vytvořit YAML loader službu
+- **Celkový pokrok**: 11/44 úkolů dokončeno (25%)
+- **Aktuální milník**: M3 - Základní routing a šablony
+- **Další úkol**: ROUTE-1 - Vytvořit FastAPI aplikaci s routingem
 
 ## Poznámky
 

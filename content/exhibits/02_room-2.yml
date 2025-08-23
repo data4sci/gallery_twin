@@ -1,0 +1,21 @@
+slug: room-2
+title: "Room 2 — Geometrie"
+text_md: |
+  **Geometrie**
+  Zkoumejte vztahy mezi tvary, liniemi a kompozicí. Sledujte rytmus a opakování.
+
+audio: "audio/room2.mp3"
+
+images:
+  - path: "img/room2/a.jpg"
+    alt: "Kompozice A"
+  - path: "img/room2/b.jpg"
+    alt: "Kompozice B"
+
+questions:
+  - type: "single"
+    text: "Který prvek vás nejvíce zaujal?"
+    options: ["tvary", "linie", "textura", "kompozice"]
+  - type: "likert"
+    text: "Jak silný estetický dojem na vás místnost zanechala?"
+    options: [1, 2, 3, 4, 5]

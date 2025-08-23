@@ -20,14 +20,14 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M1: Databázový model a migrace (0.5 dne)
 
-- [ ] **DB-1**: Vytvořit SQLModel modely (models.py)
+- [x] **DB-1**: Vytvořit SQLModel modely (models.py)
   - Exhibits, Images, Questions, Sessions, Answers, Events
   - Akceptační kritéria: Modely odpovídají schématu z PRD
-- [ ] **DB-2**: Vytvořit database connection a session management (db.py)
+- [x] **DB-2**: Vytvořit database connection a session management (db.py)
   - Akceptační kritéria: Funkční SQLite připojení s async session
-- [ ] **DB-3**: Vytvořit první Alembic migraci
+- [x] **DB-3**: Vytvořit první Alembic migraci
   - Akceptační kritéria: `alembic upgrade head` vytvoří všechny tabulky
-- [ ] **DB-4**: Vytvořit Pydantic schémata pro API (schemas.py)
+- [x] **DB-4**: Vytvořit Pydantic schémata pro API (schemas.py)
   - Akceptační kritéria: Request/Response modely pro všechny endpointy
 
 ### M2: YAML Content Loader (0.5 dne)
@@ -144,9 +144,9 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ## Aktuální status
 
-- **Celkový pokrok**: 4/44 úkolů dokončeno (9%)
-- **Aktuální milník**: M1 - Databázový model a migrace
-- **Další úkol**: DB-1 - Vytvořit SQLModel modely
+- **Celkový pokrok**: 8/44 úkolů dokončeno (18%)
+- **Aktuální milník**: M2 - YAML Content Loader
+- **Další úkol**: CONTENT-1 - Vytvořit YAML loader službu
 
 ## Poznámky
 

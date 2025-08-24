@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block title %}{{ exhibit.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8" x-data="{
+        prev_slug: {{ prev_slug | tojson | safe }},
+        next_slug: {{ next_slug | tojson | safe }},
+        isSubmitting: false,
+        handleKey(e) {
+            if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'textarea') {
+                return;
+            }
+            if (e.key === 'ArrowLeft' && this.prev_slug) {
+                window.location.href = '{{ url_for("exhibit_detail", slug="PREV_SLUG") }}'.replace('PREV_SLUG', this.prev_slug);
+            }
+            if (e.key === 'ArrowRight' && this.next_slug) {
+                window.location.href = '{{ url_for("exhibit_detail", slug="NEXT_SLUG") }}'.replace('NEXT_SLUG', this.next_slug);
+            }
+            if (e.key === ' ') {
+                e.preventDefault();
+                const audio = this.$refs.audioPlayer;
+                if (audio.paused) {
+                    audio.play();
+                } else {
+                    audio.pause();
+                }
+            }
+        }
+    }"
+    @keydown.window="handleKey($event)">
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ exhibit.title }}</h1>
+
+    <div class="prose max-w-none mb-8">
+        {{ exhibit.text_md | safe }}
+    </div>
+
+    {% if exhibit.images %}
+    <div class="mb-8" x-data="{ activeImage: 0, images: {{ images_json | tojson | safe }} }">
+        <h2 class="text-2xl font-semibold mb-4">Obrázky</h2>
+        <div class="relative bg-white p-4 rounded-lg shadow-md">
+            <template x-for="(image, index) in images" :key="index">
+                <div x-show="activeImage === index" class="transition-opacity duration-500 ease-in-out">
+                    <img :src="'{{ url_for("static", path="") }}' + image.path" 
+                         :alt="image.alt_text"
+                         class="w-full h-auto rounded-lg">
+                    <p class="text-sm text-gray-600 mt-2" x-text="image.alt_text"></p>
+                </div>
+            </template>
+
+            <button @click="activeImage = (activeImage - 1 + images.length) % images.length"
+                aria-label="Předchozí obrázek"
+                class="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75">
+                &#10094;
+            </button>
+            <button @click="activeImage = (activeImage + 1) % images.length" 
+                aria-label="Další obrázek"
+                class="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75">
+                &#10095;
+            </button>
+
+            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <template x-for="(image, index) in images" :key="index">
+                    <button @click="activeImage = index" 
+                        :aria-label="'Přejít na obrázek ' + (index + 1)"
+                        :class="{ 'bg-blue-500': activeImage === index, 'bg-gray-300': activeImage !== index }"
+                        class="w-3 h-3 rounded-full hover:bg-blue-400"></button>
+                </template>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if exhibit.audio_path %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Audio průvodce</h2>
+        <audio controls class="w-full" x-ref="audioPlayer">
+            <source src="{{ url_for('static', path=exhibit.audio_path) }}" type="audio/mpeg">
+            Váš prohlížeč nepodporuje přehrávání audia.
+        </audio>
+    </div>
+    {% endif %}
+
+    {% if exhibit.questions %}
+    <div class="bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">Dotazník</h2>
+        {% if error %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Chyba:</strong>
+            <span class="block sm:inline">{{ error }}</span>
+        </div>
+        {% endif %}
+        <form x-on:submit="isSubmitting = true" action="{{ url_for('save_answer', slug=exhibit.slug) }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            {% for question in exhibit.questions %}
+            <div class="mb-6">
+                <label for="q_{{ question.id }}" class="block text-lg font-medium text-gray-800 mb-2">
+                    {{ question.text }}
+                    {% if question.required %}<span class="text-red-500">*</span>{% endif %}
+                </label>
+
+                {% set answer = answers.get(question.id) %}
+
+                {% if question.type == 'text' %}
+                <input id="q_{{ question.id }}" 
+                    type="text" 
+                    name="q_{{ question.id }}" 
+                    value="{{ answer or '' }}"
+                    class="w-full p-2 border border-gray-300 rounded-md">
+
+                {% elif question.type == 'single' %}
+                <div class="space-y-2">
+                    {% for option in question.options_json %}
+                    <label class="flex items-center">
+                        <input id="q_{{ question.id }}_{{ loop.index }}" 
+                            type="radio" 
+                            name="q_{{ question.id }}"
+                            value="{{ option }}" 
+                            class="mr-2" 
+                            {% if option == answer %}checked{% endif %}>
+                        <span>{{ option }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                {% elif question.type == 'multi' %}
+                <div class="space-y-2">
+                    {% for option in question.options_json %}
+                    <label class="flex items-center">
+                        <input id="q_{{ question.id }}_{{ loop.index }}" 
+                            type="checkbox" 
+                            name="q_{{ question.id }}"
+                            value="{{ option }}" 
+                            class="mr-2" 
+                            {% if option in answer %}checked{% endif %}>
+                        <span>{{ option }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+                {% elif question.type == 'likert' %}
+                <div class="flex flex-wrap justify-between items-center">
+                    <span class="text-sm text-gray-600">Nesouhlasím</span>
+                    {% for i in range(1, 6) %}
+                    <label class="flex flex-col items-center mx-2">
+                        <span class="mb-1">{{ i }}</span>
+                        <input id="q_{{ question.id }}_{{ i }}" 
+                            type="radio" 
+                            name="q_{{ question.id }}" 
+                            value="{{ i }}"
+                            class="h-5 w-5" 
+                            {% if i == answer|int %}checked{% endif %}>
+                    </label>
+                    {% endfor %}
+                    <span class="text-sm text-gray-600">Souhlasím</span>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" 
+                :disabled="isSubmitting"
+                class="mt-4 w-full sm:w-auto bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center">
+                <span x-show="!isSubmitting">Uložit a pokračovat</span>
+                <span x-show="isSubmitting">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                        </path>
+                    </svg>
+                </span>
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <div class="flex flex-col sm:flex-row justify-between mt-8 space-y-4 sm:space-y-0">
+        {% if prev_slug %}
+        <a href="{{ url_for('exhibit_detail', slug=prev_slug) }}" 
+            aria-label="Přejít na předchozí expozici"
+            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+            &laquo; Předchozí
+        </a>
+        {% else %}
+        <span></span>
+        {% endif %}
+
+        {% if next_slug %}
+        <a href="{{ url_for('exhibit_detail', slug=next_slug) }}" 
+            aria-label="Přejít na další expozici"
+            class="w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Další &raquo;
+        </a>
+        {% else %}
+        <a href="{{ url_for('thanks') }}"
+            class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Dokončit
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

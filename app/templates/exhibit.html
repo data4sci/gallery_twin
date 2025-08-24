@@ -127,12 +127,12 @@
                 <div class="space-y-2">
                     {% for option in question.options_json %}
                     <label class="flex items-center">
-                        <input id="q_{{ question.id }}_{{ loop.index }}" 
-                            type="checkbox" 
-                            name="q_{{ question.id }}"
-                            value="{{ option }}" 
-                            class="mr-2" 
-                            {% if option in answer %}checked{% endif %}>
+<input id="q_{{ question.id }}_{{ loop.index }}" 
+    type="checkbox" 
+    name="q_{{ question.id }}"
+    value="{{ option }}" 
+    class="mr-2" 
+    {% if answer is not none and option in answer %}checked{% endif %}>
                         <span>{{ option }}</span>
                     </label>
                     {% endfor %}

@@ -126,42 +126,108 @@ async def save_answer(
     )
     questions = result.scalars().all()
 
+    answers = {}
+    missing_required = []
     for question in questions:
         form_key = f"q_{question.id}"
-        if question.required and form_key not in form_data:
-            # Basic validation: re-render the page with an error
-            # A more robust solution would use flash messages
-            return templates.TemplateResponse(
-                "exhibit.html",
-                {
-                    "request": request,
-                    "exhibit": await db_session.get(Exhibit, session.id),
-                    "error": f"Question '{question.text}' is required.",
-                },
-                status_code=400,
-            )
-
+        value_present = False
         if form_key in form_data:
             answer_value = form_data.getlist(form_key)
+            # For single-value types, get the value directly
             value_to_save = answer_value[0] if len(answer_value) == 1 else answer_value
-
-            # Check if an answer already exists
-            result = await db_session.execute(
-                select(Answer).where(
-                    Answer.session_id == session.id, Answer.question_id == question.id
-                )
-            )
-            existing_answer = result.scalar_one_or_none()
-
-            if existing_answer:
-                existing_answer.value_json = value_to_save
+            # Check for non-empty value for required questions
+            if question.required:
+                if isinstance(value_to_save, str):
+                    value_present = value_to_save.strip() != ""
+                elif isinstance(value_to_save, list):
+                    value_present = len(value_to_save) > 0 and all(
+                        str(v).strip() != "" for v in value_to_save
+                    )
+                else:
+                    value_present = bool(value_to_save)
             else:
-                new_answer = Answer(
-                    session_id=session.id,
-                    question_id=question.id,
-                    value_json=value_to_save,
+                value_present = True
+
+            if value_present:
+                answers[question.id] = value_to_save
+
+                # Check if an answer already exists
+                result = await db_session.execute(
+                    select(Answer).where(
+                        Answer.session_id == session.id,
+                        Answer.question_id == question.id,
+                    )
                 )
-                db_session.add(new_answer)
+                existing_answer = result.scalar_one_or_none()
+
+                if existing_answer:
+                    existing_answer.value_json = value_to_save
+                else:
+                    new_answer = Answer(
+                        session_id=session.id,
+                        question_id=question.id,
+                        value_json=value_to_save,
+                    )
+                    db_session.add(new_answer)
+            elif question.required:
+                missing_required.append(question)
+        elif question.required:
+            missing_required.append(question)
+
+    if missing_required:
+        # Fetch exhibit by slug
+        exhibit = await db_session.execute(
+            select(Exhibit)
+            .where(Exhibit.slug == slug)
+            .options(
+                selectinload(Exhibit.images),
+                selectinload(Exhibit.questions),
+            )
+        )
+        exhibit = exhibit.scalars().first()
+
+        # Prev/Next by order_index
+        prev_res = await db_session.execute(
+            select(Exhibit.slug)
+            .where(Exhibit.order_index < exhibit.order_index)
+            .order_by(Exhibit.order_index.desc())
+            .limit(1)
+        )
+        next_res = await db_session.execute(
+            select(Exhibit.slug)
+            .where(Exhibit.order_index > exhibit.order_index)
+            .order_by(Exhibit.order_index.asc())
+            .limit(1)
+        )
+        prev_slug = prev_res.scalar_one_or_none()
+        next_slug = next_res.scalar_one_or_none()
+
+        csrf_token = get_csrf_token(session.uuid)
+
+        from app.schemas import ImageResponse
+
+        images_json = [
+            ImageResponse.model_validate(img).model_dump() for img in exhibit.images
+        ]
+
+        error_msg = "Vyplňte všechny povinné otázky: " + ", ".join(
+            f"'{q.text}'" for q in missing_required
+        )
+
+        return templates.TemplateResponse(
+            "exhibit.html",
+            {
+                "request": request,
+                "exhibit": exhibit,
+                "answers": answers,
+                "prev_slug": prev_slug,
+                "next_slug": next_slug,
+                "csrf_token": csrf_token,
+                "images_json": images_json,
+                "error": error_msg,
+            },
+            status_code=400,
+        )
 
     await db_session.commit()
 

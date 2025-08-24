@@ -42,16 +42,16 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M3: Základní routing a šablony (0.5 dne)
 
-- [ ] **ROUTE-1**: Vytvořit FastAPI aplikaci s routingem (main.py, routers/)
+- [x] **ROUTE-1**: Vytvořit FastAPI aplikaci s routingem (main.py, routers/)
   - Public router: /, /exhibit/{slug}, /thanks
   - Admin router: /admin, /admin/responses, /admin/export.csv
   - Akceptační kritéria: Všechny routy odpovídají s HTTP 200/404
-- [ ] **TMPL-1**: Vytvořit base template s Tailwind CSS
+- [x] **TMPL-1**: Vytvořit base template s Tailwind CSS
   - Akceptační kritéria: Responsive layout, navigation
-- [ ] **TMPL-2**: Vytvořit šablony pro public stránky
+- [x] **TMPL-2**: Vytvořit šablony pro public stránky
   - index.html, exhibit.html, thanks.html
   - Akceptační kritéria: Základní struktura s placeholder obsahem
-- [ ] **TMPL-3**: Vytvořit admin šablony
+- [x] **TMPL-3**: Vytvořit admin šablony
   - admin/dashboard.html, admin/responses.html
   - Akceptační kritéria: Tabulky a formuláře pro admin funkce
 

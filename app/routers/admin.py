@@ -26,9 +26,33 @@ templates = Jinja2Templates(directory="app/templates")
 async def admin_dashboard(
     request: Request, db_session: Annotated[AsyncSession, Depends(get_async_session)]
 ):
-    """Admin dashboard with KPIs."""
+    """Admin dashboard with KPIs and self-eval stats."""
     total_sessions = await analytics.get_total_sessions(db_session)
     completion_rate = await analytics.get_completion_rate(db_session)
+
+    # Self-eval stats
+    sessions_res = await db_session.execute(select(Session))
+    sessions = sessions_res.scalars().all()
+    gender_counts = {}
+    education_counts = {}
+    ages = []
+    for s in sessions:
+        if s.gender:
+            gender_counts[s.gender] = gender_counts.get(s.gender, 0) + 1
+        if s.education:
+            education_counts[s.education] = education_counts.get(s.education, 0) + 1
+        if s.age is not None:
+            ages.append(s.age)
+    avg_age = round(sum(ages) / len(ages), 1) if ages else None
+    median_age = sorted(ages)[len(ages) // 2] if ages else None
+
+    selfeval_stats = {
+        "gender_counts": gender_counts,
+        "education_counts": education_counts,
+        "avg_age": avg_age,
+        "median_age": median_age,
+        "total_selfeval": len(sessions),
+    }
 
     kpis = {
         "sessions_count": total_sessions,
@@ -36,7 +60,8 @@ async def admin_dashboard(
         "average_time": "N/A",  # Not implemented yet
     }
     return templates.TemplateResponse(
-        "admin/dashboard.html", {"request": request, "kpis": kpis}
+        "admin/dashboard.html",
+        {"request": request, "kpis": kpis, "selfeval_stats": selfeval_stats},
     )
 
 
@@ -68,7 +93,9 @@ async def admin_responses(
     responses = result.scalars().all()
 
     # For filter dropdowns
-    exhibits_res = await db_session.execute(select(Exhibit).order_by(Exhibit.order_index))
+    exhibits_res = await db_session.execute(
+        select(Exhibit).order_by(Exhibit.order_index)
+    )
     questions_res = await db_session.execute(select(Question).order_by(Question.text))
     exhibits = exhibits_res.scalars().all()
     questions = questions_res.scalars().all()
@@ -88,7 +115,7 @@ async def admin_responses(
 
 @router.get("/export.csv")
 async def export_responses_csv(
-    db_session: Annotated[AsyncSession, Depends(get_async_session)]
+    db_session: Annotated[AsyncSession, Depends(get_async_session)],
 ):
     """Export all responses to a CSV file."""
     stmt = (

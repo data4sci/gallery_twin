@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + "/.."))
 from sqlmodel import SQLModel, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from app.models import Session, Answer, Question, Exhibit
+from app.services.content_loader import load_content_from_dir
 
 DB_URL = "sqlite+aiosqlite:///gallery.db"
 
@@ -17,6 +18,8 @@ EDUCATIONS = ["základní", "středoškolské", "vysokoškolské", "jiné", "nec
 
 
 async def main():
+    # Nejprve načti obsah z YAML do DB
+    await load_content_from_dir()
     engine = create_async_engine(DB_URL, echo=False)
     async with AsyncSession(engine) as session:
         # Načti otázky a expozice
@@ -34,6 +37,7 @@ async def main():
                 gender=random.choice(GENDERS),
                 age=random.randint(15, 70),
                 education=random.choice(EDUCATIONS),
+                completed=True,
             )
             session.add(s)
             await session.flush()  # Získáme s.id
@@ -61,11 +65,18 @@ async def main():
                 else:
                     value = None
 
-                a = Answer(
-                    session_id=s.id,
-                    question_id=q.id,
-                    value_json=value,
-                )
+                if q.type == "multi":
+                    a = Answer(
+                        session_id=s.id,
+                        question_id=q.id,
+                        value_json=value,
+                    )
+                else:
+                    a = Answer(
+                        session_id=s.id,
+                        question_id=q.id,
+                        value_text=str(value) if value is not None else None,
+                    )
                 session.add(a)
         await session.commit()
     print("Demo data byla úspěšně vložena.")

@@ -7,17 +7,49 @@
     <h1 class="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold text-gray-700">Počet návštěv</h2>
-            <p class="text-4xl font-bold text-blue-600">{{ kpis.sessions_count }}</p>
+        <div class="bg-white p-6 rounded-lg shadow text-center">
+            <div class="text-3xl font-bold mb-2">{{ kpis.sessions_count }}</div>
+            <div class="text-gray-500">Počet návštěv</div>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold text-gray-700">Míra dokončení</h2>
-            <p class="text-4xl font-bold text-green-600">{{ "{:.0%}".format(kpis.completion_rate) }}</p>
+        <div class="bg-white p-6 rounded-lg shadow text-center">
+            <div class="text-3xl font-bold mb-2">{{ (kpis.completion_rate * 100) | round(2) }}%</div>
+            <div class="text-gray-500">Completion Rate</div>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h2 class="text-xl font-semibold text-gray-700">Průměrný čas</h2>
-            <p class="text-4xl font-bold text-purple-600">{{ kpis.average_time }}</p>
+        <div class="bg-white p-6 rounded-lg shadow text-center">
+            <div class="text-3xl font-bold mb-2">{{ kpis.average_time }}</div>
+            <div class="text-gray-500">Průměrný čas na návštěvu</div>
+        </div>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-bold mb-4">Sebeevaluační statistiky</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <div class="font-semibold mb-2">Pohlaví</div>
+                <ul>
+                    {% for gender, count in selfeval_stats.gender_counts.items() %}
+                    <li>{{ gender }}: {{ count }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <div class="font-semibold mb-2">Vzdělání</div>
+                <ul>
+                    {% for education, count in selfeval_stats.education_counts.items() %}
+                    <li>{{ education }}: {{ count }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <div class="font-semibold mb-2">Věk</div>
+                <ul>
+                    <li>Průměr: {{ selfeval_stats.avg_age or "N/A" }}</li>
+                    <li>Medián: {{ selfeval_stats.median_age or "N/A" }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-4 text-gray-500 text-sm">
+            Celkem vyplněno: {{ selfeval_stats.total_selfeval }}
         </div>
     </div>
 

@@ -113,6 +113,9 @@ class SessionCreate(BaseModel):
 
     user_agent: Optional[str] = None
     accept_lang: Optional[str] = None
+    gender: Optional[str] = None
+    age: Optional[int] = None
+    education: Optional[str] = None
 
 
 class SessionResponse(TimestampSchema):
@@ -122,6 +125,9 @@ class SessionResponse(TimestampSchema):
     uuid: UUID
     user_agent: Optional[str] = None
     accept_lang: Optional[str] = None
+    gender: Optional[str] = None
+    age: Optional[int] = None
+    education: Optional[str] = None
 
     class Config:
         from_attributes = True

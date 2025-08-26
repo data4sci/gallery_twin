@@ -18,5 +18,10 @@ questions:
     text: "Jak na vás expozice působila?"
     options: [1, 2, 3, 4, 5]
     required: true
+  - type: "likert"
+    text: "Jak se vám líbí tato expozice?"
+    options: [1, 2, 3, 4, 5]
+    required: true
   - type: "text"
     text: "Krátká zpětná vazba?"
+    required: true

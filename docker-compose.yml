@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./gallery.db:/app/gallery.db
+      - ./content:/app/content
+    environment:
+      - DB_PATH=/app/gallery.db
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=password
+      - SECRET_KEY=a-very-secret-key
+    command: >
+      bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"

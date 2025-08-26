@@ -20,7 +20,7 @@ async def index(
     request: Request,
     tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
 ):
-    """Intro page with link to start (first exhibit)."""
+    """Intro page with link to start (selfeval)."""
     _, db_session = tracked_session
     result = await db_session.execute(
         select(Exhibit).order_by(Exhibit.order_index.asc())
@@ -33,6 +33,45 @@ async def index(
             "first_slug": first.slug if first else None,
         },
     )
+
+
+@router.get("/selfeval", response_class=HTMLResponse)
+async def selfeval_get(
+    request: Request,
+    tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
+):
+    """Show self-evaluation form."""
+    return templates.TemplateResponse("selfeval.html", {"request": request})
+
+
+@router.post("/selfeval", response_class=HTMLResponse)
+async def selfeval_post(
+    request: Request,
+    tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
+):
+    """Process self-evaluation form and redirect to first exhibit."""
+    session, db_session = tracked_session
+    form = await request.form()
+    gender = form.get("gender")
+    age = form.get("age")
+    education = form.get("education")
+
+    # Save to session
+    session.gender = gender
+    session.age = int(age) if age else None
+    session.education = education
+    db_session.add(session)
+    await db_session.commit()
+
+    # Find first exhibit slug
+    result = await db_session.execute(
+        select(Exhibit).order_by(Exhibit.order_index.asc())
+    )
+    first: Optional[Exhibit] = result.scalars().first()
+    if first:
+        return RedirectResponse(url=f"/exhibit/{first.slug}", status_code=303)
+    else:
+        return RedirectResponse(url="/thanks", status_code=303)
 
 
 @router.get("/exhibit/{slug}", response_class=HTMLResponse)

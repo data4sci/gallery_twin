@@ -57,6 +57,7 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M4: Session Management (0.5 dne)
 
+- [ ] **DB-5**: Na úvodni stránce přidat sebeevaluační dotazník (pohlaví, věk, vzdělání) a uložit do databáze
 - [ ] **SESSION-1**: Implementovat session management s cookies
   - Akceptační kritéria: UUIDv4 session se vytvoří při první návštěvě
 - [ ] **SESSION-2**: Vytvořit middleware pro session handling

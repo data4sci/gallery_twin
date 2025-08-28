@@ -24,4 +24,5 @@ dependencies = [
     "itsdangerous>=2.2.0",
     "djlint>=1.36.4",
     "markdown>=3.8.2",
+    "pillow>=11.3.0",
 ]

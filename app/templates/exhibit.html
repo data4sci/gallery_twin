@@ -39,6 +39,10 @@
     <div class="mb-8" x-data="{ activeImage: 0, images: {{ images_json | tojson | safe }} }">
         <h2 class="text-2xl font-semibold mb-4">Obrázky</h2>
         <div class="relative bg-white p-4 rounded-lg shadow-md">
+            <!-- DEBUG: statický obrázek pro ověření cesty -->
+            {% if exhibit.images and exhibit.images[0].path %}
+            <img src="{{ url_for('static', path=exhibit.images[0].path) }}" alt="DEBUG static" style="border:2px solid red;max-width:200px;">
+            {% endif %}
             <template x-for="(image, index) in images" :key="index">
                 <div x-show="activeImage === index" class="transition-opacity duration-500 ease-in-out">
                     <img :src="'{{ url_for("static", path="") }}' + image.path" 

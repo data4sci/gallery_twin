@@ -7,6 +7,8 @@ text_md: |
 audio: "audio/room3.mp3"
 
 images:
+  - path: "img/example_image_3.png"
+    alt: "Example image 3"
   - path: "img/room3/a.jpg"
     alt: "Spektrum A"
   - path: "img/room3/b.jpg"

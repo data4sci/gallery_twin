@@ -37,12 +37,19 @@ async def admin_dashboard(
     education_counts = {}
     ages = []
     for s in sessions:
-        if s.gender:
-            gender_counts[s.gender] = gender_counts.get(s.gender, 0) + 1
-        if s.education:
-            education_counts[s.education] = education_counts.get(s.education, 0) + 1
-        if s.age is not None:
-            ages.append(s.age)
+        sj = s.selfeval_json or {}
+        gender = sj.get("gender")
+        education = sj.get("education")
+        age = sj.get("age")
+        if gender:
+            gender_counts[gender] = gender_counts.get(gender, 0) + 1
+        if education:
+            education_counts[education] = education_counts.get(education, 0) + 1
+        if age is not None:
+            try:
+                ages.append(int(age))
+            except Exception:
+                pass
     avg_age = round(sum(ages) / len(ages), 1) if ages else None
     median_age = sorted(ages)[len(ages) // 2] if ages else None
 

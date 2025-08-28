@@ -24,22 +24,16 @@
     <div class="bg-white p-6 rounded-lg shadow mb-8">
         <h2 class="text-xl font-bold mb-4">Sebeevaluační statistiky</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {% for key, stat in selfeval_stats.items() if key not in ['total_selfeval', 'avg_age', 'median_age'] %}
             <div>
-                <div class="font-semibold mb-2">Pohlaví</div>
+                <div class="font-semibold mb-2">{{ key|capitalize }}</div>
                 <ul>
-                    {% for gender, count in selfeval_stats.gender_counts.items() %}
-                    <li>{{ gender }}: {{ count }}</li>
+                    {% for value, count in stat.items() %}
+                    <li>{{ value }}: {{ count }}</li>
                     {% endfor %}
                 </ul>
             </div>
-            <div>
-                <div class="font-semibold mb-2">Vzdělání</div>
-                <ul>
-                    {% for education, count in selfeval_stats.education_counts.items() %}
-                    <li>{{ education }}: {{ count }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
+            {% endfor %}
             <div>
                 <div class="font-semibold mb-2">Věk</div>
                 <ul>

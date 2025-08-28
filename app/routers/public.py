@@ -35,13 +35,19 @@ async def index(
     )
 
 
+from app.services.selfeval_loader import SelfEvalConfig
+
+
 @router.get("/selfeval", response_class=HTMLResponse)
 async def selfeval_get(
     request: Request,
     tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
 ):
     """Show self-evaluation form."""
-    return templates.TemplateResponse("selfeval.html", {"request": request})
+    questions = SelfEvalConfig.get_questions()
+    return templates.TemplateResponse(
+        "selfeval.html", {"request": request, "questions": questions}
+    )
 
 
 @router.post("/selfeval", response_class=HTMLResponse)
@@ -52,14 +58,8 @@ async def selfeval_post(
     """Process self-evaluation form and redirect to first exhibit."""
     session, db_session = tracked_session
     form = await request.form()
-    gender = form.get("gender")
-    age = form.get("age")
-    education = form.get("education")
-
-    # Save to session
-    session.gender = gender
-    session.age = int(age) if age else None
-    session.education = education
+    # Store all form data as dict in selfeval_json
+    session.selfeval_json = dict(form)
     db_session.add(session)
     await db_session.commit()
 

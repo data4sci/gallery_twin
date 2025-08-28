@@ -10,11 +10,24 @@ from sqlmodel import SQLModel, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from app.models import Session, Answer, Question, Exhibit
 from app.services.content_loader import load_content_from_dir
+from app.services.selfeval_loader import SelfEvalConfig
 
 DB_URL = "sqlite+aiosqlite:///gallery.db"
 
-GENDERS = ["muž", "žena", "jiné", "nechci_uvést"]
-EDUCATIONS = ["základní", "středoškolské", "vysokoškolské", "jiné", "nechci_uvést"]
+
+def random_selfeval_answer(q):
+    if q["type"] == "single":
+        return random.choice(q["options"])
+    elif q["type"] == "multi":
+        opts = q["options"]
+        k = random.randint(1, min(2, len(opts)))
+        return random.sample(opts, k=k)
+    elif q["type"] == "likert":
+        return random.randint(q["options"]["min"], q["options"]["max"])
+    elif q["type"] == "text":
+        return f"Demo odpověď {random.randint(1, 99)}"
+    else:
+        return None
 
 
 async def main():
@@ -29,20 +42,26 @@ async def main():
             print("Nejsou načteny žádné expozice nebo otázky.")
             return
 
+        selfeval_questions = SelfEvalConfig.get_questions()
+
         for i in range(12):
+            # Vygeneruj odpovědi na selfeval dotazník
+            selfeval_answers = {}
+            for q in selfeval_questions:
+                ans = random_selfeval_answer(q)
+                selfeval_answers[q["id"]] = ans
+
             s = Session(
                 uuid=uuid4(),
                 user_agent=f"demo-agent-{i}",
                 accept_lang="cs",
-                gender=random.choice(GENDERS),
-                age=random.randint(15, 70),
-                education=random.choice(EDUCATIONS),
                 completed=True,
+                selfeval_json=selfeval_answers,
             )
             session.add(s)
             await session.flush()  # Získáme s.id
 
-            # Každý návštěvník odpoví na všechny otázky
+            # Každý návštěvník odpoví na všechny otázky v exhibits
             for q in questions:
                 # Syntetická odpověď podle typu otázky
                 if q.type == "likert":

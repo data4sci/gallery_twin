@@ -103,10 +103,10 @@ class Session(TimestampMixin, SQLModel, table=True):
     uuid: UUID = Field(default_factory=uuid4, unique=True, index=True)
     user_agent: Optional[str] = None
     accept_lang: Optional[str] = None
-    gender: Optional[str] = Field(default=None, description="Pohlaví")
-    age: Optional[int] = Field(default=None, description="Věk")
-    education: Optional[str] = Field(default=None, description="Vzdělání")
     completed: bool = Field(default=False, description="Dokončeno")
+    selfeval_json: Optional[dict] = Field(
+        default=None, sa_column=Column(JSON), description="Autoevaluační odpovědi"
+    )
 
     # Relationships
     answers: List["Answer"] = Relationship(back_populates="session")

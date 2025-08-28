@@ -6,31 +6,47 @@
 <div class="max-w-lg mx-auto mt-10">
   <h2 class="text-2xl font-bold mb-4">Sebeevaluační dotazník</h2>
   <form method="post">
-    <div class="mb-4">
-      <label for="gender" class="block font-semibold mb-1">Pohlaví</label>
-      <select id="gender" name="gender" class="w-full border rounded px-3 py-2" required>
-        <option value="">-- vyberte --</option>
-        <option value="muž">Muž</option>
-        <option value="žena">Žena</option>
-        <option value="jiné">Jiné</option>
-        <option value="nechci_uvést">Nechci uvést</option>
-      </select>
-    </div>
-    <div class="mb-4">
-      <label for="age" class="block font-semibold mb-1">Věk</label>
-      <input type="number" id="age" name="age" min="10" max="120" class="w-full border rounded px-3 py-2" required>
-    </div>
-    <div class="mb-4">
-      <label for="education" class="block font-semibold mb-1">Vzdělání</label>
-      <select id="education" name="education" class="w-full border rounded px-3 py-2" required>
-        <option value="">-- vyberte --</option>
-        <option value="základní">Základní</option>
-        <option value="středoškolské">Středoškolské</option>
-        <option value="vysokoškolské">Vysokoškolské</option>
-        <option value="jiné">Jiné</option>
-        <option value="nechci_uvést">Nechci uvést</option>
-      </select>
-    </div>
+    {% for q in questions %}
+      <div class="mb-4">
+        <label for="{{ q.id }}" class="block font-semibold mb-1">
+          {{ q.text }}{% if q.required %} <span class="text-red-600">*</span>{% endif %}
+        </label>
+        {% if q.type == "single" %}
+          <select id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" {% if q.required %}required{% endif %}>
+            <option value="">-- vyberte --</option>
+            {% for opt in q.options %}
+              <option value="{{ opt }}">{{ opt }}</option>
+            {% endfor %}
+          </select>
+        {% elif q.type == "multi" %}
+          <div class="flex flex-wrap gap-2">
+            {% for opt in q.options %}
+              <label class="inline-flex items-center">
+                <input type="checkbox" name="{{ q.id }}" value="{{ opt }}" class="mr-2">
+                {{ opt }}
+              </label>
+            {% endfor %}
+          </div>
+        {% elif q.type == "likert" %}
+          <div class="flex items-center gap-2">
+            {% for i in range(q.options.min, q.options.max + 1) %}
+              <label class="flex flex-col items-center">
+                <input type="radio" name="{{ q.id }}" value="{{ i }}" {% if q.required %}required{% endif %}>
+                <span class="text-xs">
+                  {% if q.options.labels and q.options.labels[i] %}
+                    {{ q.options.labels[i] }}
+                  {% else %}
+                    {{ i }}
+                  {% endif %}
+                </span>
+              </label>
+            {% endfor %}
+          </div>
+        {% elif q.type == "text" %}
+          <input type="text" id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" {% if q.required %}required{% endif %}>
+        {% endif %}
+      </div>
+    {% endfor %}
     <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
       Pokračovat do galerie
     </button>

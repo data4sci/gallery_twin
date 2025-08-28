@@ -1,0 +1,46 @@
+# Konfigurovatelný autoevaluační dotazník
+questions:
+  - id: gender
+    text: "Pohlaví"
+    type: single
+    required: true
+    options:
+      - muž
+      - žena
+      - jiné
+      - nechci uvést
+  - id: age
+    text: "Věk"
+    type: text
+    required: true
+  - id: education
+    text: "Vzdělání"
+    type: single
+    required: true
+    options:
+      - základní
+      - středoškolské
+      - vysokoškolské
+      - jiné
+      - nechci uvést
+  - id: art_interest
+    text: "Jaký je váš zájem o umění?"
+    type: likert
+    required: false
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Žádný"
+        5: "Velký"
+  - id: hobbies
+    text: "Vaše zájmy (vyberte více možností)"
+    type: multi
+    required: false
+    options:
+      - hudba
+      - sport
+      - literatura
+      - výtvarné umění
+      - cestování
+      - jiné

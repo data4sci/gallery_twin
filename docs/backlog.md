@@ -57,12 +57,12 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M4: Session Management (0.5 dne)
 
-- [ ] **DB-5**: Na úvodni stránce přidat sebeevaluační dotazník (pohlaví, věk, vzdělání) a uložit do databáze
+- [x] **DB-5**: Na úvodni stránce přidat sebeevaluační dotazník (pohlaví, věk, vzdělání) a uložit do databáze
 - [ ] **SESSION-1**: Implementovat session management s cookies
   - Akceptační kritéria: UUIDv4 session se vytvoří při první návštěvě
-- [ ] **SESSION-2**: Vytvořit middleware pro session handling
+- [x] **SESSION-2**: Vytvořit middleware pro session handling
   - Akceptační kritéria: Session persists mezi requests, bezpečné cookie nastavení
-- [ ] **SESSION-3**: Implementovat session tracking v databázi
+- [x] **SESSION-3**: Implementovat session tracking v databázi
   - Akceptační kritéria: Sessions tabulka se plní s metadaty (user_agent, čas)
 
 ### M5: Exhibit zobrazení a navigace (0.5 dne)

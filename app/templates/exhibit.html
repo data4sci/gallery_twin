@@ -184,15 +184,15 @@
                 {% elif question.type == 'likert' %}
                 <div class="flex flex-wrap justify-between items-center">
                     <span class="text-sm text-gray-600">Nesouhlasím</span>
-                    {% for i in range(1, 6) %}
+                    {% for opt in question.options_json %}
                     <label class="flex flex-col items-center mx-2">
-                        <span class="mb-1">{{ i }}</span>
-                        <input id="q_{{ question.id }}_{{ i }}" 
+                        <span class="mb-1">{{ opt }}</span>
+                        <input id="q_{{ question.id }}_{{ loop.index }}" 
                             type="radio" 
                             name="q_{{ question.id }}" 
-                            value="{{ i }}"
+                            value="{{ opt }}"
                             class="h-5 w-5" 
-                            {% if i == answer|int %}checked{% endif %}>
+                            {% if opt|string == answer|string %}checked{% endif %}>
                     </label>
                     {% endfor %}
                     <span class="text-sm text-gray-600">Souhlasím</span>

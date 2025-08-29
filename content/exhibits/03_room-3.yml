@@ -26,6 +26,7 @@ questions:
   - type: "multi"
     text: "Jaké emoce jste cítili?"
     options: ["radost", "klid", "napětí", "nostalgie", "jiné"]
+    required: true
   - type: "text"
     text: "Popište stručně, co ve vás barvy vyvolaly."
   - type: "likert"

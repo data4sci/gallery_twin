@@ -26,6 +26,7 @@ questions:
   - type: "single"
     text: "Který prvek vás nejvíce zaujal?"
     options: ["tvary", "linie", "textura", "kompozice"]
+    required: true
   - type: "likert"
     text: "Jak silný estetický dojem na vás místnost zanechala?"
     options: [1, 2, 3, 4, 5]

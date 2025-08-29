@@ -243,12 +243,6 @@ async def save_answer(
 
         csrf_token = get_csrf_token(session.uuid)
 
-        from app.schemas import ImageResponse
-
-        images_json = [
-            ImageResponse.model_validate(img).model_dump() for img in exhibit.images
-        ]
-
         error_msg = "Vyplňte všechny povinné otázky: " + ", ".join(
             f"'{q.text}'" for q in missing_required
         )
@@ -262,7 +256,6 @@ async def save_answer(
                 "prev_slug": prev_slug,
                 "next_slug": next_slug,
                 "csrf_token": csrf_token,
-                "images_json": images_json,
                 "error": error_msg,
             },
             status_code=400,

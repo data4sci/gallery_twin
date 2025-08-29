@@ -67,14 +67,14 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M5: Exhibit zobrazení a navigace (0.5 dne)
 
-- [ ] **EXHIBIT-1**: Implementovat zobrazení exhibit obsahu
+- [x] **EXHIBIT-1**: Implementovat zobrazení exhibit obsahu
   - Markdown rendering, obrázky, audio
   - Akceptační kritéria: Kompletní exhibit se zobrazí s obsahem z YAML
-- [ ] **EXHIBIT-2**: Vytvořit image carousel s Alpine.js
+- [x] **EXHIBIT-2**: Vytvořit image carousel s Alpine.js
   - Akceptační kritéria: Funkční navigace mezi obrázky
-- [ ] **EXHIBIT-3**: Implementovat audio přehrávač
+- [x] **EXHIBIT-3**: Implementovat audio přehrávač
   - Akceptační kritéria: HTML5 audio s custom controls
-- [ ] **EXHIBIT-4**: Vytvořit navigaci mezi exhibits
+- [x] **EXHIBIT-4**: Vytvořit navigaci mezi exhibits
   - Akceptační kritéria: Tlačítka Další/Předchozí fungují podle order_index
 
 ### M6: Dotazníky a odpovědi (1 den)

@@ -79,17 +79,17 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M6: Dotazníky a odpovědi (1 den)
 
-- [ ] **FORM-1**: Vytvořit formulářové komponenty pro všechny typy otázek
+- [x] **FORM-1**: Vytvořit formulářové komponenty pro všechny typy otázek
   - Single choice, multiple choice, Likert scale, text
   - Akceptační kritéria: Všechny typy se renderují správně
-- [ ] **FORM-2**: Implementovat validaci na straně serveru
+- [x] **FORM-2**: Implementovat validaci na straně serveru
   - Akceptační kritéria: Required validace, type checking
-- [ ] **FORM-3**: Implementovat ukládání odpovědí
+- [x] **FORM-3**: Implementovat ukládání odpovědí
   - POST /exhibit/{slug}/answer endpoint
   - Akceptační kritéria: Odpovědi se ukládají do databáze s session_id
-- [ ] **FORM-4**: Implementovat loading existujících odpovědí
+- [x] **FORM-4**: Implementovat loading existujících odpovědí
   - Akceptační kritéria: Po refresh stránky jsou odpovědi předvyplněné
-- [ ] **FORM-5**: Vytvořit CSRF protection
+- [x] **FORM-5**: Vytvořit CSRF protection
   - Akceptační kritéria: CSRF token v každém formuláři
 
 ### M7: Admin rozhraní (1 den)

@@ -45,16 +45,44 @@
     {% endif %}
 
     {% if exhibit.images %}
-    <div class="mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Reprodukce</h2>
+    <div 
+        x-data="{ selectedImage: null }"
+        class="mb-8"
+    >
+        <h2 class="text-2xl font-semibold mb-4">Obrázky</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {% for image in exhibit.images %}
             <div class="bg-white p-4 rounded-lg shadow-md">
-                <img src="{{ url_for('static', path=image.path) }}" alt="{{ image.alt_text }}" class="w-full h-auto rounded-lg">
+                <img 
+                    src="{{ url_for('static', path=image.path) }}" 
+                    alt="{{ image.alt_text }}" 
+                    class="w-full h-auto rounded-lg cursor-zoom-in"
+                    @click="selectedImage = '{{ url_for('static', path=image.path) }}'"
+                >
                 <p class="text-sm text-gray-600 mt-2">{{ image.alt_text }}</p>
             </div>
             {% endfor %}
         </div>
+        <!-- Modal overlay for zoomed image -->
+        <template x-if="selectedImage">
+            <div 
+                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80"
+                @click.self="selectedImage = null"
+            >
+                <div class="relative max-w-3xl w-full p-4">
+                    <button 
+                        class="absolute top-2 right-2 text-white text-3xl font-bold focus:outline-none"
+                        @click="selectedImage = null"
+                        aria-label="Zavřít detail"
+                    >&times;</button>
+                    <img 
+                        :src="selectedImage" 
+                        class="w-full h-auto rounded-lg shadow-lg border-4 border-white"
+                        alt="Zvětšený obrázek"
+                    >
+                </div>
+            </div>
+        </template>
     </div>
     {% endif %}
 

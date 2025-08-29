@@ -47,6 +47,7 @@ async def _upsert_exhibit(session, data: Dict[str, Any], order_index: int) -> Ex
     text_md: str = data["text_md"]
     audio_path: Optional[str] = data.get("audio")
     audio_transcript: Optional[str] = data.get("audio_transcript")
+    master_image: Optional[str] = data.get("master_image")
 
     existing = await session.execute(select(Exhibit).where(Exhibit.slug == slug))
     exhibit = existing.scalar_one_or_none()
@@ -56,6 +57,7 @@ async def _upsert_exhibit(session, data: Dict[str, Any], order_index: int) -> Ex
         exhibit.text_md = text_md
         exhibit.audio_path = audio_path
         exhibit.audio_transcript = audio_transcript
+        exhibit.master_image = master_image
         exhibit.order_index = order_index
         # Replace children to reflect YAML
         await session.execute(delete(Image).where(Image.exhibit_id == exhibit.id))
@@ -67,6 +69,7 @@ async def _upsert_exhibit(session, data: Dict[str, Any], order_index: int) -> Ex
             text_md=text_md,
             audio_path=audio_path,
             audio_transcript=audio_transcript,
+            master_image=master_image,
             order_index=order_index,
         )
         session.add(exhibit)

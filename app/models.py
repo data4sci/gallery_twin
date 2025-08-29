@@ -49,6 +49,7 @@ class Exhibit(SQLModel, table=True):
     text_md: str  # Markdown content
     audio_path: Optional[str] = None
     audio_transcript: Optional[str] = None
+    master_image: Optional[str] = None
     order_index: int = Field(index=True)
 
     # Relationships

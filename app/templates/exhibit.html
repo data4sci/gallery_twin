@@ -35,9 +35,18 @@
         {{ exhibit.text_md | safe }}
     </div>
 
+    {% if exhibit.master_image %}
+    <div class="mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Originál</h2>
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <img src="{{ url_for('static', path=exhibit.master_image) }}" alt="{{ exhibit.title }}" class="w-full h-auto rounded-lg">
+        </div>
+    </div>
+    {% endif %}
+
     {% if exhibit.images %}
     <div class="mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Obrázky</h2>
+        <h2 class="text-2xl font-semibold mb-4">Reprodukce</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {% for image in exhibit.images %}
             <div class="bg-white p-4 rounded-lg shadow-md">

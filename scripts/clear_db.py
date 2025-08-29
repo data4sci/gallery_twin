@@ -19,7 +19,14 @@ async def main():
         ]:
             await session.execute(text(f"DELETE FROM {table}"))
         await session.commit()
-    print("Obsah databáze byl vymazán, schéma zůstává zachováno.")
+        # Resetovat auto-increment sekvenci pro tabulku questions (pouze SQLite)
+        await session.execute(
+            text("DELETE FROM sqlite_sequence WHERE name='questions';")
+        )
+        await session.commit()
+    print(
+        "Obsah databáze byl vymazán a sekvence questions resetována, schéma zůstává zachováno."
+    )
 
 
 if __name__ == "__main__":

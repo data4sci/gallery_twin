@@ -77,6 +77,7 @@ class Question(SQLModel, table=True):
     """Question model for surveys."""
 
     __tablename__ = "questions"
+    __table_args__ = {"sqlite_autoincrement": True}
 
     id: Optional[int] = Field(default=None, primary_key=True)
     exhibit_id: Optional[int] = Field(

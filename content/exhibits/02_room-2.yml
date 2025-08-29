@@ -19,10 +19,6 @@ images:
     alt: "Example image 2-5"
   - path: "img/example_image_2_6.png"
     alt: "Example image 2-6"
-  - path: "img/room2/a.jpg"
-    alt: "Kompozice A"
-  - path: "img/room2/b.jpg"
-    alt: "Kompozice B"
 
 questions:
   - type: "single"

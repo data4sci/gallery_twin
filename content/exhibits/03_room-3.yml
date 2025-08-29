@@ -19,12 +19,6 @@ images:
     alt: "Example image 3-5"
   - path: "img/example_image_3_6.png"
     alt: "Example image 3-6"
-  - path: "img/room3/a.jpg"
-    alt: "Spektrum A"
-  - path: "img/room3/b.jpg"
-    alt: "Spektrum B"
-  - path: "img/room3/c.jpg"
-    alt: "Spektrum C"
 
 questions:
   - type: "multi"

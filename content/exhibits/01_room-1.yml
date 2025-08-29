@@ -20,10 +20,6 @@ images:
     alt: "Example image 1-5"
   - path: "img/example_image_1_6.png"
     alt: "Example image 1-6"
-  - path: "img/room1/a.jpg"
-    alt: "Detail A"
-  - path: "img/room1/b.jpg"
-    alt: "Detail B"
 
 questions:
   - type: "likert"

@@ -94,17 +94,18 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M7: Admin rozhraní (1 den)
 
-- [ ] **ADMIN-1**: Implementovat HTTP Basic Auth pro admin
+- [x] **ADMIN-1**: Implementovat HTTP Basic Auth pro admin
   - Akceptační kritéria: Přístup k /admin/* vyžaduje heslo z .env
-- [ ] **ADMIN-2**: Vytvořit dashboard s KPI metrikami
+- [x] **ADMIN-2**: Vytvořit dashboard s KPI metrikami
   - Sessions count, completion rate, average time
+  - Sessions (Selfevaluation Answers) statistics
   - Akceptační kritéria: Správné výpočty z databáze
-- [ ] **ADMIN-3**: Implementovat tabulku odpovědí s filtry
+- [x] **ADMIN-3**: Implementovat tabulku odpovědí s filtry
   - Filtr podle data, exhibit, otázky
   - Akceptační kritéria: Funkční filtrace a pagination
-- [ ] **ADMIN-4**: Implementovat CSV export
+- [x] **ADMIN-4**: Implementovat CSV export
   - Akceptační kritéria: CSV stream s formátem podle PRD
-- [ ] **ADMIN-5**: Vytvořit analytics službu (services/analytics.py)
+- [x] **ADMIN-5**: Vytvořit analytics službu (services/analytics.py)
   - Akceptační kritéria: Agregace dat pro dashboard
 
 ### M8: UX vylepšení (0.5 dne)

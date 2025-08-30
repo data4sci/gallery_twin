@@ -202,4 +202,4 @@ gallery_twin/
 
 * **KPI karty**: `#Sessions`, `#Completed`, `Completion Rate = completed/sessions`, `Avg time per exhibit` (z `events` pokud zapnuto).
 * **Odpovědi**: pivot (otázka × odpověď → počet), detailní tabulka s filtrem.
-* **Export**: CSV s poli: `session_uuid, ts, exhibit_slug, question_id, question_text, answer_value`.
+* **Export**: CSV s poli: `session_uuid, ts, exhibit_slug, question_id, question_text, answer_value`, `selfeval_json`.

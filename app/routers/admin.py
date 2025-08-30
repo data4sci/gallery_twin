@@ -11,8 +11,10 @@ from sqlalchemy.orm import selectinload
 
 from app.auth import get_admin_user
 from app.db import get_async_session
-from app.models import Answer, Exhibit, Question, Session
+from app.models import Answer, Exhibit, Question, Session, Event
 from app.services import analytics
+import json
+from sqlalchemy import and_
 
 router = APIRouter(
     prefix="/admin",
@@ -61,10 +63,33 @@ async def admin_dashboard(
         "total_selfeval": len(sessions),
     }
 
+    # Výpočet průměrného času na exhibit (v sekundách)
+    events_res = await db_session.execute(select(Event))
+    events = events_res.scalars().all()
+    # Mapování: (session_id, exhibit_id) -> [view_start, view_end]
+    from collections import defaultdict
+
+    time_map = defaultdict(lambda: {"start": None, "end": None})
+    for e in events:
+        key = (e.session_id, e.exhibit_id)
+        if e.event_type == "view_start":
+            if (not time_map[key]["start"]) or (e.timestamp < time_map[key]["start"]):
+                time_map[key]["start"] = e.timestamp
+        elif e.event_type == "view_end":
+            if (not time_map[key]["end"]) or (e.timestamp > time_map[key]["end"]):
+                time_map[key]["end"] = e.timestamp
+    durations = []
+    for key, val in time_map.items():
+        if val["start"] and val["end"]:
+            diff = (val["end"] - val["start"]).total_seconds()
+            if diff > 0:
+                durations.append(diff)
+    average_time = round(sum(durations) / len(durations), 1) if durations else None
+
     kpis = {
         "sessions_count": total_sessions,
         "completion_rate": completion_rate,
-        "average_time": "N/A",  # Not implemented yet
+        "average_time": average_time if average_time is not None else "N/A",
     }
     return templates.TemplateResponse(
         "admin/dashboard.html",
@@ -146,6 +171,11 @@ async def export_responses_csv(
             "question_id": r.question.id,
             "question_text": r.question.text,
             "answer_value": r.value_json,
+            "selfeval_json": (
+                json.dumps(r.session.selfeval_json, ensure_ascii=False)
+                if r.session.selfeval_json
+                else None
+            ),
         }
         for r in responses
     ]

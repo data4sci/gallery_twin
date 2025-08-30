@@ -16,8 +16,14 @@
             <div class="text-gray-500">Completion Rate</div>
         </div>
         <div class="bg-white p-6 rounded-lg shadow text-center">
-            <div class="text-3xl font-bold mb-2">{{ kpis.average_time }}</div>
-            <div class="text-gray-500">Průměrný čas na návštěvu</div>
+            <div class="text-3xl font-bold mb-2">
+                {% if kpis.average_time != "N/A" %}
+                    {{ kpis.average_time }} s
+                {% else %}
+                    N/A
+                {% endif %}
+            </div>
+            <div class="text-gray-500">Průměrný čas na exhibit (s)</div>
         </div>
     </div>
 

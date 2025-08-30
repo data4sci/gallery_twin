@@ -110,14 +110,14 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M8: UX vylepšení (0.5 dne)
 
-- [ ] **UX-1**: Implementovat responsive design
+- [x] **UX-1**: Implementovat responsive design
   - Akceptační kritéria: Funguje na mobilu, tabletu, desktopu
-- [ ] **UX-2**: Přidat klávesové zkratky
+- [x] **UX-2**: Přidat klávesové zkratky
   - Šipky pro navigaci, mezera pro play/pause
   - Akceptační kritéria: Klávesy fungují na exhibit stránkách
-- [ ] **UX-3**: Implementovat loading states a error handling
+- [x] **UX-3**: Implementovat loading states a error handling
   - Akceptační kritéria: Feedback pro uživatele při operacích
-- [ ] **UX-4**: Přidat accessibility features
+- [x] **UX-4**: Přidat accessibility features
   - Alt texty, ARIA labely, focus management
   - Akceptační kritéria: Základní a11y compliance
 

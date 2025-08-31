@@ -26,4 +26,5 @@ dependencies = [
     "markdown>=3.8.2",
     "pillow>=11.3.0",
     "pytest-asyncio>=1.1.0",
+    "python-dotenv>=1.1.1",
 ]

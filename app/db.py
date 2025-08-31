@@ -14,7 +14,7 @@ from app.models import Session
 
 
 # Database configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./gallery.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./db/gallery.db")
 
 # Convert SQLite URL to async version for SQLAlchemy
 if DATABASE_URL.startswith("sqlite:///"):

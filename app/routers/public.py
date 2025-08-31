@@ -27,9 +27,9 @@ async def index(
     )
     first: Optional[Exhibit] = result.scalars().first()
     return templates.TemplateResponse(
+        request,
         "index.html",
         {
-            "request": request,
             "first_slug": first.slug if first else None,
         },
     )
@@ -46,7 +46,7 @@ async def selfeval_get(
     """Show self-evaluation form."""
     questions = SelfEvalConfig.get_questions()
     return templates.TemplateResponse(
-        "selfeval.html", {"request": request, "questions": questions}
+        request, "selfeval.html", {"questions": questions}
     )
 
 
@@ -127,9 +127,9 @@ async def exhibit_detail(
     ]
 
     return templates.TemplateResponse(
+        request,
         "exhibit.html",
         {
-            "request": request,
             "exhibit": exhibit,
             "answers": answers,
             "prev_slug": prev_slug,
@@ -146,7 +146,7 @@ async def thanks(
     tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
 ):
     """Final page."""
-    return templates.TemplateResponse("thanks.html", {"request": request})
+    return templates.TemplateResponse(request, "thanks.html", {})
 
 
 @router.post("/exhibit/{slug}/answer", dependencies=[Depends(verify_csrf_token)])
@@ -248,9 +248,9 @@ async def save_answer(
         )
 
         return templates.TemplateResponse(
+            request,
             "exhibit.html",
             {
-                "request": request,
                 "exhibit": exhibit,
                 "answers": answers,
                 "prev_slug": prev_slug,

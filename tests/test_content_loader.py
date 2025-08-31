@@ -1,6 +1,10 @@
 import pytest
 from pathlib import Path
-from app.services.content_loader import _order_from_filename, _parse_question_type, load_content_from_dir
+from app.services.content_loader import (
+    _order_from_filename,
+    _parse_question_type,
+    load_content_from_dir,
+)
 from app.models import QuestionType
 
 
@@ -29,14 +33,16 @@ async def test_load_content_from_dir(tmp_path: Path):
     exhibit_1_content = """
 slug: room-1
 title: Room 1
-text_md: """
+text_md: "Testovací obsah 1"
+"""
     (content_dir / "01_room-1.yml").write_text(exhibit_1_content)
 
     # Create another dummy exhibit file
     exhibit_2_content = """
 slug: room-2
 title: Room 2
-text_md: """
+text_md: "Testovací obsah 2"
+"""
     (content_dir / "02_room-2.yml").write_text(exhibit_2_content)
 
     processed_files = await load_content_from_dir(str(content_dir))

@@ -9,8 +9,18 @@ from app.routers import admin, public
 from app.services.startup_tasks import run_startup_tasks
 from app.db import get_async_session
 
+from contextlib import asynccontextmanager
 
-app = FastAPI(title="Gallery Twin")
+
+@asynccontextmanager
+async def lifespan(app):
+    # Startup
+    await run_startup_tasks()
+    yield
+    # (Optional) Shutdown tasks here
+
+
+app = FastAPI(title="Gallery Twin", lifespan=lifespan)
 
 # Middleware is added before routers
 app.add_middleware(SessionMiddleware)
@@ -19,12 +29,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(public.router)
 app.include_router(admin.router)
-
-
-@app.on_event("startup")
-async def on_startup():
-    """Run startup tasks."""
-    await run_startup_tasks()
 
 
 @app.get("/health")

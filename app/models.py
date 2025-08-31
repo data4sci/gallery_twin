@@ -3,7 +3,7 @@ SQLModel database models for Gallery Twin application.
 Based on the schema defined in PRD.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from typing import List, Optional
 from uuid import UUID, uuid4
@@ -34,7 +34,7 @@ class EventType(str, Enum):
 class TimestampMixin:
     """Mixin for timestamp fields."""
 
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 # Main models
@@ -143,7 +143,7 @@ class Event(TimestampMixin, SQLModel, table=True):
     exhibit_id: Optional[int] = Field(default=None, foreign_key="exhibits.id")
     event_type: EventType
     timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True), server_default=func.now()),
     )
     metadata_json: Optional[dict] = Field(

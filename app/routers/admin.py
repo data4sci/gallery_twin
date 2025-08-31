@@ -92,8 +92,9 @@ async def admin_dashboard(
         "average_time": average_time if average_time is not None else "N/A",
     }
     return templates.TemplateResponse(
+        request,
         "admin/dashboard.html",
-        {"request": request, "kpis": kpis, "selfeval_stats": selfeval_stats},
+        {"kpis": kpis, "selfeval_stats": selfeval_stats},
     )
 
 
@@ -133,9 +134,9 @@ async def admin_responses(
     questions = questions_res.scalars().all()
 
     return templates.TemplateResponse(
+        request,
         "admin/responses.html",
         {
-            "request": request,
             "responses": responses,
             "exhibits": exhibits,
             "questions": questions,

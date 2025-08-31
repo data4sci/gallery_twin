@@ -2,11 +2,11 @@
 Pydantic schemas for API request/response models.
 """
 
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any, Union
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 from app.models import QuestionType, EventType
 
@@ -51,8 +51,7 @@ class ExhibitResponse(ExhibitBase):
 
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Image schemas
@@ -76,8 +75,7 @@ class ImageResponse(ImageBase):
     id: int
     exhibit_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Question schemas
@@ -103,8 +101,7 @@ class QuestionResponse(QuestionBase):
     id: int
     exhibit_id: Optional[int] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Session schemas
@@ -125,8 +122,7 @@ class SessionResponse(TimestampSchema):
     accept_lang: Optional[str] = None
     selfeval_json: Optional[Dict[str, Any]] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Answer schemas
@@ -157,8 +153,7 @@ class AnswerResponse(AnswerBase, TimestampSchema):
     id: int
     session_id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Bulk answer submission schema
@@ -187,8 +182,7 @@ class EventResponse(TimestampSchema):
     timestamp: datetime
     metadata_json: Optional[Dict[str, Any]] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 # Combined schemas for complex responses
@@ -276,4 +270,4 @@ class HealthResponse(BaseModel):
 
     status: str = "ok"
     database: str = "connected"
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

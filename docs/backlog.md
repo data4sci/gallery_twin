@@ -123,13 +123,13 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M9: Testování (0.5 dne)
 
-- [ ] **TEST-1**: Vytvořit unit testy pro content loader
+- [x] **TEST-1**: Vytvořit unit testy pro content loader
   - Akceptační kritéria: Pokrytí YAML parsingu a validace
-- [ ] **TEST-2**: Vytvořit integration testy pro API
+- [x] **TEST-2**: Vytvořit integration testy pro API
   - Akceptační kritéria: Testy pro všechny public a admin endpointy
-- [ ] **TEST-3**: Vytvořit testy pro analytics službu
+- [x] **TEST-3**: Vytvořit testy pro analytics službu
   - Akceptační kritéria: Správnost výpočtů agregací
-- [ ] **TEST-4**: Nastavit pytest konfigurace a test databázi
+- [x] **TEST-4**: Nastavit pytest konfigurace a test databázi
   - Akceptační kritéria: `pytest` běží všechny testy
 
 ### M10: Deployment příprava (0.5 dne)

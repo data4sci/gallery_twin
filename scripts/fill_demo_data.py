@@ -4,7 +4,10 @@ from uuid import uuid4
 import sys
 import os
 
+from dotenv import load_dotenv
+
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + "/.."))
+load_dotenv()
 
 from sqlmodel import SQLModel, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -12,7 +15,11 @@ from app.models import Session, Answer, Question, Exhibit
 from app.services.content_loader import load_content_from_dir
 from app.services.selfeval_loader import SelfEvalConfig
 
-DB_URL = "sqlite+aiosqlite:///gallery.db"
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./db/gallery.db")
+if DATABASE_URL.startswith("sqlite:///"):
+    ASYNC_DATABASE_URL = DATABASE_URL.replace("sqlite:///", "sqlite+aiosqlite:///")
+else:
+    ASYNC_DATABASE_URL = DATABASE_URL
 
 
 def random_selfeval_answer(q):
@@ -33,7 +40,7 @@ def random_selfeval_answer(q):
 async def main():
     # Nejprve načti obsah z YAML do DB
     await load_content_from_dir()
-    engine = create_async_engine(DB_URL, echo=False)
+    engine = create_async_engine(ASYNC_DATABASE_URL, echo=False)
     async with AsyncSession(engine) as session:
         # Načti otázky a expozice
         exhibits = (await session.execute(select(Exhibit))).scalars().all()

@@ -1,4 +1,5 @@
 import uuid
+import os
 from starlette.middleware.base import BaseHTTPMiddleware
 from typing import Callable, Awaitable
 from starlette.requests import Request
@@ -29,12 +30,14 @@ class SessionMiddleware(BaseHTTPMiddleware):
         response = await call_next(request)
 
         if new_session_created:
+            # Read max_age from env, fallback to 30 days
+            max_age = int(os.getenv("SESSION_COOKIE_MAX_AGE", 30 * 24 * 60 * 60))
             response.set_cookie(
                 key=SESSION_COOKIE_NAME,
                 value=session_id,
                 httponly=True,
                 samesite="lax",
-                max_age=30 * 24 * 60 * 60,  # 30 days
+                max_age=max_age,
             )
 
         return response

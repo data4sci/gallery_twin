@@ -134,14 +134,14 @@ Virtuální galerie s expozicemi, dotazníky a admin rozhraním. FastAPI + SQLit
 
 ### M10: Deployment příprava (0.5 dne)
 
-- [ ] **DEPLOY-1**: Vytvořit Dockerfile
+- [x] **DEPLOY-1**: Vytvořit Dockerfile
   - Multi-stage build s uvicorn
   - Akceptační kritéria: `docker build` proběhne úspěšně
-- [ ] **DEPLOY-2**: Vytvořit docker-compose pro local development
+- [x] **DEPLOY-2**: Vytvořit docker-compose pro local development
   - Akceptační kritéria: `docker-compose up` spustí aplikaci
-- [ ] **DEPLOY-3**: Přidat health check endpoint
+- [x] **DEPLOY-3**: Přidat health check endpoint
   - Akceptační kritéria: /health vrací status aplikace a databáze
-- [ ] **DEPLOY-4**: Dokumentace deployment procesu
+- [x] **DEPLOY-4**: Dokumentace deployment procesu
   - Akceptační kritéria: README s instrukcemi pro Railway/Fly.io
 
 ## Aktuální status

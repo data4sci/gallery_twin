@@ -8,12 +8,15 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./gallery.db:/app/gallery.db
+      - gallery_db:/app/db
       - ./content:/app/content
     environment:
-      - DB_PATH=/app/gallery.db
+      - DB_PATH=/app/db/gallery.db
       - ADMIN_USERNAME=admin
       - ADMIN_PASSWORD=password
       - SECRET_KEY=a-very-secret-key
     command: >
       bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+volumes:
+  gallery_db:

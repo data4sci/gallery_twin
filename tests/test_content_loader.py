@@ -5,7 +5,8 @@ from app.services.content_loader import (
     _parse_question_type,
     load_content_from_dir,
 )
-from app.models import QuestionType
+from app.models import QuestionType, Exhibit
+from sqlalchemy import select
 
 
 def test_order_from_filename():
@@ -25,7 +26,7 @@ def test_parse_question_type():
 
 
 @pytest.mark.asyncio
-async def test_load_content_from_dir(tmp_path: Path):
+async def test_load_content_from_dir(db_session, tmp_path: Path):
     content_dir = tmp_path / "exhibits"
     content_dir.mkdir()
 
@@ -45,5 +46,13 @@ text_md: "Testovací obsah 2"
 """
     (content_dir / "02_room-2.yml").write_text(exhibit_2_content)
 
-    processed_files = await load_content_from_dir(str(content_dir))
+    processed_files = await load_content_from_dir(session=db_session, content_dir=str(content_dir))
     assert processed_files == 2
+
+    # Verify that the content is in the database
+    result = await db_session.execute(select(Exhibit).where(Exhibit.slug == "room-1"))
+    assert result.scalar_one_or_none() is not None
+
+    # Test idempotency: running again should load 0 new files
+    processed_again = await load_content_from_dir(session=db_session, content_dir=str(content_dir))
+    assert processed_again == 0

@@ -3,7 +3,7 @@ YAML Content Loader for Gallery Twin.
 
 - Reads content/exhibits/*.yml files
 - Parses exhibit, images, questions
-- Inserts into DB only if the database is empty.
+- Inserts into DB.
 """
 
 import asyncio
@@ -11,9 +11,9 @@ from pathlib import Path
 from typing import Any, Dict
 
 import yaml
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
-from app.db import async_session_factory, init_database
 from app.models import Exhibit, Image, Question, QuestionType
 
 
@@ -37,9 +37,13 @@ def _parse_question_type(value: str) -> QuestionType:
         raise ValueError(f"Unknown question type: {value}") from exc
 
 
-async def load_content_from_dir(content_dir: str = "content/exhibits") -> int:
+async def load_content_from_dir(
+    session: AsyncSession, content_dir: str = "content/exhibits"
+) -> int:
     """
-    Load all exhibits from YAML files in a directory if DB is empty.
+    Load all exhibits from YAML files in a directory.
+    This function is now idempotent. It checks for existing slugs
+    and only inserts new ones.
     Returns number of files processed.
     """
     base = Path(content_dir)
@@ -52,61 +56,64 @@ async def load_content_from_dir(content_dir: str = "content/exhibits") -> int:
         print(f"[content_loader] No YAML files in: {base}")
         return 0
 
-    await init_database()
+    # Check for existing exhibits to avoid duplicates
+    result = await session.execute(select(Exhibit.slug))
+    existing_slugs = {row[0] for row in result.all()}
 
-    async with async_session_factory() as session:
-        # Check if exhibits already exist
-        result = await session.execute(select(Exhibit.id).limit(1))
-        if result.scalar_one_or_none() is not None:
-            print("[content_loader] Content already loaded, skipping.")
-            return 0
+    print(f"[content_loader] Found {len(existing_slugs)} existing exhibits. Checking for new content...")
+    processed = 0
+    for f in files:
+        data = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+        slug = data.get("slug")
+        if not slug:
+            continue
 
-        print("[content_loader] Loading content into empty database...")
-        processed = 0
-        for f in files:
-            data = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
-            order_index = _order_from_filename(f.name)
+        if slug in existing_slugs:
+            continue
 
-            exhibit = Exhibit(
-                slug=data["slug"],
-                title=data["title"],
-                text_md=data["text_md"],
-                audio_path=data.get("audio"),
-                audio_transcript=data.get("audio_transcript"),
-                master_image=data.get("master_image"),
-                order_index=order_index,
+        order_index = _order_from_filename(f.name)
+
+        exhibit = Exhibit(
+            slug=data["slug"],
+            title=data["title"],
+            text_md=data["text_md"],
+            audio_path=data.get("audio"),
+            audio_transcript=data.get("audio_transcript"),
+            master_image=data.get("master_image"),
+            order_index=order_index,
+        )
+        session.add(exhibit)
+        await session.flush()  # Flush to get exhibit.id
+
+        for idx, img_data in enumerate(data.get("images", [])):
+            image = Image(
+                exhibit_id=exhibit.id,
+                path=img_data["path"],
+                alt_text=img_data.get("alt") or img_data.get("alt_text") or "",
+                sort_order=idx,
             )
-            session.add(exhibit)
-            await session.flush()  # Flush to get exhibit.id
+            session.add(image)
 
-            for idx, img_data in enumerate(data.get("images", [])):
-                image = Image(
-                    exhibit_id=exhibit.id,
-                    path=img_data["path"],
-                    alt_text=img_data.get("alt") or img_data.get("alt_text") or "",
-                    sort_order=idx,
-                )
-                session.add(image)
+        for idx, q_data in enumerate(data.get("questions", [])):
+            q_type = _parse_question_type(q_data["type"])
+            question = Question(
+                exhibit_id=exhibit.id,
+                text=q_data["text"],
+                type=q_type,
+                options_json=q_data.get("options"),
+                required=bool(q_data.get("required", False)),
+                sort_order=idx,
+            )
+            session.add(question)
 
-            for idx, q_data in enumerate(data.get("questions", [])):
-                q_type = _parse_question_type(q_data["type"])
-                question = Question(
-                    exhibit_id=exhibit.id,
-                    text=q_data["text"],
-                    type=q_type,
-                    options_json=q_data.get("options"),
-                    required=bool(q_data.get("required", False)),
-                    sort_order=idx,
-                )
-                session.add(question)
+        processed += 1
+        print(f"[content_loader] Loaded new exhibit: {slug}")
 
-            processed += 1
+    await session.commit()
 
-        await session.commit()
+    if processed > 0:
+        print(f"[content_loader] Loaded {processed} new exhibits from {base}")
+    else:
+        print("[content_loader] No new content to load.")
 
-    print(f"[content_loader] Loaded {processed} exhibits from {base}")
     return processed
-
-
-if __name__ == "__main__":
-    asyncio.run(load_content_from_dir())

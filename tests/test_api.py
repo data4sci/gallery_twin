@@ -1,4 +1,5 @@
 import pytest
+import uuid
 from httpx import AsyncClient
 from httpx import ASGITransport
 from app.main import app
@@ -56,9 +57,9 @@ async def test_admin_authorized(db_session):
 
 
 @pytest.mark.asyncio
-async def test_post_exhibit_answer(db_session):
+async def test_post_exhibit_answer_and_completion(db_session):
     # Vytvoření exhibit a otázky
-    from app.models import Exhibit, Question
+    from app.models import Exhibit, Question, Session
 
     exhibit = Exhibit(
         slug="test-exhibit", title="Test Exhibit", text_md="...", order_index=1
@@ -100,6 +101,16 @@ async def test_post_exhibit_answer(db_session):
         # Očekáváme redirect na /thanks (protože je jen jeden exhibit)
         assert post_resp.status_code == 303
         assert post_resp.headers["location"] == "/thanks"
+
+        # Ověření, že session byla označena jako dokončená
+        from sqlalchemy import select
+        SESSION_COOKIE_NAME = "gallery_session_id"  # The cookie name is defined in the middleware
+        session_uuid_str = ac.cookies.get(SESSION_COOKIE_NAME)
+        session_uuid_obj = uuid.UUID(session_uuid_str)
+        result = await db_session.execute(select(Session).where(Session.uuid == session_uuid_obj))
+        final_session = result.scalar_one_or_none()
+        assert final_session is not None
+        assert final_session.completed is True
 
 
 @pytest.mark.asyncio
@@ -196,3 +207,13 @@ async def test_admin_export_csv(db_session):
         assert "question_text" in content
         assert "CSV otázka?" in content
         assert "CSV odpověď" in content
+
+
+@pytest.mark.asyncio
+async def test_health_check(db_session):
+    async with AsyncClient(
+        transport=ASGITransport(app=app), base_url="http://test", follow_redirects=True
+    ) as ac:
+        response = await ac.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok", "database": "ok"}

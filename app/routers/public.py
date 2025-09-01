@@ -278,4 +278,8 @@ async def save_answer(
     if next_slug:
         return RedirectResponse(url=f"/exhibit/{next_slug}", status_code=303)
     else:
+        # This is the last exhibit, mark session as completed
+        session.completed = True
+        db_session.add(session)
+        await db_session.commit()
         return RedirectResponse(url="/thanks", status_code=303)

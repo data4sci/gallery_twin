@@ -1,7 +1,8 @@
 import io
-from typing import Annotated, Optional
+import json
+import csv
+from typing import Annotated, AsyncGenerator, Optional
 
-import pandas as pd
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
@@ -11,10 +12,8 @@ from sqlalchemy.orm import selectinload
 
 from app.auth import get_admin_user
 from app.db import get_async_session
-from app.models import Answer, Exhibit, Question, Session, Event
+from app.models import Answer, Exhibit, Question, Session
 from app.services import analytics
-import json
-from sqlalchemy import and_
 
 router = APIRouter(
     prefix="/admin",
@@ -29,72 +28,15 @@ async def admin_dashboard(
     request: Request, db_session: Annotated[AsyncSession, Depends(get_async_session)]
 ):
     """Admin dashboard with KPIs and self-eval stats."""
-    total_sessions = await analytics.get_total_sessions(db_session)
-    completion_rate = await analytics.get_completion_rate(db_session)
-
-    # Self-eval stats
-    sessions_res = await db_session.execute(select(Session))
-    sessions = sessions_res.scalars().all()
-    gender_counts = {}
-    education_counts = {}
-    ages = []
-    for s in sessions:
-        sj = s.selfeval_json or {}
-        gender = sj.get("gender")
-        education = sj.get("education")
-        age = sj.get("age")
-        if gender:
-            gender_counts[gender] = gender_counts.get(gender, 0) + 1
-        if education:
-            education_counts[education] = education_counts.get(education, 0) + 1
-        if age is not None:
-            try:
-                ages.append(int(age))
-            except Exception:
-                pass
-    avg_age = round(sum(ages) / len(ages), 1) if ages else None
-    median_age = sorted(ages)[len(ages) // 2] if ages else None
-
-    selfeval_stats = {
-        "gender_counts": gender_counts,
-        "education_counts": education_counts,
-        "avg_age": avg_age,
-        "median_age": median_age,
-        "total_selfeval": len(sessions),
-    }
-
-    # Výpočet průměrného času na exhibit (v sekundách)
-    events_res = await db_session.execute(select(Event))
-    events = events_res.scalars().all()
-    # Mapování: (session_id, exhibit_id) -> [view_start, view_end]
-    from collections import defaultdict
-
-    time_map = defaultdict(lambda: {"start": None, "end": None})
-    for e in events:
-        key = (e.session_id, e.exhibit_id)
-        if e.event_type == "view_start":
-            if (not time_map[key]["start"]) or (e.timestamp < time_map[key]["start"]):
-                time_map[key]["start"] = e.timestamp
-        elif e.event_type == "view_end":
-            if (not time_map[key]["end"]) or (e.timestamp > time_map[key]["end"]):
-                time_map[key]["end"] = e.timestamp
-    durations = []
-    for key, val in time_map.items():
-        if val["start"] and val["end"]:
-            diff = (val["end"] - val["start"]).total_seconds()
-            if diff > 0:
-                durations.append(diff)
-    average_time = round(sum(durations) / len(durations), 1) if durations else None
-
-    kpis = {
-        "sessions_count": total_sessions,
-        "completion_rate": completion_rate,
-        "average_time": average_time if average_time is not None else "N/A",
-    }
+    stats = await analytics.get_full_dashboard_stats(db_session)
     return templates.TemplateResponse(
         request,
         "admin/dashboard.html",
-        {"kpis": kpis, "selfeval_stats": selfeval_stats},
+        {
+            "kpis": stats["kpis"],
+            "selfeval_stats": stats["selfeval_stats"],
+            "exhibit_times": stats["exhibit_times"],
+        },
     )
 
 
@@ -106,6 +48,7 @@ async def admin_responses(
     question_id: Optional[int] = Query(None),
 ):
     """Paginated and filtered table of user responses."""
+    # Base query remains the same, it's efficient enough for this view
     stmt = (
         select(Answer)
         .join(Session)
@@ -125,11 +68,11 @@ async def admin_responses(
     result = await db_session.execute(stmt)
     responses = result.scalars().all()
 
-    # For filter dropdowns
-    exhibits_res = await db_session.execute(
-        select(Exhibit).order_by(Exhibit.order_index)
+    # For filter dropdowns - this is fine as the number of exhibits/questions is small
+    exhibits_res, questions_res = await asyncio.gather(
+        db_session.execute(select(Exhibit).order_by(Exhibit.order_index)),
+        db_session.execute(select(Question).order_by(Question.text)),
     )
-    questions_res = await db_session.execute(select(Question).order_by(Question.text))
     exhibits = exhibits_res.scalars().all()
     questions = questions_res.scalars().all()
 
@@ -146,15 +89,48 @@ async def admin_responses(
     )
 
 
+async def stream_csv(responses: list[Answer]) -> AsyncGenerator[str, None]:
+    """Generator to stream CSV rows using Python's built-in csv module."""
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    header = [
+        "session_uuid",
+        "ts",
+        "exhibit_slug",
+        "question_id",
+        "question_text",
+        "answer_value",
+        "selfeval_json",
+    ]
+    writer.writerow(header)
+    yield output.getvalue()
+
+    for r in responses:
+        output.seek(0)
+        output.truncate(0)
+        row = [
+            r.session.uuid,
+            r.created_at.isoformat(),
+            r.question.exhibit.slug if r.question.exhibit else None,
+            r.question.id,
+            r.question.text,
+            json.dumps(r.value_json, ensure_ascii=False),
+            json.dumps(r.session.selfeval_json, ensure_ascii=False)
+            if r.session.selfeval_json
+            else None,
+        ]
+        writer.writerow(row)
+        yield output.getvalue()
+
+
 @router.get("/export.csv")
 async def export_responses_csv(
     db_session: Annotated[AsyncSession, Depends(get_async_session)],
 ):
-    """Export all responses to a CSV file."""
+    """Export all responses to a CSV file using a streaming response."""
     stmt = (
         select(Answer)
-        .join(Session)
-        .join(Question)
         .options(
             selectinload(Answer.session),
             selectinload(Answer.question).selectinload(Question.exhibit),
@@ -162,32 +138,14 @@ async def export_responses_csv(
         .order_by(Answer.created_at.desc())
     )
     result = await db_session.execute(stmt)
-    responses = result.scalars().all()
-
-    data = [
-        {
-            "session_uuid": r.session.uuid,
-            "ts": r.created_at,
-            "exhibit_slug": r.question.exhibit.slug if r.question.exhibit else None,
-            "question_id": r.question.id,
-            "question_text": r.question.text,
-            "answer_value": r.value_json,
-            "selfeval_json": (
-                json.dumps(r.session.selfeval_json, ensure_ascii=False)
-                if r.session.selfeval_json
-                else None
-            ),
-        }
-        for r in responses
-    ]
-
-    df = pd.DataFrame(data)
-    output = io.StringIO()
-    df.to_csv(output, index=False)
-    output.seek(0)
+    responses = result.scalars().all()  # Still loads all, but streams the output
 
     return StreamingResponse(
-        output,
+        stream_csv(responses),
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=export.csv"},
     )
+
+
+# Need to import asyncio to use asyncio.gather
+import asyncio

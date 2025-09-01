@@ -45,6 +45,18 @@ async def selfeval_get(
     tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
 ):
     """Show self-evaluation form."""
+    session, db_session = tracked_session
+    if session.selfeval_json:
+        # If self-evaluation is already done, redirect to the first exhibit
+        result = await db_session.execute(
+            select(Exhibit).order_by(Exhibit.order_index.asc())
+        )
+        first: Optional[Exhibit] = result.scalars().first()
+        if first:
+            return RedirectResponse(url=f"/exhibit/{first.slug}", status_code=303)
+        else:
+            return RedirectResponse(url="/thanks", status_code=303)
+
     questions = SelfEvalConfig.get_questions()
     return templates.TemplateResponse(
         request, "selfeval.html", {"questions": questions}

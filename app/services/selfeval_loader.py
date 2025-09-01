@@ -5,22 +5,21 @@ SELFEVAL_PATH = "content/selfeval.yml"
 
 
 class SelfEvalConfig:
-    _questions = None
+    _data = None
 
     @classmethod
     def load(cls):
         path = Path(SELFEVAL_PATH)
         if not path.exists():
-            cls._questions = []
+            cls._data = {}
             return
-        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-        cls._questions = data.get("questions", [])
+        cls._data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
     @classmethod
-    def get_questions(cls):
-        if cls._questions is None:
+    def get_questions(cls, lang: str = "cz"):
+        if cls._data is None:
             cls.load()
-        return cls._questions
+        return cls._data.get(lang, {}).get("questions", [])
 
 
 # Načti při startu aplikace

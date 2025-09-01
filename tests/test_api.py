@@ -30,9 +30,18 @@ async def test_index(db_session):
 
 @pytest.mark.asyncio
 async def test_exhibit_not_found(db_session):
+    from app.models import Session
+
+    # Create a session with language set
+    session = Session(language="cz")
+    db_session.add(session)
+    await db_session.commit()
+
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test", follow_redirects=True
     ) as ac:
+        # Set the session cookie to simulate language selection
+        ac.cookies.set("gallery_session_id", str(session.uuid))
         response = await ac.get("/exhibit/non-existent-slug")
     assert response.status_code == 404
 
@@ -62,7 +71,11 @@ async def test_post_exhibit_answer_and_completion(db_session):
     from app.models import Exhibit, Question, Session
 
     exhibit = Exhibit(
-        slug="test-exhibit", title="Test Exhibit", text_md="...", order_index=1
+        slug="test-exhibit",
+        title="Test Exhibit",
+        text_md="...",
+        order_index=1,
+        language="cz",
     )
     db_session.add(exhibit)
     await db_session.commit()
@@ -72,10 +85,16 @@ async def test_post_exhibit_answer_and_completion(db_session):
     db_session.add(question)
     await db_session.commit()
 
+    # Create a session with language set
+    session = Session(language="cz")
+    db_session.add(session)
+    await db_session.commit()
+
     # GET /exhibit/{slug} pro získání csrf_token a session cookie
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test", follow_redirects=True
     ) as ac:
+        ac.cookies.set("gallery_session_id", str(session.uuid))
         get_resp = await ac.get(f"/exhibit/{exhibit.slug}")
         assert get_resp.status_code == 200
         # Získání csrf_token z HTML
@@ -84,15 +103,12 @@ async def test_post_exhibit_answer_and_completion(db_session):
         match = re.search(r'name="csrf_token" value="([^"]+)"', get_resp.text)
         assert match, "csrf_token not found in HTML"
         csrf_token = match.group(1)
-        # Získání session cookie
-        cookies = get_resp.cookies
 
         # POST odpověď
         form_data = {
             f"q_{question.id}": "Super zážitek",
             "csrf_token": csrf_token,
         }
-        ac.cookies = cookies
         post_resp = await ac.post(
             f"/exhibit/{exhibit.slug}/answer",
             data=form_data,
@@ -104,10 +120,15 @@ async def test_post_exhibit_answer_and_completion(db_session):
 
         # Ověření, že session byla označena jako dokončená
         from sqlalchemy import select
-        SESSION_COOKIE_NAME = "gallery_session_id"  # The cookie name is defined in the middleware
+
+        SESSION_COOKIE_NAME = (
+            "gallery_session_id"  # The cookie name is defined in the middleware
+        )
         session_uuid_str = ac.cookies.get(SESSION_COOKIE_NAME)
         session_uuid_obj = uuid.UUID(session_uuid_str)
-        result = await db_session.execute(select(Session).where(Session.uuid == session_uuid_obj))
+        result = await db_session.execute(
+            select(Session).where(Session.uuid == session_uuid_obj)
+        )
         final_session = result.scalar_one_or_none()
         assert final_session is not None
         assert final_session.completed is True
@@ -129,7 +150,11 @@ async def test_admin_responses_page(db_session):
 
     # Vytvoření dat
     exhibit = Exhibit(
-        slug="admin-exhibit", title="Admin Exhibit", text_md="...", order_index=1
+        slug="admin-exhibit",
+        title="Admin Exhibit",
+        text_md="...",
+        order_index=1,
+        language="cz",
     )
     db_session.add(exhibit)
     await db_session.commit()
@@ -170,7 +195,11 @@ async def test_admin_export_csv(db_session):
 
     # Vytvoření dat
     exhibit = Exhibit(
-        slug="csv-exhibit", title="CSV Exhibit", text_md="...", order_index=1
+        slug="csv-exhibit",
+        title="CSV Exhibit",
+        text_md="...",
+        order_index=1,
+        language="cz",
     )
     db_session.add(exhibit)
     await db_session.commit()

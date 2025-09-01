@@ -43,7 +43,7 @@ async def load_content_from_dir(
 ) -> int:
     """
     Load all exhibits from YAML files in a directory.
-    This function is now idempotent. It checks for existing slugs
+    This function is now idempotent. It checks for existing slugs and languages
     and only inserts new ones.
     Returns number of files processed.
     """
@@ -58,11 +58,11 @@ async def load_content_from_dir(
         return 0
 
     # Check for existing exhibits to avoid duplicates
-    result = await session.execute(select(Exhibit.slug))
-    existing_slugs = {row[0] for row in result.all()}
+    result = await session.execute(select(Exhibit.slug, Exhibit.language))
+    existing_exhibits = {(row[0], row[1]) for row in result.all()}
 
     content_logger.info(
-        f"Found {len(existing_slugs)} existing exhibits. Checking for new content in {len(files)} files..."
+        f"Found {len(existing_exhibits)} existing exhibits. Checking for new content in {len(files)} files..."
     )
     processed = 0
     for f in files:
@@ -71,46 +71,53 @@ async def load_content_from_dir(
         if not slug:
             continue
 
-        if slug in existing_slugs:
-            continue
-
         order_index = _order_from_filename(f.name)
 
-        exhibit = Exhibit(
-            slug=data["slug"],
-            title=data["title"],
-            text_md=data["text_md"],
-            audio_path=data.get("audio"),
-            audio_transcript=data.get("audio_transcript"),
-            master_image=data.get("master_image"),
-            order_index=order_index,
-        )
-        session.add(exhibit)
-        await session.flush()  # Flush to get exhibit.id
+        for lang in ["cz", "en", "ua"]:
+            if lang not in data:
+                continue
 
-        for idx, img_data in enumerate(data.get("images", [])):
-            image = Image(
-                exhibit_id=exhibit.id,
-                path=img_data["path"],
-                alt_text=img_data.get("alt") or img_data.get("alt_text") or "",
-                sort_order=idx,
+            if (slug, lang) in existing_exhibits:
+                continue
+
+            lang_data = data[lang]
+
+            exhibit = Exhibit(
+                slug=slug,
+                language=lang,
+                title=lang_data["title"],
+                text_md=lang_data["text_md"],
+                audio_path=lang_data.get("audio"),
+                audio_transcript=lang_data.get("audio_transcript"),
+                master_image=data.get("master_image"),
+                order_index=order_index,
             )
-            session.add(image)
+            session.add(exhibit)
+            await session.flush()  # Flush to get exhibit.id
 
-        for idx, q_data in enumerate(data.get("questions", [])):
-            q_type = _parse_question_type(q_data["type"])
-            question = Question(
-                exhibit_id=exhibit.id,
-                text=q_data["text"],
-                type=q_type,
-                options_json=q_data.get("options"),
-                required=bool(q_data.get("required", False)),
-                sort_order=idx,
-            )
-            session.add(question)
+            for idx, img_data in enumerate(data.get("images", [])):
+                image = Image(
+                    exhibit_id=exhibit.id,
+                    path=img_data["path"],
+                    alt_text=img_data.get("alt") or img_data.get("alt_text") or "",
+                    sort_order=idx,
+                )
+                session.add(image)
 
-        processed += 1
-        content_logger.info(f"Loaded new exhibit: {slug}")
+            for idx, q_data in enumerate(lang_data.get("questions", [])):
+                q_type = _parse_question_type(q_data["type"])
+                question = Question(
+                    exhibit_id=exhibit.id,
+                    text=q_data["text"],
+                    type=q_type,
+                    options_json=q_data.get("options"),
+                    required=bool(q_data.get("required", False)),
+                    sort_order=idx,
+                )
+                session.add(question)
+
+            processed += 1
+            content_logger.info(f"Loaded new exhibit: {slug} ({lang})")
 
     await session.commit()
 

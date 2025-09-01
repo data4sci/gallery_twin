@@ -1,46 +1,138 @@
-# Konfigurovatelný autoevaluační dotazník
-questions:
-  - id: gender
-    text: "Pohlaví"
-    type: single
-    required: true
-    options:
-      - muž
-      - žena
-      - jiné
-      - nechci uvést
-  - id: age
-    text: "Věk"
-    type: text
-    required: true
-  - id: education
-    text: "Vzdělání"
-    type: single
-    required: true
-    options:
-      - základní
-      - středoškolské
-      - vysokoškolské
-      - jiné
-      - nechci uvést
-  - id: art_interest
-    text: "Jaký je váš zájem o umění?"
-    type: likert
-    required: false
-    options:
-      min: 1
-      max: 5
-      labels:
-        1: "Žádný"
-        5: "Velký"
-  - id: hobbies
-    text: "Vaše zájmy (vyberte více možností)"
-    type: multi
-    required: false
-    options:
-      - hudba
-      - sport
-      - literatura
-      - výtvarné umění
-      - cestování
-      - jiné
+cz:
+  questions:
+    - id: gender
+      text: "Pohlaví"
+      type: single
+      required: true
+      options:
+        - muž
+        - žena
+        - jiné
+        - nechci uvést
+    - id: age
+      text: "Věk"
+      type: text
+      required: true
+    - id: education
+      text: "Vzdělání"
+      type: single
+      required: true
+      options:
+        - základní
+        - středoškolské
+        - vysokoškolské
+        - jiné
+        - nechci uvést
+    - id: art_interest
+      text: "Jaký je váš zájem o umění?"
+      type: likert
+      required: false
+      options:
+        min: 1
+        max: 5
+        labels:
+          1: "Žádný"
+          5: "Velký"
+    - id: hobbies
+      text: "Vaše zájmy (vyberte více možností)"
+      type: multi
+      required: false
+      options:
+        - hudba
+        - sport
+        - literatura
+        - výtvarné umění
+        - cestování
+        - jiné
+en:
+  questions:
+    - id: gender
+      text: "Gender"
+      type: single
+      required: true
+      options:
+        - male
+        - female
+        - other
+        - prefer not to say
+    - id: age
+      text: "Age"
+      type: text
+      required: true
+    - id: education
+      text: "Education"
+      type: single
+      required: true
+      options:
+        - primary
+        - secondary
+        - university
+        - other
+        - prefer not to say
+    - id: art_interest
+      text: "What is your interest in art?"
+      type: likert
+      required: false
+      options:
+        min: 1
+        max: 5
+        labels:
+          1: "None"
+          5: "A lot"
+    - id: hobbies
+      text: "Your hobbies (select multiple options)"
+      type: multi
+      required: false
+      options:
+        - music
+        - sport
+        - literature
+        - visual arts
+        - traveling
+        - other
+ua:
+  questions:
+    - id: gender
+      text: "Стать"
+      type: single
+      required: true
+      options:
+        - чоловік
+        - жінка
+        - інше
+        - не хочу вказувати
+    - id: age
+      text: "Вік"
+      type: text
+      required: true
+    - id: education
+      text: "Освіта"
+      type: single
+      required: true
+      options:
+        - початкова
+        - середня
+        - вища
+        - інше
+        - не хочу вказувати
+    - id: art_interest
+      text: "Який ваш інтерес до мистецтва?"
+      type: likert
+      required: false
+      options:
+        min: 1
+        max: 5
+        labels:
+          1: "Жодного"
+          5: "Великий"
+    - id: hobbies
+      text: "Ваші інтереси (виберіть кілька варіантів)"
+      type: multi
+      required: false
+      options:
+        - музика
+        - спорт
+        - література
+        - образотворче мистецтво
+        - подорожі
+        - інше

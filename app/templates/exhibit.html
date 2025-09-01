@@ -182,22 +182,10 @@
                 </div>
 
                 {% elif question.type == 'likert' %}
-                {% set likert_label = question.options_json.label if question.options_json.label is defined else None %}
-                {% if likert_label %}
-                <div class="mb-2 font-semibold text-gray-700">
-                    {{ likert_label }}
-                </div>
-                {% endif %}
                 <div class="flex flex-wrap justify-between items-center">
                     {% for opt in range(question.options_json.min, question.options_json.max + 1) %}
                     <label class="flex flex-col items-center mx-2">
-                        <span class="mb-1">
-                            {% if question.options_json.labels is defined and question.options_json.labels[opt] is defined %}
-                                {{ question.options_json.labels[opt] }}
-                            {% else %}
-                                {{ opt }}
-                            {% endif %}
-                        </span>
+                        <span class="mb-1">{{ opt }}</span>
                         <input id="q_{{ question.id }}_{{ loop.index }}" 
                             type="radio" 
                             name="q_{{ question.id }}" 

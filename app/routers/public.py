@@ -125,11 +125,13 @@ async def exhibit_detail(
         exhibit_title=exhibit.title,
     )
 
-    # Fetch existing answers for this session
+    # Check if answers for this exhibit and session already exist
     result = await db_session.execute(
-        select(Answer).where(Answer.session_id == session.id)
+        select(Answer)
+        .join(Question)
+        .where(Answer.session_id == session.id, Question.exhibit_id == exhibit.id)
     )
-    answers = {a.question_id: a.value_json for a in result.scalars().all()}
+    has_answered = result.scalars().first() is not None
 
     # Prev/Next by order_index
     prev_res = await db_session.execute(
@@ -161,7 +163,7 @@ async def exhibit_detail(
         "exhibit.html",
         {
             "exhibit": exhibit,
-            "answers": answers,
+            "has_answered": has_answered,
             "prev_slug": prev_slug,
             "next_slug": next_slug,
             "csrf_token": csrf_token,
@@ -189,11 +191,37 @@ async def save_answer(
     session, db_session = tracked_session
     form_data = await request.form()
 
-    # Fetch questions for the current exhibit to validate required ones
+    # Fetch exhibit to get its ID
     result = await db_session.execute(
-        select(Question).join(Exhibit).where(Exhibit.slug == slug)
+        select(Exhibit)
+        .where(Exhibit.slug == slug)
+        .options(selectinload(Exhibit.images), selectinload(Exhibit.questions))
     )
-    questions = result.scalars().all()
+    exhibit = result.scalars().first()
+    if not exhibit:
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Exhibit not found")
+
+    # Check if answers for this exhibit and session already exist
+    result = await db_session.execute(
+        select(Answer)
+        .join(Question)
+        .where(Answer.session_id == session.id, Question.exhibit_id == exhibit.id)
+    )
+    if result.scalars().first() is not None:
+        # Answers already submitted, redirect to next exhibit
+        next_res = await db_session.execute(
+            select(Exhibit.slug)
+            .where(Exhibit.order_index > exhibit.order_index)
+            .order_by(Exhibit.order_index.asc())
+            .limit(1)
+        )
+        next_slug = next_res.scalar_one_or_none()
+        if next_slug:
+            return RedirectResponse(url=f"/exhibit/{next_slug}", status_code=303)
+        else:
+            return RedirectResponse(url="/thanks", status_code=303)
+
+    questions = exhibit.questions
 
     answers = {}
     missing_required = []
@@ -219,60 +247,27 @@ async def save_answer(
 
             if value_present:
                 answers[question.id] = value_to_save
-
-                # Check if an answer already exists
-                result = await db_session.execute(
-                    select(Answer).where(
-                        Answer.session_id == session.id,
-                        Answer.question_id == question.id,
-                    )
+                new_answer = Answer(
+                    session_id=session.id,
+                    question_id=question.id,
+                    value_json=value_to_save,
                 )
-                existing_answer = result.scalar_one_or_none()
-
-                if existing_answer:
-                    existing_answer.value_json = value_to_save
-                    # Log answer update
-                    log_answer_submission(
-                        session_uuid=str(session.uuid),
-                        question_id=question.id,
-                        exhibit_slug=slug,
-                        action="updated",
-                        question_text=question.text,
-                        question_type=question.type,
-                    )
-                else:
-                    new_answer = Answer(
-                        session_id=session.id,
-                        question_id=question.id,
-                        value_json=value_to_save,
-                    )
-                    db_session.add(new_answer)
-                    # Log new answer
-                    log_answer_submission(
-                        session_uuid=str(session.uuid),
-                        question_id=question.id,
-                        exhibit_slug=slug,
-                        action="created",
-                        question_text=question.text,
-                        question_type=question.type,
-                    )
+                db_session.add(new_answer)
+                # Log new answer
+                log_answer_submission(
+                    session_uuid=str(session.uuid),
+                    question_id=question.id,
+                    exhibit_slug=slug,
+                    action="created",
+                    question_text=question.text,
+                    question_type=question.type,
+                )
             elif question.required:
                 missing_required.append(question)
         elif question.required:
             missing_required.append(question)
 
     if missing_required:
-        # Fetch exhibit by slug
-        exhibit = await db_session.execute(
-            select(Exhibit)
-            .where(Exhibit.slug == slug)
-            .options(
-                selectinload(Exhibit.images),
-                selectinload(Exhibit.questions),
-            )
-        )
-        exhibit = exhibit.scalars().first()
-
         # Prev/Next by order_index
         prev_res = await db_session.execute(
             select(Exhibit.slug)
@@ -290,6 +285,12 @@ async def save_answer(
         next_slug = next_res.scalar_one_or_none()
 
         csrf_token = get_csrf_token(session.uuid)
+
+        from app.schemas import ImageResponse
+
+        images_json = [
+            ImageResponse.model_validate(img).model_dump() for img in exhibit.images
+        ]
 
         error_msg = "Vyplňte všechny povinné otázky: " + ", ".join(
             f"'{q.text}'" for q in missing_required
@@ -311,10 +312,12 @@ async def save_answer(
             "exhibit.html",
             {
                 "exhibit": exhibit,
+                "has_answered": False,
                 "answers": answers,
                 "prev_slug": prev_slug,
                 "next_slug": next_slug,
                 "csrf_token": csrf_token,
+                "images_json": images_json,
                 "error": error_msg,
             },
             status_code=400,

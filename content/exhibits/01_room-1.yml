@@ -26,11 +26,21 @@ images:
 questions:
   - type: "likert"
     text: "Jak na vás expozice působila?"
-    options: [1, 2, 3, 4, 5]
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Vůbec ne"
+        5: "Velmi silně"
     required: true
   - type: "likert"
     text: "Jak se vám líbí tato expozice?"
-    options: [1, 2, 3, 4, 5]
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Vůbec se mi nelíbí"
+        5: "Velmi se mi líbí"
     required: true
   - type: "text"
     text: "Krátká zpětná vazba?"

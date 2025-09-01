@@ -14,6 +14,7 @@ from app.auth import get_admin_user
 from app.db import get_async_session
 from app.models import Answer, Exhibit, Question, Session
 from app.services import analytics
+from app.logging_config import log_admin_access, logger
 
 router = APIRouter(
     prefix="/admin",
@@ -25,9 +26,19 @@ templates = Jinja2Templates(directory="app/templates")
 
 @router.get("/", response_class=HTMLResponse)
 async def admin_dashboard(
-    request: Request, db_session: Annotated[AsyncSession, Depends(get_async_session)]
+    request: Request,
+    db_session: Annotated[AsyncSession, Depends(get_async_session)],
+    admin_user: Annotated[str, Depends(get_admin_user)],
 ):
     """Admin dashboard with KPIs and self-eval stats."""
+    # Log admin dashboard access
+    log_admin_access(
+        username=admin_user,
+        action="dashboard_viewed",
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent"),
+    )
+
     stats = await analytics.get_full_dashboard_stats(db_session)
     return templates.TemplateResponse(
         request,
@@ -44,10 +55,21 @@ async def admin_dashboard(
 async def admin_responses(
     request: Request,
     db_session: Annotated[AsyncSession, Depends(get_async_session)],
+    admin_user: Annotated[str, Depends(get_admin_user)],
     exhibit_id: Optional[int] = Query(None),
     question_id: Optional[int] = Query(None),
 ):
     """Paginated and filtered table of user responses."""
+    # Log admin responses access
+    log_admin_access(
+        username=admin_user,
+        action="responses_viewed",
+        exhibit_filter=exhibit_id,
+        question_filter=question_id,
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent"),
+    )
+
     # Base query remains the same, it's efficient enough for this view
     stmt = (
         select(Answer)
@@ -116,9 +138,11 @@ async def stream_csv(responses: list[Answer]) -> AsyncGenerator[str, None]:
             r.question.id,
             r.question.text,
             json.dumps(r.value_json, ensure_ascii=False),
-            json.dumps(r.session.selfeval_json, ensure_ascii=False)
-            if r.session.selfeval_json
-            else None,
+            (
+                json.dumps(r.session.selfeval_json, ensure_ascii=False)
+                if r.session.selfeval_json
+                else None
+            ),
         ]
         writer.writerow(row)
         yield output.getvalue()
@@ -127,8 +151,16 @@ async def stream_csv(responses: list[Answer]) -> AsyncGenerator[str, None]:
 @router.get("/export.csv")
 async def export_responses_csv(
     db_session: Annotated[AsyncSession, Depends(get_async_session)],
+    admin_user: Annotated[str, Depends(get_admin_user)],
 ):
     """Export all responses to a CSV file using a streaming response."""
+    # Log CSV export action
+    log_admin_access(
+        username=admin_user,
+        action="csv_export",
+        export_format="csv",
+    )
+
     stmt = (
         select(Answer)
         .options(
@@ -139,6 +171,16 @@ async def export_responses_csv(
     )
     result = await db_session.execute(stmt)
     responses = result.scalars().all()  # Still loads all, but streams the output
+
+    # Log export completion with record count
+    logger.info(
+        "CSV export completed",
+        extra={
+            "admin_user": admin_user,
+            "total_records": len(responses),
+            "export_format": "csv",
+        },
+    )
 
     return StreamingResponse(
         stream_csv(responses),

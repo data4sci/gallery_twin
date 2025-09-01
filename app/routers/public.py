@@ -10,6 +10,7 @@ from starlette.status import HTTP_404_NOT_FOUND
 
 from app.dependencies import get_csrf_token, track_session, verify_csrf_token
 from app.models import Answer, Exhibit, Question, Session
+from app.logging_config import log_session_event, log_answer_submission, logger
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -63,6 +64,14 @@ async def selfeval_post(
     db_session.add(session)
     await db_session.commit()
 
+    # Log self-evaluation completion
+    log_session_event(
+        event_type="selfeval_completed",
+        session_uuid=str(session.uuid),
+        form_fields=list(form.keys()),
+        total_fields=len(form),
+    )
+
     # Find first exhibit slug
     result = await db_session.execute(
         select(Exhibit).order_by(Exhibit.order_index.asc())
@@ -94,6 +103,15 @@ async def exhibit_detail(
     exhibit = result.scalars().first()
     if not exhibit:
         raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="Exhibit not found")
+
+    # Log exhibit view
+    log_session_event(
+        event_type="exhibit_viewed",
+        session_uuid=str(session.uuid),
+        exhibit_slug=slug,
+        exhibit_id=exhibit.id,
+        exhibit_title=exhibit.title,
+    )
 
     # Fetch existing answers for this session
     result = await db_session.execute(
@@ -201,6 +219,15 @@ async def save_answer(
 
                 if existing_answer:
                     existing_answer.value_json = value_to_save
+                    # Log answer update
+                    log_answer_submission(
+                        session_uuid=str(session.uuid),
+                        question_id=question.id,
+                        exhibit_slug=slug,
+                        action="updated",
+                        question_text=question.text,
+                        question_type=question.type,
+                    )
                 else:
                     new_answer = Answer(
                         session_id=session.id,
@@ -208,6 +235,15 @@ async def save_answer(
                         value_json=value_to_save,
                     )
                     db_session.add(new_answer)
+                    # Log new answer
+                    log_answer_submission(
+                        session_uuid=str(session.uuid),
+                        question_id=question.id,
+                        exhibit_slug=slug,
+                        action="created",
+                        question_text=question.text,
+                        question_type=question.type,
+                    )
             elif question.required:
                 missing_required.append(question)
         elif question.required:
@@ -247,6 +283,17 @@ async def save_answer(
             f"'{q.text}'" for q in missing_required
         )
 
+        # Log validation error
+        logger.warning(
+            "Form validation failed",
+            extra={
+                "session_uuid": str(session.uuid),
+                "exhibit_slug": slug,
+                "missing_required_questions": [q.text for q in missing_required],
+                "total_missing": len(missing_required),
+            },
+        )
+
         return templates.TemplateResponse(
             request,
             "exhibit.html",
@@ -262,6 +309,15 @@ async def save_answer(
         )
 
     await db_session.commit()
+
+    # Log successful form submission
+    log_session_event(
+        event_type="exhibit_form_submitted",
+        session_uuid=str(session.uuid),
+        exhibit_slug=slug,
+        total_answers=len(answers),
+        question_ids=list(answers.keys()),
+    )
 
     # Find next slug to redirect
     result = await db_session.execute(select(Exhibit).where(Exhibit.slug == slug))
@@ -282,4 +338,13 @@ async def save_answer(
         session.completed = True
         db_session.add(session)
         await db_session.commit()
+
+        # Log session completion
+        log_session_event(
+            event_type="session_completed",
+            session_uuid=str(session.uuid),
+            final_exhibit_slug=slug,
+            total_exhibits_completed=current_exhibit.order_index,
+        )
+
         return RedirectResponse(url="/thanks", status_code=303)

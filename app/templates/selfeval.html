@@ -42,6 +42,8 @@
               </label>
             {% endfor %}
           </div>
+        {% elif q.type == "text" and q.id == "age" %}
+          <input type="number" id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" min="0" step="1" {% if q.required %}required{% endif %}>
         {% elif q.type == "text" %}
           <input type="text" id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" {% if q.required %}required{% endif %}>
         {% endif %}

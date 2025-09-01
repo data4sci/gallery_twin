@@ -42,17 +42,9 @@ Jednoduchá webová aplikace pro „virtuální galerii“: návštěvník si pr
 
 * Projdu **lineárně** N expozic → všude vidím obrázky, text, pustím audio, dotazník uloží odpovědi do SQLite.
 * Hard-refresh neztratí již uložené odpovědi; SessionID váže odpovědi k návštěvě.
-* Admin po zadání hesla vidí: počty návštěv, completion rate, rozpad odpovědí, **Export CSV, XLSX**.
-* Obsah lze definovat v `content/exhibits/*.yml` a načte se při startu.
+* Admin po zadání hesla vidí: počty návštěv, completion rate, rozpad odpovědí, **Export CSV**.
+* Obsah lze definovat v `content/exhibits/*.yml` a načte se při prvním startu aplikace.
 * Závěrečná stránka se zobrazí po poslední expozici.
-
-## Milníky
-
-* **M1 Skelety (0.5 d)**: routing, šablony, /, /exhibit/\:slug, /thanks, /admin (guard).
-* **M2 Model & migrace (0.5 d)**: SQLite schéma, loader YAML → DB seed.
-* **M3 Dotazník & ukládání (0.5–1 d)**: formuláře, validace, POST→DB, Session cookie.
-* **M4 Admin (0.5–1 d)**: agregace, filtry, CSV export.
-* **M5 UX & obsah (0.5 d)**: responsive layout, klávesové zkratky, basic a11y, transkript pole.
 
 ---
 

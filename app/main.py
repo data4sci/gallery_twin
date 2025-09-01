@@ -8,6 +8,7 @@ from app.middleware import SessionMiddleware
 from app.routers import admin, public
 from app.services.startup_tasks import run_startup_tasks
 from app.db import get_async_session
+from app.logging_config import logger
 
 from contextlib import asynccontextmanager
 
@@ -15,9 +16,12 @@ from contextlib import asynccontextmanager
 @asynccontextmanager
 async def lifespan(app):
     # Startup
+    logger.info("Starting Gallery Twin application")
     await run_startup_tasks()
+    logger.info("Application startup completed")
     yield
-    # (Optional) Shutdown tasks here
+    # Shutdown
+    logger.info("Shutting down Gallery Twin application")
 
 
 app = FastAPI(title="Gallery Twin", lifespan=lifespan)
@@ -38,7 +42,9 @@ async def health_check(db_session: AsyncSession = Depends(get_async_session)):
         # Try to execute a simple query to check database connection
         await db_session.execute(text("SELECT 1"))
         db_status = "ok"
-    except Exception:
+        logger.debug("Health check passed - database connection OK")
+    except Exception as e:
         db_status = "error"
+        logger.error(f"Health check failed - database connection error: {e}")
 
     return {"status": "ok", "database": db_status}

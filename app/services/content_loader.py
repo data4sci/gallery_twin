@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
 from app.models import Exhibit, Image, Question, QuestionType
+from app.logging_config import content_logger, log_content_loading, log_error
 
 
 def _order_from_filename(filename: str) -> int:
@@ -48,19 +49,21 @@ async def load_content_from_dir(
     """
     base = Path(content_dir)
     if not base.exists():
-        print(f"[content_loader] Directory not found: {base}")
+        content_logger.warning(f"Directory not found: {base}")
         return 0
 
     files = sorted(list(base.glob("*.yml")) + list(base.glob("*.yaml")))
     if not files:
-        print(f"[content_loader] No YAML files in: {base}")
+        content_logger.info(f"No YAML files found in: {base}")
         return 0
 
     # Check for existing exhibits to avoid duplicates
     result = await session.execute(select(Exhibit.slug))
     existing_slugs = {row[0] for row in result.all()}
 
-    print(f"[content_loader] Found {len(existing_slugs)} existing exhibits. Checking for new content...")
+    content_logger.info(
+        f"Found {len(existing_slugs)} existing exhibits. Checking for new content in {len(files)} files..."
+    )
     processed = 0
     for f in files:
         data = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
@@ -107,13 +110,14 @@ async def load_content_from_dir(
             session.add(question)
 
         processed += 1
-        print(f"[content_loader] Loaded new exhibit: {slug}")
+        content_logger.info(f"Loaded new exhibit: {slug}")
 
     await session.commit()
 
     if processed > 0:
-        print(f"[content_loader] Loaded {processed} new exhibits from {base}")
+        log_content_loading(processed, directory=str(base))
+        content_logger.info(f"Successfully loaded {processed} new exhibits from {base}")
     else:
-        print("[content_loader] No new content to load.")
+        content_logger.info("No new content to load - all exhibits already exist")
 
     return processed

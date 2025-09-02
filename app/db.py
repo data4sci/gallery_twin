@@ -3,6 +3,8 @@ Database connection and session management for Gallery Twin.
 """
 
 import os
+import uuid
+from datetime import datetime, timezone
 from typing import AsyncGenerator
 from uuid import UUID
 
@@ -55,35 +57,6 @@ async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
         finally:
             await session.close()
 
-
-async def get_or_create_session(
-    db_session: AsyncSession,
-    session_uuid: str,
-    user_agent: str | None,
-    accept_lang: str | None,
-) -> Session:
-    """Get a session from the database or create it if it doesn't exist."""
-    try:
-        session_uuid_obj = UUID(session_uuid)
-    except Exception:
-        session_uuid_obj = session_uuid  # fallback, but should be UUID
-
-    result = await db_session.execute(
-        select(Session).where(Session.uuid == session_uuid_obj)
-    )
-    db_session_obj = result.scalar_one_or_none()
-
-    if not db_session_obj:
-        db_session_obj = Session(
-            uuid=session_uuid_obj,
-            user_agent=user_agent,
-            accept_lang=accept_lang,
-        )
-        db_session.add(db_session_obj)
-        await db_session.commit()
-        await db_session.refresh(db_session_obj)
-
-    return db_session_obj
 
 
 async def get_session() -> AsyncSession:

@@ -1,12 +1,15 @@
 import os
+import uuid
+from datetime import datetime, timezone
 from typing import Annotated, Tuple
 
 from fastapi import Depends, Form, Header, HTTPException, Request
 from itsdangerous import BadSignature, URLSafeTimedSerializer
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import select
 from starlette.status import HTTP_403_FORBIDDEN
 
-from app.db import get_async_session, get_or_create_session
+from app.db import get_async_session
 from app.models import Session
 
 SECRET_KEY = os.getenv("SECRET_KEY", "a-very-secret-key")
@@ -19,20 +22,62 @@ async def track_session(
     accept_language: Annotated[str | None, Header()] = None,
 ) -> Tuple[Session, AsyncSession]:
     """
-    FastAPI dependency to get or create a session based on the session cookie.
+    FastAPI dependency to get a session.
+
+    - Validates session from cookie.
+    - If session is expired or invalid, creates a new one (preserving the old one).
+    - The definitive session_id is stored in request.state.session_id
+      for the middleware to set the cookie.
     """
-    session_uuid = request.state.session_id
-    db_session_obj = await get_or_create_session(
-        db_session=db_session,
-        session_uuid=session_uuid,
-        user_agent=user_agent,
-        accept_lang=accept_language,
-    )
+    session_uuid_str = getattr(request.state, "session_id", None)
+    db_session_obj = None
+
+    if session_uuid_str:
+        try:
+            session_uuid = uuid.UUID(session_uuid_str)
+            result = await db_session.execute(
+                select(Session).where(Session.uuid == session_uuid)
+            )
+            found_session = result.scalar_one_or_none()
+
+            if found_session:
+                max_age = int(os.getenv("SESSION_COOKIE_MAX_AGE", 30 * 24 * 60 * 60))
+                session_age = datetime.now(timezone.utc) - found_session.last_activity.replace(
+                    tzinfo=timezone.utc
+                )
+
+                if session_age.total_seconds() <= max_age:
+                    # Session is valid and not expired
+                    db_session_obj = found_session
+                    db_session_obj.last_activity = datetime.now(timezone.utc)
+                    await db_session.commit()
+
+        except (ValueError, TypeError):
+            # Invalid UUID in cookie, treat as no session
+            pass
+
+    if db_session_obj is None:
+        # Create a new session if:
+        # - No cookie was provided
+        # - Cookie was invalid
+        # - Session was not found in DB
+        # - Session was expired
+        db_session_obj = Session(
+            uuid=uuid.uuid4(),
+            user_agent=user_agent,
+            accept_lang=accept_language,
+        )
+        db_session.add(db_session_obj)
+        await db_session.commit()
+        await db_session.refresh(db_session_obj)
+
+    # Set the definitive session ID for the middleware to use
+    request.state.session_id = str(db_session_obj.uuid)
     return db_session_obj, db_session
 
 
 def get_csrf_token(session_id: str) -> str:
-    """Generate a CSRF token for the given session ID."""
+    """Generate a CSRF token for the given session ID."""""
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     return serializer.dumps(str(session_id))
 
@@ -40,7 +85,7 @@ def get_csrf_token(session_id: str) -> str:
 async def verify_csrf_token(
     request: Request, csrf_token: Annotated[str, Form(...)]
 ) -> None:
-    """Dependency to verify the CSRF token from a form submission."""
+    """Dependency to verify the CSRF token from a form submission."""""
     session_id = request.state.session_id
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     try:

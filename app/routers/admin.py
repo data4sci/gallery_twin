@@ -5,7 +5,6 @@ from typing import Annotated, AsyncGenerator, Optional
 
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -16,12 +15,13 @@ from app.models import Answer, Exhibit, Question, Session
 from app.services import analytics
 from app.logging_config import log_admin_access, logger
 
+from app.main import templates
+
 router = APIRouter(
     prefix="/admin",
     tags=["admin"],
     dependencies=[Depends(get_admin_user)],
 )
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/", response_class=HTMLResponse)

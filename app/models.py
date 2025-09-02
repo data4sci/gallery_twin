@@ -111,6 +111,11 @@ class Session(TimestampMixin, SQLModel, table=True):
     selfeval_json: Optional[dict] = Field(
         default=None, sa_column=Column(JSON), description="Autoevaluační odpovědi"
     )
+    last_activity: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc),
+        sa_column=Column(DateTime(timezone=True)),
+        description="Čas poslední aktivity pro session expiration",
+    )
 
     # Relationships
     answers: List["Answer"] = Relationship(back_populates="session")

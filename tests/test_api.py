@@ -68,7 +68,7 @@ async def test_admin_authorized(db_session):
 @pytest.mark.asyncio
 async def test_post_exhibit_answer_and_completion(db_session):
     # Vytvoření exhibit a otázky
-    from app.models import Exhibit, Question, Session
+    from app.models import Exhibit, Question
 
     exhibit = Exhibit(
         slug="test-exhibit",
@@ -85,18 +85,33 @@ async def test_post_exhibit_answer_and_completion(db_session):
     db_session.add(question)
     await db_session.commit()
 
-    # Create a session with language set
-    session = Session(language="cz")
-    db_session.add(session)
-    await db_session.commit()
-
-    # GET /exhibit/{slug} pro získání csrf_token a session cookie
+    # Nejdřív nastavíme jazyk a pak získáme exhibit
     async with AsyncClient(
-        transport=ASGITransport(app=app), base_url="http://test", follow_redirects=True
+        transport=ASGITransport(app=app), base_url="http://test", follow_redirects=False
     ) as ac:
-        ac.cookies.set("gallery_session_id", str(session.uuid))
+        # 1. Nastavit jazyk
+        lang_resp = await ac.get("/select-language/cz")
+        assert lang_resp.status_code == 303
+        assert lang_resp.headers["location"] == "/selfeval"
+
+        # 2. Získat session UUID z cookie
+        SESSION_COOKIE_NAME = "gallery_session_id"
+        session_uuid_str = None
+        for cookie in ac.cookies.jar:
+            if cookie.name == SESSION_COOKIE_NAME:
+                session_uuid_str = cookie.value
+                break
+        assert session_uuid_str is not None, "Middleware nevytvořil session cookie"
+        session_uuid_obj = uuid.UUID(session_uuid_str)
+
+        # 3. Nastavit selfeval (jinak se redirectuje)
+        selfeval_resp = await ac.post("/selfeval", data={"dummy": "data"})
+        assert selfeval_resp.status_code == 303
+
+        # 4. Teď můžeme získat exhibit
         get_resp = await ac.get(f"/exhibit/{exhibit.slug}")
         assert get_resp.status_code == 200
+
         # Získání csrf_token z HTML
         import re
 
@@ -120,18 +135,14 @@ async def test_post_exhibit_answer_and_completion(db_session):
 
         # Ověření, že session byla označena jako dokončená
         from sqlalchemy import select
+        from app.models import Session
 
-        SESSION_COOKIE_NAME = (
-            "gallery_session_id"  # The cookie name is defined in the middleware
-        )
-        session_uuid_str = ac.cookies.get(SESSION_COOKIE_NAME)
-        session_uuid_obj = uuid.UUID(session_uuid_str)
         result = await db_session.execute(
             select(Session).where(Session.uuid == session_uuid_obj)
         )
         final_session = result.scalar_one_or_none()
-        assert final_session is not None
-        assert final_session.completed is True
+        assert final_session is not None, "Session nebyla nalezena v databázi"
+        assert final_session.completed is True, "Session nebyla označena jako dokončená"
 
 
 @pytest.mark.asyncio

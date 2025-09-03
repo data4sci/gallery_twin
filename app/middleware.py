@@ -33,15 +33,19 @@ class SessionMiddleware(BaseHTTPMiddleware):
         # 4. Get the final session ID after the dependency has run.
         final_session_id = getattr(request.state, "session_id", original_session_id)
 
-        # 5. If the ID is new, set the cookie on the response.
-        if final_session_id != original_session_id:
-            max_age = int(os.getenv("SESSION_COOKIE_MAX_AGE", 30 * 24 * 60 * 60))
-            response.set_cookie(
-                key=SESSION_COOKIE_NAME,
-                value=final_session_id,
-                httponly=True,
-                samesite="lax",
-                max_age=max_age,
-            )
+        # 5. Set (or refresh) the cookie on the response so the browser-side
+        # expiration mirrors the server-side TTL. Use SESSION_TTL env var
+        # (seconds) and default to 60s for short sessions in dev/test.
+        max_age = int(os.getenv("SESSION_TTL", "60"))
+        # Always set the cookie with the definitive session id so the
+        # browser receives a refreshed expiry (sliding expiration behavior).
+        response.set_cookie(
+            key=SESSION_COOKIE_NAME,
+            value=final_session_id,
+            httponly=True,
+            samesite="lax",
+            max_age=max_age,
+            expires=max_age,
+        )
 
         return response

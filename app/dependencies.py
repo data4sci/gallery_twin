@@ -41,13 +41,16 @@ async def track_session(
             found_session = result.scalar_one_or_none()
 
             if found_session:
-                max_age = int(os.getenv("SESSION_COOKIE_MAX_AGE", 30 * 24 * 60 * 60))
-                session_age = datetime.now(timezone.utc) - found_session.last_activity.replace(
-                    tzinfo=timezone.utc
-                )
+                # Use SESSION_TTL (seconds) to control session expiry (default 30 days)
+                session_ttl = int(
+                    os.getenv("SESSION_TTL", "2592000")
+                )  # 30 * 24 * 60 * 60
+                session_age = datetime.now(
+                    timezone.utc
+                ) - found_session.last_activity.replace(tzinfo=timezone.utc)
 
-                if session_age.total_seconds() <= max_age:
-                    # Session is valid and not expired
+                if session_age.total_seconds() <= session_ttl:
+                    # Session is valid and not expired; refresh last_activity
                     db_session_obj = found_session
                     db_session_obj.last_activity = datetime.now(timezone.utc)
                     await db_session.commit()
@@ -77,7 +80,7 @@ async def track_session(
 
 
 def get_csrf_token(session_id: str) -> str:
-    """Generate a CSRF token for the given session ID."""""
+    """Generate a CSRF token for the given session ID.""" ""
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     return serializer.dumps(str(session_id))
 
@@ -85,7 +88,7 @@ def get_csrf_token(session_id: str) -> str:
 async def verify_csrf_token(
     request: Request, csrf_token: Annotated[str, Form(...)]
 ) -> None:
-    """Dependency to verify the CSRF token from a form submission."""""
+    """Dependency to verify the CSRF token from a form submission.""" ""
     session_id = request.state.session_id
     serializer = URLSafeTimedSerializer(SECRET_KEY)
     try:

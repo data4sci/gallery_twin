@@ -16,7 +16,6 @@ from app.main import templates
 router = APIRouter()
 
 from app.services.selfeval_loader import SelfEvalConfig
-from app.services.translations import get_translations
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -79,9 +78,8 @@ async def selfeval_get(
             return RedirectResponse(url="/thanks", status_code=303)
 
     questions = SelfEvalConfig.get_questions(session.language)
-    translations = get_translations(session.language)
     return templates.TemplateResponse(
-        request, "selfeval.html", {"questions": questions, "translations": translations}
+        request, "selfeval.html", {"questions": questions}
     )
 
 
@@ -194,8 +192,6 @@ async def exhibit_detail(
         ImageResponse.model_validate(img).model_dump() for img in exhibit.images
     ]
 
-    translations = get_translations(session.language)
-
     return templates.TemplateResponse(
         request,
         "exhibit.html",
@@ -206,7 +202,6 @@ async def exhibit_detail(
             "next_slug": next_slug,
             "csrf_token": csrf_token,
             "images_json": images_json,
-            "translations": translations,
         },
     )
 
@@ -218,14 +213,7 @@ async def thanks(
 ):
     """Final page."""
     session, _ = tracked_session
-    translations = (
-        get_translations(session.language)
-        if session.language
-        else get_translations("cz")
-    )
-    return templates.TemplateResponse(
-        request, "thanks.html", {"translations": translations}
-    )
+    return templates.TemplateResponse(request, "thanks.html", {})
 
 
 @router.post("/exhibit/{slug}/answer", dependencies=[Depends(verify_csrf_token)])
@@ -366,8 +354,6 @@ async def save_answer(
             },
         )
 
-        translations = get_translations(session.language)
-
         return templates.TemplateResponse(
             request,
             "exhibit.html",
@@ -380,7 +366,6 @@ async def save_answer(
                 "csrf_token": csrf_token,
                 "images_json": images_json,
                 "error": error_msg,
-                "translations": translations,
             },
             status_code=400,
         )
@@ -431,7 +416,5 @@ async def save_answer(
             total_exhibits_completed=current_exhibit.order_index,
         )
 
-        translations = get_translations(session.language)
-        return templates.TemplateResponse(
-            request, "thanks.html", {"translations": translations}
-        )
+        # Redirect to the canonical thanks page (keeps behavior consistent)
+        return RedirectResponse(url="/thanks", status_code=303)

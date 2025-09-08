@@ -29,6 +29,37 @@
         }
     }"
     @keydown.window="handleKey($event)">
+    
+    <!-- Top navigation buttons -->
+    <div class="flex flex-col sm:flex-row justify-between mb-6 space-y-4 sm:space-y-0">
+        {% if prev_slug %}
+        <a href="{{ url_for('exhibit_detail', slug=prev_slug) }}" 
+            aria-label="Go to previous exhibit"
+            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+            &laquo; Previous
+        </a>
+        {% else %}
+        <a href="{{ url_for('index') }}" 
+            aria-label="Go to home page"
+            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+            &laquo; Previous
+        </a>
+        {% endif %}
+
+        {% if next_slug %}
+        <a href="{{ url_for('exhibit_detail', slug=next_slug) }}" 
+            aria-label="Go to next exhibit"
+            class="w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Next &raquo;
+        </a>
+        {% else %}
+        <a href="{{ url_for('thanks') }}"
+            class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            Finish
+        </a>
+        {% endif %}
+    </div>
+    
     <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ exhibit.title }}</h1>
 
     <div class="prose max-w-none mb-8">

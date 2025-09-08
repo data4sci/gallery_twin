@@ -1,79 +1,20 @@
-slug: room-3
-master_image: "img/master_image_3.png"
-images:
-  - path: "img/example_image_3_1.png"
-    alt: "Example image 3-1"
-  - path: "img/example_image_3_2.png"
-    alt: "Example image 3-2"
-  - path: "img/example_image_3_3.png"
-    alt: "Example image 3-3"
-  - path: "img/example_image_3_4.png"
-    alt: "Example image 3-4"
-  - path: "img/example_image_3_5.png"
-    alt: "Example image 3-5"
-  - path: "img/example_image_3_6.png"
-    alt: "Example image 3-6"
-
-cz:
-  title: "Room 3 — Barva a emoce"
-  text_md: |
-    **Barva a emoce**
-    Zaměřte se na emocionální odezvu vyvolanou barevnými kontrasty a sytostí.
-  audio: "audio/room3.mp3"
-  questions:
-    - type: "multi"
-      text: "Jaké emoce jste cítili?"
-      options: ["radost", "klid", "napětí", "nostalgie", "jiné"]
-      required: true
-    - type: "text"
-      text: "Popište stručně, co ve vás barvy vyvolaly."
-    - type: "likert"
-      text: "Jak intenzivní byl celkový dojem?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Slabý"
-          5: "Velmi intenzivní"
-en:
-  title: "Room 3 — Color and Emotion"
-  text_md: |
-    **Color and Emotion**
-    Focus on the emotional response evoked by color contrasts and saturation.
-  audio: "audio/room3_en.mp3"
-  questions:
-    - type: "multi"
-      text: "What emotions did you feel?"
-      options: ["joy", "calm", "tension", "nostalgia", "other"]
-      required: true
-    - type: "text"
-      text: "Briefly describe what the colors evoked in you."
-    - type: "likert"
-      text: "How intense was the overall impression?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Weak"
-          5: "Very intense"
-ua:
-  title: "Кімната 3 — Колір та емоції"
-  text_md: |
-    **Колір та емоції**
-    Зосередьтеся на емоційній реакції, викликаній контрастами кольорів та насиченістю.
-  audio: "audio/room3_ua.mp3"
-  questions:
-    - type: "multi"
-      text: "Які емоції ви відчували?"
-      options: ["радість", "спокій", "напруга", "ностальгія", "інше"]
-      required: true
-    - type: "text"
-      text: "Коротко опишіть, що у вас викликали кольори."
-    - type: "likert"
-      text: "Наскільки інтенсивним було загальне враження?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Слабке"
-          5: "Дуже інтенсивне"
+title: "Room 3 — Color and Emotion"
+text_md: |
+  **Color and Emotion**
+  Focus on the emotional response evoked by color contrasts and saturation.
+audio: "audio/room3.mp3"
+questions:
+  - type: "multi"
+    text: "What emotions did you feel?"
+    options: ["joy", "calm", "tension", "nostalgia", "other"]
+    required: true
+  - type: "text"
+    text: "Briefly describe what the colors evoked in you."
+  - type: "likert"
+    text: "How intense was the overall impression?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Weak"
+        5: "Very intense"

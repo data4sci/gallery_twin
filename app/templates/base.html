@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ request.state.lang if request and request.state and request.state.lang else 'cs' }}">
+<html lang="{{ request.state.lang if request and request.state and request.state.lang else 'en' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,11 +18,9 @@
                     <span class="text-lg font-semibold">Gallery Twin</span>
                 </a>
 
-                <nav class="flex items-center space-x-3">
-                    <a href="{{ url_for('select_language', lang='cz') }}" class="text-sm px-3 py-1 rounded hover:bg-gray-100">Čeština</a>
-                    <a href="{{ url_for('select_language', lang='en') }}" class="text-sm px-3 py-1 rounded hover:bg-gray-100">English</a>
-                    <a href="{{ url_for('select_language', lang='ua') }}" class="text-sm px-3 py-1 rounded hover:bg-gray-100">Українська</a>
-                </nav>
+                    <nav class="flex items-center space-x-3">
+                        <span class="text-sm px-3 py-1">English</span>
+                    </nav>
             </div>
         </div>
     </header>
@@ -33,7 +31,7 @@
 
     <footer class="mt-12 border-t bg-white">
         <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500">
-            &copy; {{ "Gallery Twin" }} — {{ t(request, 'back_to_start') if request else 'Gallery' }}
+            &copy; {{ "Gallery Twin" }} — Gallery
         </div>
     </footer>
 </body>

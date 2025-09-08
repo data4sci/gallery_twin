@@ -44,8 +44,7 @@ class Exhibit(SQLModel, table=True):
     __tablename__ = "exhibits"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    slug: str = Field(index=True)
-    language: str = Field(index=True)
+    slug: str = Field(index=True, unique=True)
     title: str
     text_md: str  # Markdown content
     audio_path: Optional[str] = None
@@ -104,7 +103,6 @@ class Session(TimestampMixin, SQLModel, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
     uuid: UUID = Field(default_factory=uuid4, unique=True, index=True)
-    language: Optional[str] = Field(default=None, index=True)
     user_agent: Optional[str] = None
     accept_lang: Optional[str] = None
     completed: bool = Field(default=False, description="Dokončeno")

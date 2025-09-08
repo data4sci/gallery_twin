@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Admin - Odpovědi{% endblock %}
+{% block title %}Admin - Responses{% endblock %}
 
 {% block content %}
 <div class="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-        <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Odpovědi návštěvníků</h1>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">Visitor responses</h1>
         <a href="{{ url_for('export_responses_csv') }}" class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Exportovat CSV
+            Export CSV
         </a>
     </div>
 
@@ -15,25 +15,25 @@
         <form method="GET" action="{{ url_for('admin_responses') }}">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div>
-                    <label for="exhibit_id" class="block text-sm font-medium text-gray-700">Expozice</label>
+                    <label for="exhibit_id" class="block text-sm font-medium text-gray-700">Exhibit</label>
                     <select name="exhibit_id" id="exhibit_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option value="">Všechny</option>
+                        <option value="">All</option>
                         {% for exhibit in exhibits %}
                         <option value="{{ exhibit.id }}" {% if exhibit.id == selected_exhibit %}selected{% endif %}>{{ exhibit.title }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
-                    <label for="question_id" class="block text-sm font-medium text-gray-700">Otázka</label>
+                    <label for="question_id" class="block text-sm font-medium text-gray-700">Question</label>
                     <select name="question_id" id="question_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                        <option value="">Všechny</option>
+                        <option value="">All</option>
                         {% for question in questions %}
                         <option value="{{ question.id }}" {% if question.id == selected_question %}selected{% endif %}>{{ question.text }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="self-end flex space-x-2">
-                    <button type="submit" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Filtrovat</button>
+                    <button type="submit" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Filter</button>
                     <a href="{{ url_for('admin_responses') }}" class="w-full sm:w-auto text-center py-2 px-4 text-gray-500 hover:underline">Reset</a>
                 </div>
             </div>
@@ -45,10 +45,10 @@
             <thead class="bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Session UUID</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Čas odpovědi</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expozice</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Otázka</th>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Odpověď</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Answer time</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exhibit</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Question</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Answer</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selfeval</th>
                 </tr>
             </thead>
@@ -58,7 +58,7 @@
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ response.session.uuid|string|slice(0,8) }}...</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ response.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ response.question.exhibit.title if response.question.exhibit else 'Globální' }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ response.question.exhibit.title if response.question.exhibit else t(request, 'global') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ response.question.text }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                             {% if response.value_json is not none %}
@@ -80,14 +80,14 @@
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">Nebyly nalezeny žádné odpovědi.</td>
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No responses were found.</td>
                     </tr>
                 {% endif %}
             </tbody>
         </table>
     </div>
     <div class="mt-4">
-        <a href="{{ url_for('admin_dashboard') }}" class="text-blue-500 hover:underline">&laquo; Zpět na Dashboard</a>
+    <a href="{{ url_for('admin_dashboard') }}" class="text-blue-500 hover:underline">&laquo; Back to Dashboard</a>
     </div>
 </div>
 {% endblock %}

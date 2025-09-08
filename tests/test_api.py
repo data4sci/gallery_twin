@@ -25,15 +25,15 @@ async def test_index(db_session):
     ) as ac:
         response = await ac.get("/")
     assert response.status_code == 200
-    assert "Vítejte v naší virtuální galerii" in response.text
+    assert "Welcome to our virtual gallery" in response.text
 
 
 @pytest.mark.asyncio
 async def test_exhibit_not_found(db_session):
     from app.models import Session
 
-    # Create a session with language set
-    session = Session(language="cz")
+    # Create a session
+    session = Session()
     db_session.add(session)
     await db_session.commit()
 
@@ -75,7 +75,6 @@ async def test_post_exhibit_answer_and_completion(db_session):
         title="Test Exhibit",
         text_md="...",
         order_index=1,
-        language="cz",
     )
     db_session.add(exhibit)
     await db_session.commit()
@@ -89,26 +88,25 @@ async def test_post_exhibit_answer_and_completion(db_session):
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test", follow_redirects=False
     ) as ac:
-        # 1. Nastavit jazyk
-        lang_resp = await ac.get("/select-language/cz")
-        assert lang_resp.status_code == 303
-        assert lang_resp.headers["location"] == "/selfeval"
+        # 1. Request selfeval page to establish session cookie
+        lang_resp = await ac.get("/selfeval")
+        assert lang_resp.status_code == 200
 
-        # 2. Získat session UUID z cookie
+        # 2. Get session UUID from cookie
         SESSION_COOKIE_NAME = "gallery_session_id"
         session_uuid_str = None
         for cookie in ac.cookies.jar:
             if cookie.name == SESSION_COOKIE_NAME:
                 session_uuid_str = cookie.value
                 break
-        assert session_uuid_str is not None, "Middleware nevytvořil session cookie"
+        assert session_uuid_str is not None, "Middleware did not create session cookie"
         session_uuid_obj = uuid.UUID(session_uuid_str)
 
-        # 3. Nastavit selfeval (jinak se redirectuje)
+        # 3. Submit selfeval (then redirected)
         selfeval_resp = await ac.post("/selfeval", data={"dummy": "data"})
         assert selfeval_resp.status_code == 303
 
-        # 4. Teď můžeme získat exhibit
+        # 4. Now we can fetch the exhibit
         get_resp = await ac.get(f"/exhibit/{exhibit.slug}")
         assert get_resp.status_code == 200
 
@@ -152,7 +150,7 @@ async def test_thanks_page(db_session):
     ) as ac:
         resp = await ac.get("/thanks")
     assert resp.status_code == 200
-    assert "Děkujeme" in resp.text or "děkujeme" in resp.text
+    assert "Thank you" in resp.text or "thank you" in resp.text
 
 
 @pytest.mark.asyncio
@@ -165,7 +163,6 @@ async def test_admin_responses_page(db_session):
         title="Admin Exhibit",
         text_md="...",
         order_index=1,
-        language="cz",
     )
     db_session.add(exhibit)
     await db_session.commit()
@@ -210,7 +207,6 @@ async def test_admin_export_csv(db_session):
         title="CSV Exhibit",
         text_md="...",
         order_index=1,
-        language="cz",
     )
     db_session.add(exhibit)
     await db_session.commit()

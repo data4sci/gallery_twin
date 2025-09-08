@@ -25,9 +25,7 @@ async def index(
 ):
     """Intro page with link to start (selfeval)."""
     session, db_session = tracked_session
-    # If language already selected, go to selfeval
-    if session.language:
-        return RedirectResponse(url="/selfeval", status_code=303)
+    # English-only app: no language selection step
 
     result = await db_session.execute(
         select(Exhibit).order_by(Exhibit.order_index.asc())
@@ -40,18 +38,7 @@ async def index(
     )
 
 
-@router.get("/select-language/{lang}")
-async def select_language(
-    lang: str,
-    request: Request,
-    tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
-):
-    """Set language in session and redirect to self-evaluation."""
-    session, db_session = tracked_session
-    session.language = lang
-    db_session.add(session)
-    await db_session.commit()
-    return RedirectResponse(url="/selfeval", status_code=303)
+# Language selection route removed - app is English-only
 
 
 @router.get("/selfeval", response_class=HTMLResponse)
@@ -61,15 +48,12 @@ async def selfeval_get(
 ):
     """Show self-evaluation form."""
     session, db_session = tracked_session
-    if not session.language:
-        return RedirectResponse(url="/", status_code=303)
+    # Ensure english-only flow: session.language is expected to be 'en'
 
     if session.selfeval_json:
         # If self-evaluation is already done, redirect to the first exhibit
         result = await db_session.execute(
-            select(Exhibit)
-            .where(Exhibit.language == session.language)
-            .order_by(Exhibit.order_index.asc())
+            select(Exhibit).order_by(Exhibit.order_index.asc())
         )
         first: Optional[Exhibit] = result.scalars().first()
         if first:
@@ -77,7 +61,7 @@ async def selfeval_get(
         else:
             return RedirectResponse(url="/thanks", status_code=303)
 
-    questions = SelfEvalConfig.get_questions(session.language)
+    questions = SelfEvalConfig.get_questions("en")
     return templates.TemplateResponse(
         request, "selfeval.html", {"questions": questions}
     )
@@ -90,8 +74,7 @@ async def selfeval_post(
 ):
     """Process self-evaluation form and redirect to first exhibit."""
     session, db_session = tracked_session
-    if not session.language:
-        return RedirectResponse(url="/", status_code=303)
+    # english-only
 
     form = await request.form()
     # Store all form data as dict in selfeval_json
@@ -109,9 +92,7 @@ async def selfeval_post(
 
     # Find first exhibit slug
     result = await db_session.execute(
-        select(Exhibit)
-        .where(Exhibit.language == session.language)
-        .order_by(Exhibit.order_index.asc())
+        select(Exhibit).order_by(Exhibit.order_index.asc())
     )
     first: Optional[Exhibit] = result.scalars().first()
     if first:
@@ -128,13 +109,12 @@ async def exhibit_detail(
 ):
     """Render exhibit content with basic navigation and forms."""
     session, db_session = tracked_session
-    if not session.language:
-        return RedirectResponse(url="/", status_code=303)
+    # english-only: no language guard
 
     # Current exhibit with images/questions preloaded
     result = await db_session.execute(
         select(Exhibit)
-        .where(Exhibit.slug == slug, Exhibit.language == session.language)
+        .where(Exhibit.slug == slug)
         .options(
             selectinload(Exhibit.images),
             selectinload(Exhibit.questions),
@@ -164,19 +144,13 @@ async def exhibit_detail(
     # Prev/Next by order_index
     prev_res = await db_session.execute(
         select(Exhibit.slug)
-        .where(
-            Exhibit.order_index < exhibit.order_index,
-            Exhibit.language == session.language,
-        )
+        .where(Exhibit.order_index < exhibit.order_index)
         .order_by(Exhibit.order_index.desc())
         .limit(1)
     )
     next_res = await db_session.execute(
         select(Exhibit.slug)
-        .where(
-            Exhibit.order_index > exhibit.order_index,
-            Exhibit.language == session.language,
-        )
+        .where(Exhibit.order_index > exhibit.order_index)
         .order_by(Exhibit.order_index.asc())
         .limit(1)
     )
@@ -224,15 +198,14 @@ async def save_answer(
 ):
     """Save answers and redirect to the next exhibit or thanks page."""
     session, db_session = tracked_session
-    if not session.language:
-        return RedirectResponse(url="/", status_code=303)
+    # english-only: no language guard
 
     form_data = await request.form()
 
     # Fetch exhibit to get its ID
     result = await db_session.execute(
         select(Exhibit)
-        .where(Exhibit.slug == slug, Exhibit.language == session.language)
+        .where(Exhibit.slug == slug)
         .options(selectinload(Exhibit.images), selectinload(Exhibit.questions))
     )
     exhibit = result.scalars().first()
@@ -249,10 +222,7 @@ async def save_answer(
         # Answers already submitted, redirect to next exhibit
         next_res = await db_session.execute(
             select(Exhibit.slug)
-            .where(
-                Exhibit.order_index > exhibit.order_index,
-                Exhibit.language == session.language,
-            )
+            .where(Exhibit.order_index > exhibit.order_index)
             .order_by(Exhibit.order_index.asc())
             .limit(1)
         )
@@ -312,19 +282,13 @@ async def save_answer(
         # Prev/Next by order_index
         prev_res = await db_session.execute(
             select(Exhibit.slug)
-            .where(
-                Exhibit.order_index < exhibit.order_index,
-                Exhibit.language == session.language,
-            )
+            .where(Exhibit.order_index < exhibit.order_index)
             .order_by(Exhibit.order_index.desc())
             .limit(1)
         )
         next_res = await db_session.execute(
             select(Exhibit.slug)
-            .where(
-                Exhibit.order_index > exhibit.order_index,
-                Exhibit.language == session.language,
-            )
+            .where(Exhibit.order_index > exhibit.order_index)
             .order_by(Exhibit.order_index.asc())
             .limit(1)
         )
@@ -382,19 +346,12 @@ async def save_answer(
     )
 
     # Find next slug to redirect
-    result = await db_session.execute(
-        select(Exhibit).where(
-            Exhibit.slug == slug, Exhibit.language == session.language
-        )
-    )
+    result = await db_session.execute(select(Exhibit).where(Exhibit.slug == slug))
     current_exhibit = result.scalar_one()
 
     next_res = await db_session.execute(
         select(Exhibit.slug)
-        .where(
-            Exhibit.order_index > current_exhibit.order_index,
-            Exhibit.language == session.language,
-        )
+        .where(Exhibit.order_index > current_exhibit.order_index)
         .order_by(Exhibit.order_index.asc())
         .limit(1)
     )

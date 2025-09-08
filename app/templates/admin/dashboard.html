@@ -9,11 +9,11 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div class="bg-white p-6 rounded-lg shadow text-center">
             <div class="text-3xl font-bold mb-2">{{ kpis.sessions_count | default(0) }}</div>
-            <div class="text-gray-500">Počet návštěv</div>
+            <div class="text-gray-500">Visits</div>
         </div>
         <div class="bg-white p-6 rounded-lg shadow text-center">
             <div class="text-3xl font-bold mb-2">{{ kpis.completion_rate | default(0) }}%</div>
-            <div class="text-gray-500">Completion Rate</div>
+            <div class="text-gray-500">Completion rate</div>
         </div>
         <div class="bg-white p-6 rounded-lg shadow text-center">
             <div class="text-3xl font-bold mb-2">
@@ -23,12 +23,12 @@
                     N/A
                 {% endif %}
             </div>
-            <div class="text-gray-500">Průměrný čas na exhibit (s)</div>
+            <div class="text-gray-500">Average time</div>
         </div>
     </div>
 
     <div class="bg-white p-6 rounded-lg shadow mb-8">
-        <h2 class="text-xl font-bold mb-4">Sebeevaluační statistiky</h2>
+    <h2 class="text-xl font-bold mb-4">Self-eval stats</h2>
         {% if selfeval_stats and selfeval_stats.total_selfeval > 0 %}
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {% for key, stat_dict in selfeval_stats.items() if key in ['gender_counts', 'education_counts'] %}
@@ -41,29 +41,29 @@
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p class="text-gray-500">Žádná data.</p>
+                        <p class="text-gray-500">No data.</p>
                     {% endif %}
                 </div>
                 {% endfor %}
                 <div>
-                    <div class="font-semibold mb-2">Věk</div>
+                    <div class="font-semibold mb-2">Age</div>
                     <ul>
-                        <li>Průměr: {{ selfeval_stats.avg_age or "N/A" }}</li>
-                        <li>Minimální: {{ selfeval_stats.min_age or "N/A" }}</li>
-                        <li>Maximální: {{ selfeval_stats.max_age or "N/A" }}</li>
+                        <li>Avg: {{ selfeval_stats.avg_age or "N/A" }}</li>
+                        <li>Min: {{ selfeval_stats.min_age or "N/A" }}</li>
+                        <li>Max: {{ selfeval_stats.max_age or "N/A" }}</li>
                     </ul>
                 </div>
             </div>
-            <div class="mt-4 text-gray-500 text-sm">
-                Celkem vyplněno: {{ selfeval_stats.total_selfeval }}
+                <div class="mt-4 text-gray-500 text-sm">
+                Total filled: {{ selfeval_stats.total_selfeval }}
             </div>
         {% else %}
-            <p>Zatím nebyly vyplněny žádné sebeevaluační dotazníky.</p>
+            <p>No self-evaluation questionnaires have been submitted yet.</p>
         {% endif %}
     </div>
 
     <div>
-        <a href="{{ url_for('admin_responses') }}" class="text-blue-500 hover:underline">Zobrazit všechny odpovědi &raquo;</a>
+    <a href="{{ url_for('admin_responses') }}" class="text-blue-500 hover:underline">View all responses &raquo;</a>
     </div>
 </div>
 {% endblock %}

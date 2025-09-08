@@ -14,90 +14,31 @@ images:
   - path: "img/example_image_1_6.png"
     alt: "Example image 1-6"
 
-cz:
-  title: "Room 1 — Abstrakce"
-  text_md: |
-    **Úvod**
-    Tato místnost představuje základní principy abstraktního vyjádření.
-    Vnímejte barvy, tvary a rytmus bez nutnosti hledat figurativní význam.
-  audio: "audio/room1.mp3"
-  questions:
-    - type: "likert"
-      text: "Jak na vás expozice působila?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Vůbec ne"
-          5: "Velmi silně"
-      required: true
-    - type: "likert"
-      text: "Jak se vám líbí tato expozice?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Vůbec se mi nelíbí"
-          5: "Velmi se mi líbí"
-      required: true
-    - type: "text"
-      text: "Krátká zpětná vazba?"
-      required: true
-en:
-  title: "Room 1 — Abstraction"
-  text_md: |
-    **Introduction**
-    This room presents the basic principles of abstract expression.
-    Perceive colors, shapes, and rhythm without the need to search for figurative meaning.
-  audio: "audio/room1_en.mp3"
-  questions:
-    - type: "likert"
-      text: "How did the exhibition affect you?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Not at all"
-          5: "Very strongly"
-      required: true
-    - type: "likert"
-      text: "How do you like this exhibition?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "I don't like it at all"
-          5: "I like it very much"
-      required: true
-    - type: "text"
-      text: "Short feedback?"
-      required: true
-ua:
-  title: "Кімната 1 — Абстракція"
-  text_md: |
-    **Вступ**
-    Ця кімната представляє основні принципи абстрактного вираження.
-    Сприймайте кольори, форми та ритм без необхідності шукати фігуративне значення.
-  audio: "audio/room1_ua.mp3"
-  questions:
-    - type: "likert"
-      text: "Як на вас вплинула виставка?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Зовсім ні"
-          5: "Дуже сильно"
-      required: true
-    - type: "likert"
-      text: "Як вам ця виставка?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Мені зовсім не подобається"
-          5: "Мені дуже подобається"
-      required: true
-    - type: "text"
-      text: "Короткий відгук?"
-      required: true
+title: "Room 1 — Abstraction"
+text_md: |
+  **Introduction**
+  This room presents the basic principles of abstract expression.
+  Perceive colors, shapes, and rhythm without the need to search for figurative meaning.
+audio: "audio/room1.mp3"
+questions:
+  - type: "likert"
+    text: "How did the exhibition affect you?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Not at all"
+        5: "Very strongly"
+    required: true
+  - type: "likert"
+    text: "How do you like this exhibition?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "I don't like it at all"
+        5: "I like it very much"
+    required: true
+  - type: "text"
+    text: "Short feedback?"
+    required: true

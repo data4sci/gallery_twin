@@ -1,24 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Vítejte v naší virtuální galerii{% endblock %}
+{% block title %}Welcome{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
     <div class="bg-white p-6 rounded-lg shadow-md text-center">
-        <h1 class="text-3xl md:text-4xl font-bold mb-4">Vítejte v naší virtuální galerii</h1>
-        <p class="mb-8 text-lg">Vyberte si jazyk pro prohlídku výstavy / Choose your language / Оберіть мову для перегляду виставки.</p>
+    <h1 class="text-3xl md:text-4xl font-bold mb-4">Welcome to our virtual gallery</h1>
+    <p class="mb-8 text-lg">Please continue to the self-evaluation form to start the tour.</p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="{{ url_for('select_language', lang='cz') }}"
+            <a href="/selfeval"
                class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded text-lg transition">
-                Čeština
-            </a>
-            <a href="{{ url_for('select_language', lang='en') }}"
-               class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded text-lg transition">
-                English
-            </a>
-            <a href="{{ url_for('select_language', lang='ua') }}"
-               class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded text-lg transition">
-                Українська
+                Continue in English
             </a>
         </div>
     </div>

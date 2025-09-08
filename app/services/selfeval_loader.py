@@ -16,10 +16,13 @@ class SelfEvalConfig:
         cls._data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
     @classmethod
-    def get_questions(cls, lang: str = "cz"):
+    def get_questions(cls, lang: str = "en"):
         if cls._data is None:
             cls.load()
-        return cls._data.get(lang, {}).get("questions", [])
+        # English-only: prefer 'en' section, fall back to top-level 'questions'
+        if cls._data.get("en"):
+            return cls._data.get("en", {}).get("questions", [])
+        return cls._data.get("questions", [])
 
 
 # Načti při startu aplikace

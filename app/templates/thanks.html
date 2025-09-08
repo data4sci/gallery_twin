@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}{{ t(request, "thanks_title") }}{% endblock %}
+{% block title %}Thank you for visiting{% endblock %}
 
 {% block content %}
 <div class="text-center">
-    <h1 class="text-4xl font-bold mb-4">{{ t(request, "thanks_title") }}</h1>
-    <p class="mb-8">{{ t(request, "thanks_message") }}</p>
+    <h1 class="text-4xl font-bold mb-4">Thank you for visiting</h1>
+    <p class="mb-8">Your feedback is valuable to us.</p>
     <a href="{{ url_for('index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ t(request, "back_to_start") }}
+        Back to start
     </a>
 </div>
 {% endblock %}

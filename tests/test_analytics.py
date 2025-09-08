@@ -91,12 +91,8 @@ async def test_get_selfeval_stats(db_session):
 @pytest.mark.asyncio
 async def test_get_average_time_per_exhibit(db_session):
     """Tests the complex logic of pairing start/end events for duration."""
-    exhibit1 = Exhibit(
-        slug="ex1", title="E1", text_md="...", order_index=1, language="cz"
-    )
-    exhibit2 = Exhibit(
-        slug="ex2", title="E2", text_md="...", order_index=2, language="cz"
-    )
+    exhibit1 = Exhibit(slug="ex1", title="E1", text_md="...", order_index=1)
+    exhibit2 = Exhibit(slug="ex2", title="E2", text_md="...", order_index=2)
     session1 = Session(uuid=uuid4())
     session2 = Session(uuid=uuid4())
     db_session.add_all([exhibit1, exhibit2, session1, session2])

@@ -14,60 +14,21 @@ images:
   - path: "img/example_image_2_6.png"
     alt: "Example image 2-6"
 
-cz:
-  title: "Room 2 — Geometrie"
-  text_md: |
-    **Geometrie**
-    Zkoumejte vztahy mezi tvary, liniemi a kompozicí. Sledujte rytmus a opakování.
-  audio: "audio/room2.mp3"
-  questions:
-    - type: "single"
-      text: "Který prvek vás nejvíce zaujal?"
-      options: ["tvary", "linie", "textura", "kompozice"]
-      required: true
-    - type: "likert"
-      text: "Jak silný estetický dojem na vás místnost zanechala?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Žádný dojem"
-          5: "Velmi silný dojem"
-en:
-  title: "Room 2 — Geometry"
-  text_md: |
-    **Geometry**
-    Explore the relationships between shapes, lines, and composition. Observe rhythm and repetition.
-  audio: "audio/room2_en.mp3"
-  questions:
-    - type: "single"
-      text: "Which element interested you the most?"
-      options: ["shapes", "lines", "texture", "composition"]
-      required: true
-    - type: "likert"
-      text: "How strong of an aesthetic impression did the room leave on you?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "No impression"
-          5: "Very strong impression"
-ua:
-  title: "Кімната 2 — Геометрія"
-  text_md: |
-    **Геометрія**
-    Досліджуйте зв'язки між формами, лініями та композицією. Спостерігайте за ритмом і повторенням.
-  audio: "audio/room2_ua.mp3"
-  questions:
-    - type: "single"
-      text: "Який елемент вас найбільше зацікавив?"
-      options: ["форми", "лінії", "текстура", "композиція"]
-      required: true
-    - type: "likert"
-      text: "Наскільки сильне естетичне враження залишила на вас кімната?"
-      options:
-        min: 1
-        max: 5
-        labels:
-          1: "Жодного враження"
-          5: "Дуже сильне враження"
+title: "Room 2 — Geometry"
+text_md: |
+  **Geometry**
+  Explore the relationships between shapes, lines, and composition. Observe rhythm and repetition.
+audio: "audio/room2.mp3"
+questions:
+  - type: "single"
+    text: "Which element interested you the most?"
+    options: ["shapes", "lines", "texture", "composition"]
+    required: true
+  - type: "likert"
+    text: "How strong of an aesthetic impression did the room leave on you?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "No impression"
+        5: "Very strong impression"

@@ -16,6 +16,7 @@ from app.main import templates
 router = APIRouter()
 
 from app.services.selfeval_loader import SelfEvalConfig
+from app.services.exhibition_feedback_loader import ExhibitionFeedbackConfig
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -398,12 +399,16 @@ async def exhibition_feedback_get(
         event_type="exhibition_feedback_viewed", session_uuid=str(session.uuid)
     )
 
+    # Load questions from YAML config
+    questions = ExhibitionFeedbackConfig.get_questions()
+
     return templates.TemplateResponse(
         request,
         "exhibition_feedback.html",
         {
             "session_id": session.id,
             "csrf_token": get_csrf_token(request.state.session_id),
+            "questions": questions,
         },
     )
 
@@ -456,27 +461,41 @@ async def submit_exhibition_feedback(
         logger.error(f"Invalid CSRF token: {e}")
         raise HTTPException(status_code=403, detail="Invalid CSRF token")
 
-    # Validate required fields
-    exhibition_rating = form_data.get("exhibition_rating")
-    if not exhibition_rating:
-        raise HTTPException(status_code=400, detail="Exhibition rating is required")
+    # Load questions from YAML to validate responses
+    questions = ExhibitionFeedbackConfig.get_questions()
 
-    try:
-        rating_value = int(exhibition_rating)
-        if rating_value < 1 or rating_value > 5:
-            raise ValueError("Rating must be between 1 and 5")
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid rating value")
+    # Prepare feedback data dynamically
+    feedback_data = {}
 
-    # Get optional fields
-    ai_art_opinion = form_data.get("ai_art_opinion", "").strip()
+    for question in questions:
+        question_id = question["id"]
+        response_value = form_data.get(question_id)
 
-    # Prepare feedback data
-    feedback_data = {
-        "exhibition_rating": rating_value,
-        "ai_art_opinion": ai_art_opinion if ai_art_opinion else None,
-        "submitted_at": session.last_activity.isoformat(),
-    }
+        # Validate required fields
+        if question.get("required", False) and not response_value:
+            raise HTTPException(
+                status_code=400, detail=f"Question '{question['text']}' is required"
+            )
+
+        # Store response if provided
+        if response_value:
+            if question["type"] == "likert":
+                try:
+                    numeric_value = int(response_value)
+                    min_val = question.get("options", {}).get("min", 1)
+                    max_val = question.get("options", {}).get("max", 5)
+                    if numeric_value < min_val or numeric_value > max_val:
+                        raise ValueError(
+                            f"Rating must be between {min_val} and {max_val}"
+                        )
+                    feedback_data[question_id] = numeric_value
+                except ValueError:
+                    raise HTTPException(status_code=400, detail="Invalid rating value")
+            else:
+                feedback_data[question_id] = response_value.strip()
+
+    # Add submission timestamp
+    feedback_data["submitted_at"] = session.last_activity.isoformat()
 
     # Store feedback in session
     session.exhibition_feedback_json = feedback_data
@@ -487,12 +506,11 @@ async def submit_exhibition_feedback(
     log_session_event(
         event_type="exhibition_feedback_submitted",
         session_uuid=str(session.uuid),
-        exhibition_rating=rating_value,
-        has_ai_opinion=bool(ai_art_opinion),
+        **{k: v for k, v in feedback_data.items() if k != "submitted_at"},
     )
 
     logger.info(
-        f"Exhibition feedback submitted for session {session.uuid}: rating={rating_value}, has_opinion={bool(ai_art_opinion)}"
+        f"Exhibition feedback submitted for session {session.uuid}: {feedback_data}"
     )
 
     return RedirectResponse(url="/thanks", status_code=303)

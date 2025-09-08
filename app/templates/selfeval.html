@@ -3,55 +3,59 @@
 {% block title %}Self-evaluation questionnaire{% endblock %}
 
 {% block content %}
-<div class="max-w-lg mx-auto mt-10">
-  <h2 class="text-2xl font-bold mb-4">Self-evaluation questionnaire</h2>
-  <form method="post">
-    {% for q in questions %}
-      <div class="mb-4">
-        <label for="{{ q.id }}" class="block font-semibold mb-1">
-          {{ q.text }}{% if q.required %} <span class="text-red-600">*</span>{% endif %}
-        </label>
-        {% if q.type == "single" %}
-          <select id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" {% if q.required %}required{% endif %}>
-            <option value="">-- vyberte --</option>
-            {% for opt in q.options %}
-              <option value="{{ opt }}">{{ opt }}</option>
-            {% endfor %}
-          </select>
-        {% elif q.type == "multi" %}
-          <div class="flex flex-wrap gap-2">
-            {% for opt in q.options %}
-              <label class="inline-flex items-center">
-                <input type="checkbox" name="{{ q.id }}" value="{{ opt }}" class="mr-2">
-                {{ opt }}
-              </label>
-            {% endfor %}
-          </div>
-        {% elif q.type == "likert" %}
-          <div class="flex items-center gap-2">
-            {% for i in range(q.options.min, q.options.max + 1) %}
-              <label class="flex flex-col items-center">
-                <input type="radio" name="{{ q.id }}" value="{{ i }}" {% if q.required %}required{% endif %}>
-                <span class="text-xs">
+<div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
+  <h1 class="text-3xl md:text-4xl font-bold mb-4">Self-evaluation questionnaire</h1>
+  
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-2xl font-semibold mb-4">Questionnaire</h2>
+    
+    <form method="post">
+      {% for q in questions %}
+        <div class="mb-6">
+          <label for="{{ q.id }}" class="block text-lg font-medium text-gray-800 mb-2">
+            {{ q.text }}{% if q.required %} <span class="text-red-500">*</span>{% endif %}
+          </label>
+          {% if q.type == "single" %}
+            <select id="{{ q.id }}" name="{{ q.id }}" class="w-full p-3 border border-gray-300 rounded-md" {% if q.required %}required{% endif %}>
+              <option value="">-- vyberte --</option>
+              {% for opt in q.options %}
+                <option value="{{ opt }}">{{ opt }}</option>
+              {% endfor %}
+            </select>
+          {% elif q.type == "multi" %}
+            <div class="space-y-2">
+              {% for opt in q.options %}
+                <label class="flex items-center">
+                  <input type="checkbox" name="{{ q.id }}" value="{{ opt }}" class="mr-3 h-4 w-4">
+                  <span class="text-gray-700">{{ opt }}</span>
+                </label>
+              {% endfor %}
+            </div>
+          {% elif q.type == "likert" %}
+            <div class="flex flex-wrap justify-between items-center gap-4">
+              {% for i in range(q.options.min, q.options.max + 1) %}
+                <label class="flex flex-col items-center cursor-pointer">
+                  <span class="mb-2 text-sm font-medium">{{ i }}</span>
+                  <input type="radio" name="{{ q.id }}" value="{{ i }}" class="h-5 w-5" {% if q.required %}required{% endif %}>
                   {% if q.options.labels and q.options.labels[i] %}
+                  <span class="mt-1 text-xs text-gray-500 text-center max-w-[80px]">
                     {{ q.options.labels[i] }}
-                  {% else %}
-                    {{ i }}
+                  </span>
                   {% endif %}
-                </span>
-              </label>
-            {% endfor %}
-          </div>
-        {% elif q.type == "text" and q.id == "age" %}
-          <input type="number" id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" min="0" step="1" {% if q.required %}required{% endif %}>
-        {% elif q.type == "text" %}
-          <input type="text" id="{{ q.id }}" name="{{ q.id }}" class="w-full border rounded px-3 py-2" {% if q.required %}required{% endif %}>
-        {% endif %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
-      Continue to gallery
-    </button>
-  </form>
+                </label>
+              {% endfor %}
+            </div>
+          {% elif q.type == "text" and q.id == "age" %}
+            <input type="number" id="{{ q.id }}" name="{{ q.id }}" class="w-full p-3 border border-gray-300 rounded-md" min="0" step="1" {% if q.required %}required{% endif %}>
+          {% elif q.type == "text" %}
+            <input type="text" id="{{ q.id }}" name="{{ q.id }}" class="w-full p-3 border border-gray-300 rounded-md" {% if q.required %}required{% endif %}>
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded flex items-center justify-center text-lg min-w-[200px] min-h-[56px]">
+        Continue to gallery
+      </button>
+    </form>
+  </div>
 </div>
 {% endblock %}

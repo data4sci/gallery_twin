@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Zpětná vazba k výstavě{% endblock %}
+
+{% block content %}
+<div class="container feedback-container">
+    <h1 class="title">Zpětná vazba k výstavě</h1>
+    <p class="subtitle">Děkujeme za účast na výstavě! Vaše názor nám velmi pomůže k dalšímu rozvoji.</p>
+    
+    <form id="feedback-form" method="post" action="{{ url_for('submit_exhibition_feedback') }}">
+        <input type="hidden" name="session_id" value="{{ session_id }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        
+        <!-- Question 1: Exhibition Rating -->
+        <div class="field">
+            <label class="label">Jak se vám výstava líbila?</label>
+            <div class="control">
+                <div class="rating-container">
+                    {% for value in range(1, 6) %}
+                    <label class="rating-option">
+                        <input type="radio" name="exhibition_rating" value="{{ value }}" required>
+                        <span class="rating-number">{{ value }}</span>
+                        <span class="rating-label">
+                            {% if value == 1 %}Vůbec{% elif value == 2 %}Málo{% elif value == 3 %}Průměrně{% elif value == 4 %}Hodně{% else %}Velmi{% endif %}
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Question 2: AI Art Opinion -->
+        <div class="field">
+            <label class="label" for="ai_art_opinion">Co si myslíte o AI v umění?</label>
+            <div class="control">
+                <textarea 
+                    class="textarea" 
+                    id="ai_art_opinion" 
+                    name="ai_art_opinion" 
+                    placeholder="Napište nám váš názor na umělou inteligenci v umění..."
+                    rows="4"
+                    maxlength="1000"
+                ></textarea>
+                <p class="help">Nepovinné pole - můžete se podělit o své myšlenky a postřehy</p>
+            </div>
+        </div>
+
+        <div class="field is-grouped">
+            <div class="control">
+                <button class="button is-primary is-large" type="submit">
+                    <span class="icon">
+                        <i class="fas fa-paper-plane"></i>
+                    </span>
+                    <span>Odeslat zpětnou vazbu</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+.feedback-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-style: italic;
+}
+
+.rating-container {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+}
+
+.rating-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+.rating-option:hover {
+    border-color: #3273dc;
+    background-color: #f8f9fa;
+}
+
+.rating-option input[type="radio"] {
+    display: none;
+}
+
+.rating-option input[type="radio"]:checked + .rating-number {
+    color: #fff;
+    background-color: #3273dc;
+}
+
+.rating-option input[type="radio"]:checked ~ .rating-label {
+    color: #3273dc;
+    font-weight: bold;
+}
+
+.rating-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #f5f5f5;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.rating-label {
+    font-size: 0.875rem;
+    color: #666;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+    font-family: inherit;
+}
+
+.field {
+    margin-bottom: 2rem;
+}
+
+.label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    color: #333;
+}
+
+.help {
+    font-size: 0.875rem;
+    color: #999;
+    margin-top: 0.5rem;
+}
+
+.button.is-primary.is-large {
+    font-size: 1.125rem;
+    padding: 0.75rem 2rem;
+}
+
+@media (max-width: 768px) {
+    .feedback-container {
+        padding: 1rem;
+        margin: 1rem;
+    }
+    
+    .rating-container {
+        gap: 0.5rem;
+    }
+    
+    .rating-option {
+        min-width: 60px;
+        padding: 0.75rem;
+    }
+    
+    .rating-number {
+        width: 35px;
+        height: 35px;
+        font-size: 1.25rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('feedback-form');
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    form.addEventListener('submit', function(e) {
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<span class="icon"><i class="fas fa-spinner fa-spin"></i></span><span>Odesílám...</span>';
+    });
+    
+    // Rating interaction feedback
+    const ratingOptions = document.querySelectorAll('.rating-option');
+    ratingOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            radio.checked = true;
+        });
+    });
+});
+</script>
+{% endblock %}

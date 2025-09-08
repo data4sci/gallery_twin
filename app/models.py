@@ -109,6 +109,9 @@ class Session(TimestampMixin, SQLModel, table=True):
     selfeval_json: Optional[dict] = Field(
         default=None, sa_column=Column(JSON), description="Autoevaluační odpovědi"
     )
+    exhibition_feedback_json: Optional[dict] = Field(
+        default=None, sa_column=Column(JSON), description="Zpětná vazba k celé výstavě"
+    )
     last_activity: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True)),

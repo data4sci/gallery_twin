@@ -62,8 +62,55 @@
         {% endif %}
     </div>
 
+    <div class="bg-white p-6 rounded-lg shadow mb-8">
+        <h2 class="text-xl font-bold mb-4">Exhibition Feedback</h2>
+        {% if exhibition_feedback and exhibition_feedback.total_feedback > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="font-semibold mb-2">Overall Rating</div>
+                    <div class="text-2xl font-bold text-blue-600 mb-2">
+                        {{ exhibition_feedback.avg_rating }}/5.0
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        Based on {{ exhibition_feedback.total_feedback }} responses
+                    </div>
+                </div>
+                <div>
+                    <div class="font-semibold mb-2">Rating Distribution</div>
+                    {% for rating in range(1, 6) %}
+                        <div class="flex items-center mb-1">
+                            <span class="w-8">{{ rating }}★</span>
+                            <div class="flex-1 bg-gray-200 rounded-full h-4 mx-2">
+                                {% set count = exhibition_feedback.rating_distribution.get(rating, 0) %}
+                                {% set percentage = (count / exhibition_feedback.total_feedback * 100) if exhibition_feedback.total_feedback > 0 else 0 %}
+                                <div class="bg-blue-500 h-4 rounded-full" style="width: {{ percentage }}%"></div>
+                            </div>
+                            <span class="w-8 text-sm">{{ exhibition_feedback.rating_distribution.get(rating, 0) }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            {% if exhibition_feedback.ai_opinions %}
+            <div class="mt-6">
+                <div class="font-semibold mb-3">Recent AI Art Opinions ({{ exhibition_feedback.ai_opinion_count }} total)</div>
+                <div class="space-y-3 max-h-60 overflow-y-auto">
+                    {% for opinion in exhibition_feedback.ai_opinions %}
+                    <div class="bg-gray-50 p-3 rounded border-l-4 border-blue-500">
+                        <p class="text-sm italic">"{{ opinion }}"</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        {% else %}
+            <p class="text-gray-500">No exhibition feedback has been submitted yet.</p>
+        {% endif %}
+    </div>
+
     <div>
-    <a href="{{ url_for('admin_responses') }}" class="text-blue-500 hover:underline">View all responses &raquo;</a>
+        <a href="{{ url_for('admin_responses') }}" class="text-blue-500 hover:underline mr-4">View all responses &raquo;</a>
+        <a href="{{ url_for('export_exhibition_feedback_csv') }}" class="text-green-500 hover:underline">Export exhibition feedback CSV &raquo;</a>
     </div>
 </div>
 {% endblock %}

@@ -373,5 +373,126 @@ async def save_answer(
             total_exhibits_completed=current_exhibit.order_index,
         )
 
-        # Redirect to the canonical thanks page (keeps behavior consistent)
+        # Redirect to exhibition feedback before thanks page
+        return RedirectResponse(url="/exhibition-feedback", status_code=303)
+
+
+@router.get("/exhibition-feedback", response_class=HTMLResponse)
+async def exhibition_feedback_get(
+    request: Request,
+    tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
+):
+    """Show exhibition feedback form."""
+    session, db_session = tracked_session
+
+    # Check if session is completed
+    if not session.completed:
+        return RedirectResponse(url="/", status_code=303)
+
+    # Check if feedback already submitted
+    if session.exhibition_feedback_json:
         return RedirectResponse(url="/thanks", status_code=303)
+
+    # Log feedback form view
+    log_session_event(
+        event_type="exhibition_feedback_viewed", session_uuid=str(session.uuid)
+    )
+
+    return templates.TemplateResponse(
+        request,
+        "exhibition_feedback.html",
+        {
+            "session_id": session.id,
+            "csrf_token": get_csrf_token(request.state.session_id),
+        },
+    )
+
+
+@router.post("/exhibition-feedback")
+async def submit_exhibition_feedback(
+    request: Request,
+    tracked_session: Annotated[Tuple[Session, AsyncSession], Depends(track_session)],
+):
+    """Submit exhibition feedback."""
+    session, db_session = tracked_session
+
+    # Check if session is completed
+    if not session.completed:
+        raise HTTPException(status_code=400, detail="Session not completed")
+
+    # Check if feedback already submitted
+    if session.exhibition_feedback_json:
+        raise HTTPException(status_code=400, detail="Feedback already submitted")
+
+    # Get form data
+    form_data = await request.form()
+
+    # Verify CSRF token manually
+    csrf_token = form_data.get("csrf_token")
+    if not csrf_token:
+        raise HTTPException(status_code=400, detail="CSRF token missing")
+
+    # Validate CSRF token
+    from itsdangerous import BadSignature, URLSafeTimedSerializer
+    from app.dependencies import SECRET_KEY
+
+    session_id = (
+        request.state.session_id
+    )  # Use request state session_id to match generation
+    serializer = URLSafeTimedSerializer(SECRET_KEY)
+
+    # Debug logging
+    logger.info(f"CSRF validation - current session_id: {session_id}")
+
+    try:
+        token_session_id = serializer.loads(csrf_token, max_age=3600)  # 1 hour
+        logger.info(f"CSRF validation - token session_id: {token_session_id}")
+        if token_session_id != session_id:
+            logger.error(
+                f"CSRF token mismatch: token={token_session_id}, current={session_id}"
+            )
+            raise HTTPException(status_code=403, detail="CSRF token mismatch")
+    except BadSignature as e:
+        logger.error(f"Invalid CSRF token: {e}")
+        raise HTTPException(status_code=403, detail="Invalid CSRF token")
+
+    # Validate required fields
+    exhibition_rating = form_data.get("exhibition_rating")
+    if not exhibition_rating:
+        raise HTTPException(status_code=400, detail="Exhibition rating is required")
+
+    try:
+        rating_value = int(exhibition_rating)
+        if rating_value < 1 or rating_value > 5:
+            raise ValueError("Rating must be between 1 and 5")
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid rating value")
+
+    # Get optional fields
+    ai_art_opinion = form_data.get("ai_art_opinion", "").strip()
+
+    # Prepare feedback data
+    feedback_data = {
+        "exhibition_rating": rating_value,
+        "ai_art_opinion": ai_art_opinion if ai_art_opinion else None,
+        "submitted_at": session.last_activity.isoformat(),
+    }
+
+    # Store feedback in session
+    session.exhibition_feedback_json = feedback_data
+    db_session.add(session)
+    await db_session.commit()
+
+    # Log feedback submission
+    log_session_event(
+        event_type="exhibition_feedback_submitted",
+        session_uuid=str(session.uuid),
+        exhibition_rating=rating_value,
+        has_ai_opinion=bool(ai_art_opinion),
+    )
+
+    logger.info(
+        f"Exhibition feedback submitted for session {session.uuid}: rating={rating_value}, has_opinion={bool(ai_art_opinion)}"
+    )
+
+    return RedirectResponse(url="/thanks", status_code=303)

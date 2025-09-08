@@ -48,9 +48,9 @@ async def get_selfeval_stats(db_session: AsyncSession) -> Dict[str, Any]:
     age_key = func.json_extract(Session.selfeval_json, "$.age")
 
     # Group by gender and education
-    gender_stmt = select(
-        coalesce(gender_key, "N/A"), func.count(Session.id)
-    ).group_by(coalesce(gender_key, "N/A"))
+    gender_stmt = select(coalesce(gender_key, "N/A"), func.count(Session.id)).group_by(
+        coalesce(gender_key, "N/A")
+    )
     education_stmt = select(
         coalesce(education_key, "N/A"), func.count(Session.id)
     ).group_by(coalesce(education_key, "N/A"))
@@ -152,28 +152,103 @@ async def get_average_time_per_exhibit(db_session: AsyncSession) -> Dict[str, fl
     return avg_times
 
 
+async def get_exhibition_feedback_stats(db_session: AsyncSession) -> Dict[str, Any]:
+    """Get aggregated statistics from exhibition feedback using JSON functions."""
+    # Count sessions with feedback
+    feedback_count_result = await db_session.execute(
+        select(func.count(Session.id)).where(
+            Session.exhibition_feedback_json.is_not(None)
+        )
+    )
+    feedback_count = feedback_count_result.scalar_one()
+
+    if feedback_count == 0:
+        return {
+            "total_feedback": 0,
+            "avg_rating": None,
+            "rating_distribution": {},
+            "ai_opinion_count": 0,
+            "ai_opinions": [],
+        }
+
+    # Get rating statistics
+    rating_key = func.json_extract(
+        Session.exhibition_feedback_json, "$.exhibition_rating"
+    )
+
+    # Average rating
+    avg_rating_result = await db_session.execute(
+        select(func.avg(func.cast(rating_key, Integer))).where(
+            Session.exhibition_feedback_json.is_not(None)
+        )
+    )
+    avg_rating = avg_rating_result.scalar_one()
+
+    # Rating distribution
+    rating_dist_result = await db_session.execute(
+        select(
+            func.cast(rating_key, Integer).label("rating"), func.count().label("count")
+        )
+        .where(Session.exhibition_feedback_json.is_not(None))
+        .group_by(func.cast(rating_key, Integer))
+        .order_by(func.cast(rating_key, Integer))
+    )
+    rating_distribution = {row.rating: row.count for row in rating_dist_result}
+
+    # AI opinions count and sample
+    ai_opinion_key = func.json_extract(
+        Session.exhibition_feedback_json, "$.ai_art_opinion"
+    )
+    ai_opinions_result = await db_session.execute(
+        select(ai_opinion_key)
+        .where(
+            Session.exhibition_feedback_json.is_not(None),
+            ai_opinion_key.is_not(None),
+            ai_opinion_key != "",
+        )
+        .order_by(Session.created_at.desc())
+        .limit(10)  # Latest 10 opinions for admin review
+    )
+    ai_opinions = [row[0] for row in ai_opinions_result if row[0]]
+
+    return {
+        "total_feedback": feedback_count,
+        "avg_rating": round(avg_rating, 2) if avg_rating else None,
+        "rating_distribution": rating_distribution,
+        "ai_opinion_count": len(ai_opinions),
+        "ai_opinions": ai_opinions,
+    }
+
+
 async def get_full_dashboard_stats(db_session: AsyncSession) -> Dict[str, Any]:
-    """Consolidates all stats for the admin dashboard."""
-    total_sessions_val, completion_rate_val, selfeval_stats_val = await asyncio.gather(
+    """Get all statistics for the admin dashboard."""
+    # Run all analytics in parallel for efficiency
+    (
+        total_sessions_val,
+        completion_rate_val,
+        selfeval_stats_val,
+        avg_times_per_exhibit,
+        exhibition_feedback_stats,
+    ) = await asyncio.gather(
         get_total_sessions(db_session),
         get_completion_rate(db_session),
         get_selfeval_stats(db_session),
+        get_average_time_per_exhibit(db_session),
+        get_exhibition_feedback_stats(db_session),
     )
 
-    # This part is still complex for a single SQL query, so we do it separately.
-    avg_times_per_exhibit = await get_average_time_per_exhibit(db_session)
-    exhibits_res = await db_session.execute(select(Exhibit.id, Exhibit.title))
-    exhibit_map = {ex_id: title for ex_id, title in exhibits_res.all()}
-
+    # Format exhibit times for template
     exhibit_times = {
-        exhibit_map.get(ex_id, "N/A"): round(avg, 1)
+        f"exhibit_{ex_id}": round(avg, 1)
         for ex_id, avg in avg_times_per_exhibit.items()
     }
 
     # Calculate overall average time
     total_avg_time = None
     if avg_times_per_exhibit:
-        total_avg_time = round(sum(avg_times_per_exhibit.values()) / len(avg_times_per_exhibit), 1)
+        total_avg_time = round(
+            sum(avg_times_per_exhibit.values()) / len(avg_times_per_exhibit), 1
+        )
 
     return {
         "kpis": {
@@ -183,6 +258,7 @@ async def get_full_dashboard_stats(db_session: AsyncSession) -> Dict[str, Any]:
         },
         "selfeval_stats": selfeval_stats_val,
         "exhibit_times": exhibit_times,
+        "exhibition_feedback": exhibition_feedback_stats,
     }
 
 

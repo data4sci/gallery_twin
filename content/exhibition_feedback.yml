@@ -1,0 +1,19 @@
+questions:
+  - id: "exhibition_rating"
+    type: "likert"
+    text: "Jak se vám výstava líbila?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Vůbec se mi nelíbila"
+        2: "Spíše se mi nelíbila"
+        3: "Neutrální"
+        4: "Líbila se mi"
+        5: "Velmi se mi líbila"
+    required: true
+  - id: "ai_art_opinion"
+    type: "text"
+    text: "Co si myslíte o AI v umění?"
+    placeholder: "Napište váš názor na použití umělé inteligence v umění..."
+    required: false

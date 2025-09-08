@@ -47,6 +47,7 @@ async def admin_dashboard(
             "kpis": stats["kpis"],
             "selfeval_stats": stats["selfeval_stats"],
             "exhibit_times": stats["exhibit_times"],
+            "exhibition_feedback": stats["exhibition_feedback"],
         },
     )
 
@@ -191,3 +192,75 @@ async def export_responses_csv(
 
 # Need to import asyncio to use asyncio.gather
 import asyncio
+
+
+@router.get("/export-feedback.csv")
+async def export_exhibition_feedback_csv(
+    db_session: Annotated[AsyncSession, Depends(get_async_session)],
+    admin_user: Annotated[str, Depends(get_admin_user)],
+):
+    """Export exhibition feedback to a CSV file."""
+    # Log CSV export action
+    log_admin_access(
+        username=admin_user,
+        action="feedback_csv_export",
+        export_format="csv",
+    )
+
+    # Get sessions with exhibition feedback
+    stmt = (
+        select(Session)
+        .where(Session.exhibition_feedback_json.is_not(None))
+        .order_by(Session.created_at.desc())
+    )
+    result = await db_session.execute(stmt)
+    sessions = result.scalars().all()
+
+    logger.info(
+        "Exhibition feedback CSV export completed",
+        extra={
+            "admin_user": admin_user,
+            "total_records": len(sessions),
+            "export_format": "csv",
+        },
+    )
+
+    return StreamingResponse(
+        stream_feedback_csv(sessions),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=exhibition_feedback.csv"},
+    )
+
+
+async def stream_feedback_csv(sessions: list[Session]) -> AsyncGenerator[str, None]:
+    """Generator to stream exhibition feedback CSV rows."""
+    output = io.StringIO()
+    writer = csv.writer(output)
+
+    header = [
+        "session_uuid",
+        "submitted_at",
+        "exhibition_rating",
+        "ai_art_opinion",
+        "has_selfeval",
+        "session_completed",
+    ]
+    writer.writerow(header)
+    yield output.getvalue()
+
+    for session in sessions:
+        output.seek(0)
+        output.truncate(0)
+
+        feedback = session.exhibition_feedback_json or {}
+
+        row = [
+            session.uuid,
+            feedback.get("submitted_at", session.last_activity.isoformat()),
+            feedback.get("exhibition_rating", ""),
+            feedback.get("ai_art_opinion", ""),
+            "Yes" if session.selfeval_json else "No",
+            "Yes" if session.completed else "No",
+        ]
+        writer.writerow(row)
+        yield output.getvalue()

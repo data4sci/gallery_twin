@@ -127,20 +127,27 @@ async def test_post_exhibit_answer_and_completion(db_session):
             data=form_data,
             follow_redirects=False,
         )
-        # Očekáváme redirect na /thanks (protože je jen jeden exhibit)
+        # Očekáváme redirect na /exhibition-feedback (protože je jen jeden exhibit)
         assert post_resp.status_code == 303
-        assert post_resp.headers["location"] == "/thanks"
+        assert post_resp.headers["location"] == "/exhibition-feedback"
 
-        # Ověření, že session byla označena jako dokončená
+        # Test exhibition feedback form access
+        feedback_resp = await ac.get("/exhibition-feedback")
+        assert feedback_resp.status_code == 200
+        assert "Zpětná vazba k výstavě" in feedback_resp.text
+        assert "Jak se vám výstava líbila?" in feedback_resp.text
+
+        # Ověření, že session byla označena jako dokončená (bez testování submit)
         from sqlalchemy import select
         from app.models import Session
 
         result = await db_session.execute(
             select(Session).where(Session.uuid == session_uuid_obj)
         )
-        final_session = result.scalar_one_or_none()
-        assert final_session is not None, "Session nebyla nalezena v databázi"
-        assert final_session.completed is True, "Session nebyla označena jako dokončená"
+        session = result.scalar_one()
+        assert session.completed is True
+        # Exhibition feedback JSON není zatím nastaveno (dokud neodešleme formulář)
+        assert session.exhibition_feedback_json is None
 
 
 @pytest.mark.asyncio

@@ -6,6 +6,7 @@ from sqlalchemy import text
 
 from app.middleware import SessionMiddleware
 from app.services.startup_tasks import run_startup_tasks
+from app.services.site_copy import load_site_copy
 from app.db import get_async_session
 from app.logging_config import logger
 from fastapi.templating import Jinja2Templates
@@ -37,6 +38,10 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Centralized templates instance so we can register globals in one place
 templates = Jinja2Templates(directory="app/templates")
+
+# Load site copy (texts for header/footer/index/thanks) and register as template global
+site_copy = load_site_copy(content_dir="content") or {}
+templates.env.globals["site_copy"] = site_copy
 
 
 @app.middleware("http")

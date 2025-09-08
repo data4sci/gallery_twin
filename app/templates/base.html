@@ -15,7 +15,7 @@
                     <svg class="h-8 w-8 text-green-600" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M5 3v18h14V3H5zm2 2h10v14H7V5z"></path>
                     </svg>
-                    <span class="text-lg font-semibold">Gallery Twin</span>
+                    <span class="text-lg font-semibold">{{ site_copy.header.site_title if site_copy and site_copy.header and site_copy.header.site_title else 'Gallery Twin' }}</span>
                 </a>
 
                     {# <nav class="flex items-center space-x-3">
@@ -31,7 +31,7 @@
 
     <footer class="mt-12 border-t bg-white">
         <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500">
-            &copy; {{ "Gallery Twin" }} — Gallery
+            {{ site_copy.footer.copyright | safe if site_copy and site_copy.footer and site_copy.footer.copyright else '&copy; Gallery Twin — Gallery' }}
         </div>
     </footer>
 </body>

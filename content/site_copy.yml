@@ -1,0 +1,18 @@
+# Site copy for Gallery Twin - editable texts for front page, thanks page, header and footer
+header:
+  site_title: "Gallery Twin"
+  home_link_text: "Home"
+  start_tour_text: "Start the tour"
+
+footer:
+  copyright: "&copy; Gallery Twin — A virtual gallery"
+
+index:
+  title: "Metamorfózy umění 2.0 | VŠB-TUO & Klára Sedlo"
+  lead: "Explore carefully curated digital exhibits and share your thoughts."
+  start_button: "Start the tour"
+
+thanks:
+  title: "Thank you for visiting"
+  lead: "Your feedback is valuable to us."
+  back_button: "Back to start"

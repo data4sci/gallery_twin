@@ -63,8 +63,9 @@ async def selfeval_get(
             return RedirectResponse(url="/thanks", status_code=303)
 
     questions = SelfEvalConfig.get_questions("en")
+    meta = SelfEvalConfig.get_meta("en")
     return templates.TemplateResponse(
-        request, "selfeval.html", {"questions": questions}
+        request, "selfeval.html", {"questions": questions, "meta": meta}
     )
 
 

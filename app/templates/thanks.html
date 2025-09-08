@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Thank you for visiting{% endblock %}
+{% block title %}{{ site_copy.thanks.title if site_copy and site_copy.thanks and site_copy.thanks.title else 'Thank you for visiting' }}{% endblock %}
 
 {% block content %}
 <div class="text-center">
-    <h1 class="text-4xl font-bold mb-4">Thank you for visiting</h1>
-    <p class="mb-8">Your feedback is valuable to us.</p>
+    <h1 class="text-4xl font-bold mb-4">{{ site_copy.thanks.title if site_copy and site_copy.thanks and site_copy.thanks.title else 'Thank you for visiting' }}</h1>
+    <p class="mb-8">{{ site_copy.thanks.lead if site_copy and site_copy.thanks and site_copy.thanks.lead else 'Your feedback is valuable to us.' }}</p>
     <a href="{{ url_for('index') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Back to start
+        {{ site_copy.thanks.back_button if site_copy and site_copy.thanks and site_copy.thanks.back_button else 'Back to start' }}
     </a>
 </div>
 {% endblock %}

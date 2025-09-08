@@ -264,3 +264,35 @@ async def stream_feedback_csv(sessions: list[Session]) -> AsyncGenerator[str, No
         ]
         writer.writerow(row)
         yield output.getvalue()
+
+
+@router.get("/feedbacks", response_class=HTMLResponse)
+async def admin_feedbacks(
+    request: Request,
+    db_session: Annotated[AsyncSession, Depends(get_async_session)],
+    admin_user: Annotated[str, Depends(get_admin_user)],
+):
+    """List sessions that submitted exhibition feedback."""
+    # Log admin feedbacks access
+    log_admin_access(
+        username=admin_user,
+        action="feedbacks_viewed",
+        ip_address=request.client.host if request.client else None,
+        user_agent=request.headers.get("user-agent"),
+    )
+
+    stmt = (
+        select(Session)
+        .where(Session.exhibition_feedback_json.is_not(None))
+        .order_by(Session.created_at.desc())
+    )
+    result = await db_session.execute(stmt)
+    sessions = result.scalars().all()
+
+    return templates.TemplateResponse(
+        request,
+        "admin/feedbacks.html",
+        {
+            "sessions": sessions,
+        },
+    )

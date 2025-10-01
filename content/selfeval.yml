@@ -11,38 +11,114 @@ questions:
       - female
       - other
       - prefer not to say
+
   - id: age
-    text: "Age"
-    type: text
-    required: true
-  - id: education
-    text: "Education"
+    text: "Age category"
     type: single
     required: true
     options:
-      - primary
-      - secondary
-      - university
-      - other
+      - under 17
+      - 18–24
+      - 25–34
+      - 35–44
+      - 45–54
+      - 55–64
+      - 65+
+
+  - id: education
+    text: "Highest education completed"
+    type: single
+    required: true
+    options:
+      - Primary school
+      - High school / Secondary
+      - Bachelor’s degree
+      - Master’s degree
+      - Doctoral degree (PhD)
+      - Other / prefer not to say
+
+  - id: income
+    text: "Do you have a regular personal income?"
+    type: single
+    required: true
+    options:
+      - "yes"
+      - "no"
       - prefer not to say
-  - id: art_interest
-    text: "What is your interest in art?"
+
+  - id: ai_replace_artists
+    text: "Are you afraid that AI would replace creative professionals?"
     type: likert
-    required: false
+    required: true
     options:
       min: 1
       max: 5
       labels:
-        1: "None"
-        5: "A lot"
-  - id: hobbies
-    text: "Your hobbies (select multiple options)"
-    type: multi
-    required: false
+        1: "Definitely not"
+        2: "Rather not"
+        3: "Neutral"
+        4: "Rather yes"
+        5: "Definitely yes"
+
+  - id: tech_interest
+    text: "How do you feel about modern technologies, including AI?"
+    type: likert
+    required: true
     options:
+      min: 1
+      max: 5
+      labels:
+        1: "I avoid them"
+        2: "I don't like them"
+        3: "Neutral"
+        4: "I like them"
+        5: "I actively use them"
+
+  - id: artist
+    text: "Are you an active artist?"
+    type: single
+    required: true
+    options:
+      - "yes"
+      - "no"
+
+  - id: art_field
+    text: "In which areas do you create art?"
+    type: multi
+    required: true
+    options:
+      - I do not create art
+      - painting/drawing
+      - sculpture
       - music
-      - sport
+      - photography
+      - theater
+      - dance
       - literature
-      - visual arts
-      - traveling
+      - digital art
       - other
+
+  - id: ai_usage
+    text: "Do you use AI in your work or personal life?"
+    type: single
+    required: true
+    options:
+      - yes, regularly
+      - yes, sometimes
+      - "no"
+      - not sure
+
+  - id: work_status
+    text: "What is your current work status?"
+    type: single
+    required: true
+    options:
+      - student
+      - employee (full-time)
+      - employee (part-time)
+      - self-employed
+      - unemployed
+      - parental leave
+      - retired
+      - other
+      - prefer not to say

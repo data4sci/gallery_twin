@@ -18,7 +18,7 @@
           </label>
           {% if q.type == "single" %}
             <select id="{{ q.id }}" name="{{ q.id }}" class="w-full p-3 border border-gray-300 rounded-md" {% if q.required %}required{% endif %}>
-              <option value="">-- vyberte --</option>
+              <option value="">-- Select an option --</option>
               {% for opt in q.options %}
                 <option value="{{ opt }}">{{ opt }}</option>
               {% endfor %}

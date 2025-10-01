@@ -217,3 +217,5 @@ __marimo__/
 
 # SQLite
 db/gallery.db
+db/gallery.db.backup
+

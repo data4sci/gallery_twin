@@ -1,20 +1,20 @@
-slug: room-2
-master_image: "img/master_image_2.png"
+slug: art-2
+master_image: "img/Běžící věž.png"
 images:
-  - path: "img/example_image_2_1.png"
-    alt: "Example image 2-1"
-  - path: "img/example_image_2_2.png"
-    alt: "Example image 2-2"
+  - path: "/img/Běžící věž_imagen.png"
+    alt: "A"
+  - path: "img/Běžící věž_dalle3_v1.png"
+    alt: "B"
   - path: "img/example_image_2_3.png"
-    alt: "Example image 2-3"
-  - path: "img/example_image_2_4.png"
-    alt: "Example image 2-4"
+    alt: "C"
+  - path: "/img/Běžící věž_qwen.png"
+    alt: "D"
   - path: "img/example_image_2_5.png"
-    alt: "Example image 2-5"
-  - path: "img/example_image_2_6.png"
-    alt: "Example image 2-6"
+    alt: "E"
+  - path: "img/Běžící věž_flux.jpeg"
+    alt: "F"
 
-title: "Room 2 — Geometry"
+title: "Běžící věž"
 text_md: |
   **Geometry**
   Explore the relationships between shapes, lines, and composition. Observe rhythm and repetition.

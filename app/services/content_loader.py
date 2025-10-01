@@ -124,3 +124,28 @@ async def load_content_from_dir(
         content_logger.info("No new content to load - all exhibits already exist")
 
     return processed
+
+
+# Add utility to get slugs from YAML files
+
+
+def get_yaml_slugs(content_dir: str = "content/exhibits") -> list[str]:
+    """
+    Read all YAML files in the directory and return list of slugs defined in them.
+    """
+    slugs: list[str] = []
+    base = Path(content_dir)
+    if not base.exists():
+        return slugs
+    files = sorted(base.glob("*.yml")) + sorted(base.glob("*.yaml"))
+    for f in files:
+        try:
+            data = yaml.safe_load(f.read_text(encoding="utf-8")) or {}
+            slug = data.get("slug")
+            if slug:
+                slugs.append(slug)
+        except Exception as exc:
+            # skip files that cannot be parsed
+            content_logger.error(f"Error parsing YAML {f}: {exc}")
+            continue
+    return slugs

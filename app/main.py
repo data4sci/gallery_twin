@@ -15,6 +15,7 @@ from typing import Optional
 from jinja2 import pass_context
 
 from contextlib import asynccontextmanager
+from app.services.content_loader import get_yaml_slugs
 
 
 @asynccontextmanager
@@ -22,6 +23,13 @@ async def lifespan(app):
     # Startup
     logger.info("Starting Gallery Twin application")
     await run_startup_tasks()
+    # Load current YAML-defined slugs into application state
+    try:
+        slugs = get_yaml_slugs("content/exhibits")
+    except Exception as exc:
+        logger.error(f"Failed to load YAML slugs: {exc}")
+        slugs = []
+    app.state.yaml_slugs = slugs
     logger.info("Application startup completed")
     yield
     # Shutdown

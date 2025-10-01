@@ -1,6 +1,7 @@
 from typing import Annotated, Optional, Tuple
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+import asyncio
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,9 +29,12 @@ async def index(
     session, db_session = tracked_session
     # English-only app: no language selection step
 
-    result = await db_session.execute(
-        select(Exhibit).order_by(Exhibit.order_index.asc())
-    )
+    # Only consider exhibits defined in YAML
+    slugs = request.app.state.yaml_slugs or []
+    stmt = select(Exhibit).order_by(Exhibit.order_index.asc())
+    if slugs:
+        stmt = stmt.where(Exhibit.slug.in_(slugs))
+    result = await db_session.execute(stmt)
     first: Optional[Exhibit] = result.scalars().first()
     return templates.TemplateResponse(
         request,
@@ -52,15 +56,16 @@ async def selfeval_get(
     # Ensure english-only flow: session.language is expected to be 'en'
 
     if session.selfeval_json:
-        # If self-evaluation is already done, redirect to the first exhibit
-        result = await db_session.execute(
-            select(Exhibit).order_by(Exhibit.order_index.asc())
-        )
+        # If self-evaluation is done, redirect to the first YAML-defined exhibit
+        slugs = request.app.state.yaml_slugs or []
+        stmt = select(Exhibit).order_by(Exhibit.order_index.asc())
+        if slugs:
+            stmt = stmt.where(Exhibit.slug.in_(slugs))
+        result = await db_session.execute(stmt)
         first: Optional[Exhibit] = result.scalars().first()
         if first:
             return RedirectResponse(url=f"/exhibit/{first.slug}", status_code=303)
-        else:
-            return RedirectResponse(url="/thanks", status_code=303)
+        return RedirectResponse(url="/thanks", status_code=303)
 
     questions = SelfEvalConfig.get_questions("en")
     meta = SelfEvalConfig.get_meta("en")
@@ -92,15 +97,16 @@ async def selfeval_post(
         total_fields=len(form),
     )
 
-    # Find first exhibit slug
-    result = await db_session.execute(
-        select(Exhibit).order_by(Exhibit.order_index.asc())
-    )
+    # Redirect to the first YAML-defined exhibit
+    slugs = request.app.state.yaml_slugs or []
+    stmt = select(Exhibit).order_by(Exhibit.order_index.asc())
+    if slugs:
+        stmt = stmt.where(Exhibit.slug.in_(slugs))
+    result = await db_session.execute(stmt)
     first: Optional[Exhibit] = result.scalars().first()
     if first:
         return RedirectResponse(url=f"/exhibit/{first.slug}", status_code=303)
-    else:
-        return RedirectResponse(url="/thanks", status_code=303)
+    return RedirectResponse(url="/thanks", status_code=303)
 
 
 @router.get("/exhibit/{slug}", response_class=HTMLResponse)
@@ -143,19 +149,20 @@ async def exhibit_detail(
     )
     has_answered = result.scalars().first() is not None
 
-    # Prev/Next by order_index
-    prev_res = await db_session.execute(
-        select(Exhibit.slug)
-        .where(Exhibit.order_index < exhibit.order_index)
-        .order_by(Exhibit.order_index.desc())
-        .limit(1)
+    # Prev/Next exhibits among YAML-defined slugs only
+    slugs = request.app.state.yaml_slugs or []
+    prev_stmt = select(Exhibit.slug).where(Exhibit.order_index < exhibit.order_index)
+    next_stmt = select(Exhibit.slug).where(Exhibit.order_index > exhibit.order_index)
+    if slugs:
+        prev_stmt = prev_stmt.where(Exhibit.slug.in_(slugs))
+        next_stmt = next_stmt.where(Exhibit.slug.in_(slugs))
+    prev_stmt = prev_stmt.order_by(Exhibit.order_index.desc()).limit(1)
+    next_stmt = next_stmt.order_by(Exhibit.order_index.asc()).limit(1)
+    prev_res, next_res = await asyncio.gather(
+        db_session.execute(prev_stmt),
+        db_session.execute(next_stmt),
     )
-    next_res = await db_session.execute(
-        select(Exhibit.slug)
-        .where(Exhibit.order_index > exhibit.order_index)
-        .order_by(Exhibit.order_index.asc())
-        .limit(1)
-    )
+
     prev_slug = prev_res.scalar_one_or_none()
     next_slug = next_res.scalar_one_or_none()
 
@@ -222,12 +229,13 @@ async def save_answer(
     )
     if result.scalars().first() is not None:
         # Answers already submitted, redirect to next exhibit
-        next_res = await db_session.execute(
-            select(Exhibit.slug)
-            .where(Exhibit.order_index > exhibit.order_index)
-            .order_by(Exhibit.order_index.asc())
-            .limit(1)
-        )
+        # Next exhibit from YAML-defined ones only
+        slugs = request.app.state.yaml_slugs or []
+        stmt = select(Exhibit.slug).where(Exhibit.order_index > exhibit.order_index)
+        if slugs:
+            stmt = stmt.where(Exhibit.slug.in_(slugs))
+        stmt = stmt.order_by(Exhibit.order_index.asc()).limit(1)
+        next_res = await db_session.execute(stmt)
         next_slug = next_res.scalar_one_or_none()
         if next_slug:
             return RedirectResponse(url=f"/exhibit/{next_slug}", status_code=303)
@@ -282,18 +290,24 @@ async def save_answer(
 
     if missing_required:
         # Prev/Next by order_index
-        prev_res = await db_session.execute(
-            select(Exhibit.slug)
-            .where(Exhibit.order_index < exhibit.order_index)
-            .order_by(Exhibit.order_index.desc())
-            .limit(1)
+        # Prev/next limited to YAML slugs
+        slugs = request.app.state.yaml_slugs or []
+        prev_stmt = select(Exhibit.slug).where(
+            Exhibit.order_index < exhibit.order_index
         )
-        next_res = await db_session.execute(
-            select(Exhibit.slug)
-            .where(Exhibit.order_index > exhibit.order_index)
-            .order_by(Exhibit.order_index.asc())
-            .limit(1)
+        next_stmt = select(Exhibit.slug).where(
+            Exhibit.order_index > exhibit.order_index
         )
+        if slugs:
+            prev_stmt = prev_stmt.where(Exhibit.slug.in_(slugs))
+            next_stmt = next_stmt.where(Exhibit.slug.in_(slugs))
+        prev_stmt = prev_stmt.order_by(Exhibit.order_index.desc()).limit(1)
+        next_stmt = next_stmt.order_by(Exhibit.order_index.asc()).limit(1)
+        prev_res, next_res = await asyncio.gather(
+            db_session.execute(prev_stmt),
+            db_session.execute(next_stmt),
+        )
+
         prev_slug = prev_res.scalar_one_or_none()
         next_slug = next_res.scalar_one_or_none()
 
@@ -347,16 +361,17 @@ async def save_answer(
         question_ids=list(answers.keys()),
     )
 
-    # Find next slug to redirect
+    # Find next exhibit among YAML-defined slugs
     result = await db_session.execute(select(Exhibit).where(Exhibit.slug == slug))
     current_exhibit = result.scalar_one()
-
-    next_res = await db_session.execute(
-        select(Exhibit.slug)
-        .where(Exhibit.order_index > current_exhibit.order_index)
-        .order_by(Exhibit.order_index.asc())
-        .limit(1)
+    slugs = request.app.state.yaml_slugs or []
+    next_stmt = select(Exhibit.slug).where(
+        Exhibit.order_index > current_exhibit.order_index
     )
+    if slugs:
+        next_stmt = next_stmt.where(Exhibit.slug.in_(slugs))
+    next_stmt = next_stmt.order_by(Exhibit.order_index.asc()).limit(1)
+    next_res = await db_session.execute(next_stmt)
     next_slug = next_res.scalar_one_or_none()
 
     if next_slug:

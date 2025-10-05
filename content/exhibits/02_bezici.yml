@@ -1,13 +1,13 @@
 slug: art-2
 master_image: "img/Běžící věž.png"
 images:
-  - path: "/img/Běžící věž_imagen.png"
+  - path: "img/Běžící věž_imagen.png"
     alt: "A"
   - path: "img/Běžící věž_dalle3_v1.png"
     alt: "B"
   - path: "img/example_image_2_3.png"
     alt: "C"
-  - path: "/img/Běžící věž_qwen.png"
+  - path: "img/Běžící věž_qwen.png"
     alt: "D"
   - path: "img/example_image_2_5.png"
     alt: "E"

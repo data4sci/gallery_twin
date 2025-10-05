@@ -1,0 +1,34 @@
+slug: art-3
+master_image: "img/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta.jpg"
+images:
+  - path: "img/Imagen-4/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_qwen.png"
+    alt: "A"
+  - path: "img/DALL-E/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_dalle3_v1.png"
+    alt: "B"
+  - path: "img/example_image_1.png"
+    alt: "C"
+  - path: "img/Qwen/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_qwen.png"
+    alt: "D"
+  - path: "img/example_image_1.png"
+    alt: "E"
+  - path: "img/FLUX.1-Krea-dev/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_flux.jpeg"
+    alt: "F"
+
+title: "Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta"
+text_md: |
+  **Geometry**
+  Explore the relationships between shapes, lines, and composition. Observe rhythm and repetition.
+audio: "audio/room2.mp3"
+questions:
+  - type: "single"
+    text: "Which element interested you the most?"
+    options: ["shapes", "lines", "texture", "composition"]
+    required: true
+  - type: "likert"
+    text: "How strong of an aesthetic impression did the room leave on you?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "No impression"
+        5: "Very strong impression"

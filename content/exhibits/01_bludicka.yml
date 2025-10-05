@@ -1,17 +1,17 @@
 slug: art-1
 master_image: "img/Bludička z Křemelné.jpg"
 images:
-  - path: "img/Bludička z Křemelné_dalle3_v1.png"
+  - path: "img/DALL-E/Bludička z Křemelné_dalle3_v1.png"
     alt: "A"
-  - path: "img/Bludička z Křemelné_flux.jpeg"
+  - path: "img/FLUX.1-Krea-dev/Bludička z Křemelné_flux.jpeg"
     alt: "B"
-  - path: "img/Bludička z Křemelné_imagen.png"
+  - path: "img/Imagen-4/Bludička z Křemelné_imagen.png"
     alt: "C"
-  - path: "img/Bludička z Křemelné_qwen.png"
+  - path: "img/Qwen/Bludička z Křemelné_qwen.png"
     alt: "D"
-  - path: "img/example_image_1_5.png"
+  - path: "img/example_image_1.png"
     alt: "E"
-  - path: "img/example_image_1_6.png"
+  - path: "img/example_image_1.png"
     alt: "F"
 
 title: "Bludička z Křemelné"

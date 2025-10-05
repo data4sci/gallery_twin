@@ -12,7 +12,7 @@ from typing import Any, Dict
 
 import yaml
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlmodel import select
+from sqlmodel import select, delete
 
 from app.models import Exhibit, Image, Question, QuestionType
 from app.logging_config import content_logger, log_content_loading, log_error
@@ -57,12 +57,12 @@ async def load_content_from_dir(
         content_logger.info(f"No YAML files found in: {base}")
         return 0
 
-        # Fetch existing exhibits to avoid duplicates
-    result = await session.execute(select(Exhibit.slug))
-    existing_exhibits = {slug for (slug,) in result.fetchall()}
+        # Fetch existing exhibits to sync them
+    result = await session.execute(select(Exhibit))
+    existing_exhibits = {exhibit.slug: exhibit for exhibit in result.scalars().all()}
 
     content_logger.info(
-        f"Found {len(existing_exhibits)} existing exhibits. Checking for new content in {len(files)} files..."
+        f"Found {len(existing_exhibits)} existing exhibits. Syncing content from {len(files)} files..."
     )
     processed = 0
     for f in files:
@@ -77,20 +77,39 @@ async def load_content_from_dir(
         lang_data = data
 
         if slug in existing_exhibits:
-            continue
+            # Update existing exhibit
+            exhibit = existing_exhibits[slug]
+            exhibit.title = lang_data.get("title", "")
+            exhibit.text_md = lang_data.get("text_md", "")
+            exhibit.audio_path = lang_data.get("audio")
+            exhibit.audio_transcript = lang_data.get("audio_transcript")
+            exhibit.master_image = data.get("master_image")
+            exhibit.order_index = order_index
+            session.add(exhibit)
 
-        exhibit = Exhibit(
-            slug=slug,
-            title=lang_data.get("title", ""),
-            text_md=lang_data.get("text_md", ""),
-            audio_path=lang_data.get("audio"),
-            audio_transcript=lang_data.get("audio_transcript"),
-            master_image=data.get("master_image"),
-            order_index=order_index,
-        )
-        session.add(exhibit)
+            # Delete existing images and questions to replace them
+            await session.execute(delete(Image).where(Image.exhibit_id == exhibit.id))
+            await session.execute(
+                delete(Question).where(Question.exhibit_id == exhibit.id)
+            )
+            content_logger.info(f"Updated existing exhibit: {slug}")
+        else:
+            # Create new exhibit
+            exhibit = Exhibit(
+                slug=slug,
+                title=lang_data.get("title", ""),
+                text_md=lang_data.get("text_md", ""),
+                audio_path=lang_data.get("audio"),
+                audio_transcript=lang_data.get("audio_transcript"),
+                master_image=data.get("master_image"),
+                order_index=order_index,
+            )
+            session.add(exhibit)
+            content_logger.info(f"Created new exhibit: {slug}")
+
         await session.flush()  # Flush to get exhibit.id
 
+        # Add images from YAML
         for idx, img_data in enumerate(data.get("images", [])):
             image = Image(
                 exhibit_id=exhibit.id,
@@ -100,6 +119,7 @@ async def load_content_from_dir(
             )
             session.add(image)
 
+        # Add questions from YAML
         for idx, q_data in enumerate(lang_data.get("questions", [])):
             q_type = _parse_question_type(q_data["type"])
             question = Question(
@@ -113,15 +133,16 @@ async def load_content_from_dir(
             session.add(question)
 
         processed += 1
-        content_logger.info(f"Loaded new exhibit: {slug}")
 
     await session.commit()
 
     if processed > 0:
         log_content_loading(processed, directory=str(base))
-        content_logger.info(f"Successfully loaded {processed} new exhibits from {base}")
+        content_logger.info(
+            f"Successfully synchronized {processed} exhibits from {base}"
+        )
     else:
-        content_logger.info("No new content to load - all exhibits already exist")
+        content_logger.info("No YAML files to process")
 
     return processed
 

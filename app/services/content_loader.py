@@ -92,7 +92,7 @@ async def load_content_from_dir(
             await session.execute(
                 delete(Question).where(Question.exhibit_id == exhibit.id)
             )
-            content_logger.info(f"Updated existing exhibit: {slug}")
+            content_logger.debug(f"Updated existing exhibit: {slug}")
         else:
             # Create new exhibit
             exhibit = Exhibit(
@@ -105,7 +105,7 @@ async def load_content_from_dir(
                 order_index=order_index,
             )
             session.add(exhibit)
-            content_logger.info(f"Created new exhibit: {slug}")
+            content_logger.debug(f"Created new exhibit: {slug}")
 
         await session.flush()  # Flush to get exhibit.id
 

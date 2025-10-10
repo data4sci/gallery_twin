@@ -136,6 +136,7 @@ async def exhibit_detail(
     log_session_event(
         event_type="exhibit_viewed",
         session_uuid=str(session.uuid),
+        level="DEBUG",
         exhibit_slug=slug,
         exhibit_id=exhibit.id,
         exhibit_title=exhibit.title,
@@ -356,6 +357,7 @@ async def save_answer(
     log_session_event(
         event_type="exhibit_form_submitted",
         session_uuid=str(session.uuid),
+        level="DEBUG",
         exhibit_slug=slug,
         total_answers=len(answers),
         question_ids=list(answers.keys()),
@@ -412,7 +414,9 @@ async def exhibition_feedback_get(
 
     # Log feedback form view
     log_session_event(
-        event_type="exhibition_feedback_viewed", session_uuid=str(session.uuid)
+        event_type="exhibition_feedback_viewed",
+        session_uuid=str(session.uuid),
+        level="DEBUG",
     )
 
     # Load questions from YAML config
@@ -463,11 +467,11 @@ async def submit_exhibition_feedback(
     serializer = URLSafeTimedSerializer(SECRET_KEY)
 
     # Debug logging
-    logger.info(f"CSRF validation - current session_id: {session_id}")
+    logger.debug(f"CSRF validation - current session_id: {session_id}")
 
     try:
         token_session_id = serializer.loads(csrf_token, max_age=3600)  # 1 hour
-        logger.info(f"CSRF validation - token session_id: {token_session_id}")
+        logger.debug(f"CSRF validation - token session_id: {token_session_id}")
         if token_session_id != session_id:
             logger.error(
                 f"CSRF token mismatch: token={token_session_id}, current={session_id}"

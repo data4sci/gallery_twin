@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 from sqlalchemy import text
 
-from app.middleware import SessionMiddleware
+from app.middleware import SessionMiddleware, RequestLoggingMiddleware
 from app.services.startup_tasks import run_startup_tasks
 from app.services.site_copy import load_site_copy
 from app.db import get_async_session
@@ -39,6 +39,7 @@ async def lifespan(app):
 app = FastAPI(title="Gallery Twin", lifespan=lifespan)
 
 # Middleware is added before routers
+app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(SessionMiddleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")

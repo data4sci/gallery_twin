@@ -35,6 +35,7 @@ async def admin_dashboard(
     log_admin_access(
         username=admin_user,
         action="dashboard_viewed",
+        level="DEBUG",
         ip_address=request.client.host if request.client else None,
         user_agent=request.headers.get("user-agent"),
     )
@@ -65,6 +66,7 @@ async def admin_responses(
     log_admin_access(
         username=admin_user,
         action="responses_viewed",
+        level="DEBUG",
         exhibit_filter=exhibit_id,
         question_filter=question_id,
         ip_address=request.client.host if request.client else None,
@@ -159,6 +161,7 @@ async def export_responses_csv(
     log_admin_access(
         username=admin_user,
         action="csv_export",
+        level="DEBUG",
         export_format="csv",
     )
 
@@ -204,6 +207,7 @@ async def export_exhibition_feedback_csv(
     log_admin_access(
         username=admin_user,
         action="feedback_csv_export",
+        level="DEBUG",
         export_format="csv",
     )
 
@@ -277,6 +281,7 @@ async def admin_feedbacks(
     log_admin_access(
         username=admin_user,
         action="feedbacks_viewed",
+        level="DEBUG",
         ip_address=request.client.host if request.client else None,
         user_agent=request.headers.get("user-agent"),
     )

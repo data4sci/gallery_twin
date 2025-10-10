@@ -51,8 +51,9 @@ def setup_logging(level: str = "INFO", log_file: str = "logs/gallery.log") -> No
         force=True,  # Override any existing configuration
     )
 
-    # Suppress noisy libraries
-    logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+    # Set log levels for noisy libraries
+    # INFO level for sqlalchemy.engine to see DB connections and basic operations
+    logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
     logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
     logging.getLogger("asyncio").setLevel(logging.WARNING)
 
@@ -63,34 +64,56 @@ db_logger = logging.getLogger("gallery_twin.database")
 auth_logger = logging.getLogger("gallery_twin.auth")
 session_logger = logging.getLogger("gallery_twin.session")
 content_logger = logging.getLogger("gallery_twin.content")
+request_logger = logging.getLogger("gallery_twin.request")
 
 
-def log_session_event(event_type: str, session_uuid: str, **kwargs) -> None:
+def log_request(request, status_code: int):
+    """Log incoming HTTP requests."""
+    request_logger.debug(
+        f"{request.method} {request.url.path} | STATUS={status_code} | IP={request.client.host}"
+    )
+
+
+def log_session_event(
+    event_type: str, session_uuid: str, level: str = "INFO", **kwargs
+) -> None:
     """Log session-related events with structured data."""
     extra_data = ", ".join(f"{k}={v}" for k, v in kwargs.items())
-    session_logger.info(f"{event_type} | session={session_uuid} | {extra_data}")
+    log_func = getattr(session_logger, level.lower(), session_logger.info)
+    log_func(f"{event_type} | session={session_uuid} | {extra_data}")
 
 
 def log_answer_submission(
-    session_uuid: str, question_id: int, exhibit_slug: str = None, **kwargs
+    session_uuid: str,
+    question_id: int,
+    exhibit_slug: str = None,
+    level: str = "DEBUG",
+    **kwargs,
 ) -> None:
     """Log answer submission events."""
     extra_data = ", ".join(f"{k}={v}" for k, v in kwargs.items())
-    logger.info(
+    log_func = getattr(logger, level.lower(), logger.info)
+    log_func(
         f"ANSWER_SUBMITTED | session={session_uuid} | question_id={question_id} | exhibit={exhibit_slug} | {extra_data}"
     )
 
 
-def log_admin_access(username: str, action: str, **kwargs) -> None:
+def log_admin_access(
+    username: str, action: str, level: str = "INFO", **kwargs
+) -> None:
     """Log admin access and actions."""
     extra_data = ", ".join(f"{k}={v}" for k, v in kwargs.items())
-    auth_logger.info(f"ADMIN_ACCESS | user={username} | action={action} | {extra_data}")
+    log_func = getattr(auth_logger, level.lower(), auth_logger.info)
+    log_func(f"ADMIN_ACCESS | user={username} | action={action} | {extra_data}")
 
 
-def log_content_loading(files_processed: int, **kwargs) -> None:
+def log_content_loading(
+    files_processed: int, level: str = "INFO", **kwargs
+) -> None:
     """Log content loading operations."""
     extra_data = ", ".join(f"{k}={v}" for k, v in kwargs.items())
-    content_logger.info(f"CONTENT_LOADED | files={files_processed} | {extra_data}")
+    log_func = getattr(content_logger, level.lower(), content_logger.info)
+    log_func(f"CONTENT_LOADED | files={files_processed} | {extra_data}")
 
 
 def log_error(error_type: str, message: str, **kwargs) -> None:

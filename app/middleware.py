@@ -4,7 +4,20 @@ from typing import Callable, Awaitable
 from starlette.requests import Request
 from starlette.responses import Response
 
+from app.logging_config import log_request
+
 SESSION_COOKIE_NAME = "gallery_session_id"
+
+
+class RequestLoggingMiddleware(BaseHTTPMiddleware):
+    """Middleware to log incoming HTTP requests."""
+
+    async def dispatch(
+        self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
+        response = await call_next(request)
+        log_request(request, response.status_code)
+        return response
 
 
 class SessionMiddleware(BaseHTTPMiddleware):

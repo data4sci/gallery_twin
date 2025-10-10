@@ -122,11 +122,23 @@ async def load_content_from_dir(
         # Add questions from YAML
         for idx, q_data in enumerate(lang_data.get("questions", [])):
             q_type = _parse_question_type(q_data["type"])
+            options = q_data.get("options")
+            # Pass layout as part of options_json if present
+            if options is not None:
+                if isinstance(options, list):
+                    options_json = {
+                        "options": options,
+                        "layout": q_data.get("layout", "vertical"),
+                    }
+                else:
+                    options_json = options
+            else:
+                options_json = None
             question = Question(
                 exhibit_id=exhibit.id,
                 text=q_data["text"],
                 type=q_type,
-                options_json=q_data.get("options"),
+                options_json=options_json,
                 required=bool(q_data.get("required", False)),
                 sort_order=idx,
             )

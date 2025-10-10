@@ -184,8 +184,10 @@
                     class="w-full p-2 border border-gray-300 rounded-md">
 
                 {% elif question.type == 'single' %}
-                <div class="space-y-2">
-                    {% for option in question.options_json %}
+                {% set layout = question.options_json.layout if question.options_json is mapping and 'layout' in question.options_json else 'vertical' %}
+                {% set options = question.options_json.options if question.options_json is mapping and 'options' in question.options_json else question.options_json %}
+                <div class="{% if layout == 'horizontal' %}flex flex-row space-x-4{% else %}space-y-2{% endif %}">
+                    {% for option in options %}
                     <label class="flex items-center">
                         <input id="q_{{ question.id }}_{{ loop.index }}" 
                             type="radio" 

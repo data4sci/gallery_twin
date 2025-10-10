@@ -1,0 +1,43 @@
+slug: art-7
+master_image: "img/Pocukrováno.png"
+images:
+  - path: "img/DALL-E/Pocukrováno_dalle3_v1.png"
+    alt: "A"
+  - path: "img/FLUX.1-Krea-dev/Pocukrováno_flux.jpeg"
+    alt: "B"
+  - path: "img/Imagen-4/Pocukrováno_imagen.png"
+    alt: "C"
+  - path: "img/Qwen/Pocukrováno_qwen.png"
+    alt: "D"
+  - path: "img/example_image_1.png"
+    alt: "E"
+  - path: "img/example_image_1.png"
+    alt: "F"
+
+title: "Pocukrováno"
+text_md: |
+  This room presents the basic principles of abstract expression.
+  Perceive colors, shapes, and rhythm without the need to search for figurative meaning.
+audio: "audio/room1.mp3"
+questions:
+  - type: "likert"
+    text: "How did the exhibition affect you?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Not at all"
+        5: "Very strongly"
+    required: true
+  - type: "likert"
+    text: "How do you like this exhibition?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "I don't like it at all"
+        5: "I like it very much"
+    required: true
+  - type: "text"
+    text: "Short feedback?"
+    required: true

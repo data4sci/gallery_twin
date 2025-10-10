@@ -21,14 +21,62 @@ text_md: |
 audio: "audio/room2.mp3"
 questions:
   - type: "single"
-    text: "Which element interested you the most?"
-    options: ["shapes", "lines", "texture", "composition"]
+    text: "Which of these reproductions do you think is most faithful to the original?"
+    options: ["A", "B", "C", "D", "E", "F"]
     required: true
-  - type: "likert"
-    text: "How strong of an aesthetic impression did the room leave on you?"
-    options:
-      min: 1
-      max: 5
-      labels:
-        1: "No impression"
-        5: "Very strong impression"
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you think is least faithful to the original?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you like the most?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you like the least?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you think has the highest artistic value? (regardless of fidelity to the original)"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you think has the lowest artistic value? (regardless of fidelity to the original)"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you think was definitely created by a human?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you think was definitely created by artificial intelligence?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions would you be most willing to pay for?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions would you definitely not pay for?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions has the strongest emotional impact on you?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions evokes no emotions in you?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal

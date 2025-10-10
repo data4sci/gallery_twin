@@ -25,7 +25,7 @@ def setup_logging(level: str = "INFO", log_file: str = "logs/gallery.log") -> No
 
     # Create formatter for structured logs
     formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)-8s | %(name)-20s | %(message)s",
+        "%(asctime)s | %(levelname)-8s | %(name)-25s | %(funcName)s:%(lineno)d | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
@@ -45,16 +45,17 @@ def setup_logging(level: str = "INFO", log_file: str = "logs/gallery.log") -> No
     # Configure root logger
     logging.basicConfig(
         level=getattr(logging, level.upper()),
-        format="%(asctime)s | %(levelname)-8s | %(name)-20s | %(message)s",
+        format="%(asctime)s | %(levelname)-8s | %(name)-25s | %(funcName)s:%(lineno)d | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         handlers=handlers,
         force=True,  # Override any existing configuration
     )
 
     # Set log levels for noisy libraries
-    # INFO level for sqlalchemy.engine to see DB connections and basic operations
-    logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
-    logging.getLogger("uvicorn.access").setLevel(logging.WARNING)
+    # DEBUG level for sqlalchemy.engine to see detailed DB operations, including SQL statements.
+    logging.getLogger("sqlalchemy.engine").setLevel(logging.DEBUG)
+    # INFO level for uvicorn.access to see all incoming requests.
+    logging.getLogger("uvicorn.access").setLevel(logging.INFO)
     logging.getLogger("asyncio").setLevel(logging.WARNING)
 
 

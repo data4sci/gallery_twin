@@ -8,7 +8,7 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen font-sans" style="background-image: url('{{ url_for('static', path='img/background.png') }}'); background-repeat: repeat;">
-    <header class="bg-white shadow-sm">
+    <header class="shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <a href="{{ url_for('index') }}" class="flex items-center space-x-3">
@@ -29,7 +29,7 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="mt-12 border-t bg-white">
+    <footer class="mt-12 border-t">
         <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500">
             {{ site_copy.footer.copyright | safe if site_copy and site_copy.footer and site_copy.footer.copyright else '&copy; Gallery Twin — Gallery' }}
         </div>

@@ -75,9 +75,9 @@
     </style>
 </head>
 <body class="min-h-screen" style="background-image: url('{{ url_for('static', path='img/background.png') }}'); background-repeat: repeat;">
-    <header class="shadow-sm header-custom">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
+    <header class="header-custom">
+        <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8" style="border-bottom: 2px dashed var(--color-accent);">
+            <div class="flex justify-between items-center">
                 <a href="{{ url_for('index') }}" class="flex items-center space-x-3 header-logo">
                     <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--color-accent);">
                         <path d="M5 3v18h14V3H5zm2 2h10v14H7V5z"></path>
@@ -97,7 +97,7 @@
     </main>
 
     <footer class="mt-12 footer-custom">
-        <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-center" style="color: var(--text-color); opacity: 0.75; border-top: 2px dashed var(--color-accent);">
+        <div class="max-w-4xl mx-auto px-4 py-6 text-sm text-center" style="color: var(--text-color); opacity: 0.75; border-top: 2px dashed var(--color-accent);">
             {{ site_copy.footer.copyright | safe if site_copy and site_copy.footer and site_copy.footer.copyright else '&copy; Gallery Twin — Gallery' }}
         </div>
     </footer>

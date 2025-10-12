@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Gallery Twin{% endblock %}</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <style>
@@ -28,36 +34,55 @@
             --border-color:     var(--color-accent);
         }
 
+        /* Typography */
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 18px;
+            line-height: 1.7;
         }
 
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+            font-weight: 700;
+            color: var(--heading-color);
+            line-height: 1.2;
+        }
+
+        /* Cards */
         .gallery-card {
             background: var(--color-highlight);
             border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(62, 47, 43, 0.08);
+            transition: all 0.3s ease;
         }
 
         .gallery-card:hover {
             background: var(--color-light);
-            transition: background 0.3s ease;
+            box-shadow: 0 4px 16px rgba(62, 47, 43, 0.12);
+            transform: translateY(-2px);
         }
 
-        /* Smooth animations */
-        * {
-            transition: transform 0.2s ease;
+        /* Accessibility - Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen font-sans" style="background-image: url('{{ url_for('static', path='img/background.png') }}'); background-repeat: repeat;">
-    <header class="shadow-sm">
+<body class="min-h-screen" style="background-image: url('{{ url_for('static', path='img/background.png') }}'); background-repeat: repeat;">
+    <header class="shadow-sm header-custom">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center py-4">
-                <a href="{{ url_for('index') }}" class="flex items-center space-x-3">
-                    <svg class="h-8 w-8 text-green-600" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <a href="{{ url_for('index') }}" class="flex items-center space-x-3 header-logo">
+                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--color-accent);">
                         <path d="M5 3v18h14V3H5zm2 2h10v14H7V5z"></path>
                     </svg>
-                    <span class="text-lg font-semibold">{{ site_copy.header.site_title if site_copy and site_copy.header and site_copy.header.site_title else 'Gallery Twin' }}</span>
+                    <span class="text-lg font-semibold" style="color: var(--color-dark);">{{ site_copy.header.site_title if site_copy and site_copy.header and site_copy.header.site_title else 'Gallery Twin' }}</span>
                 </a>
 
                     {# <nav class="flex items-center space-x-3">
@@ -71,8 +96,8 @@
         {% block content %}{% endblock %}
     </main>
 
-    <footer class="mt-12 border-t">
-        <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-gray-500 text-center">
+    <footer class="mt-12 footer-custom">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-center" style="color: var(--text-color); opacity: 0.8; border-top: 1px solid var(--border-color);">
             {{ site_copy.footer.copyright | safe if site_copy and site_copy.footer and site_copy.footer.copyright else '&copy; Gallery Twin — Gallery' }}
         </div>
     </footer>

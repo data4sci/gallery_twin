@@ -1,19 +1,157 @@
 questions:
-  - id: "exhibition_rating"
-    type: "likert"
-    text: "Jak se vám výstava líbila?"
+  # Kognitivní složka
+  - id: deep_thinking
+    type: likert
+    text: "Měl/a jsem nutkání k hlubokému zamyšlení."
     options:
       min: 1
       max: 5
       labels:
-        1: "Vůbec se mi nelíbila"
-        2: "Spíše se mi nelíbila"
-        3: "Neutrální"
-        4: "Líbila se mi"
-        5: "Velmi se mi líbila"
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
     required: true
-  - id: "ai_art_opinion"
-    type: "text"
-    text: "Co si myslíte o AI v umění?"
-    placeholder: "Napište váš názor na použití umělé inteligence v umění..."
-    required: false
+    sort_order: 1
+  - id: absorbed_content
+    type: likert
+    text: "Byl/a jsem pohlcen/a obsahem obrazů nebo jejich reprodukcí."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 2
+  - id: new_information
+    type: likert
+    text: "Získal/a jsem nové informace nebo poznatky."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 3
+  - id: new_thoughts
+    type: likert
+    text: "Získal/a jsem podněty k novým myšlenkám."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 4
+  - id: meaning_reflection
+    type: likert
+    text: "Pociťoval/a jsem nutkání přemýšlet o významu vystavovaných děl."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 5
+  - id: new_questions
+    type: likert
+    text: "Měl/a jsem nutkání klást si nové otázky."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 6
+
+  # Emoce
+  - id: felt_calm
+    type: likert
+    text: "Cítil/a jsem se klidný/á."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 7
+  - id: felt_good
+    type: likert
+    text: "Měl/a jsem dobrý pocit."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 8
+  - id: colors_vitality
+    type: likert
+    text: "Měl/a jsem dojem, že ve mně barvy a kompozice obrazů vyvolávají pocit živosti."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 9
+  - id: positive_emotions
+    type: likert
+    text: "Cítil/a jsem spíše pozitivní nebo příjemné emoce. Pociťoval/a jsem radost při pohledu na vystavovaná díla."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 10
+  - id: absorbed_emotions
+    type: likert
+    text: "Byl/a jsem pohlcen/a emocemi, které ve mě obrazy vyvolávaly."
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Naprosto nesouhlasím"
+        5: "Naprosto souhlasím"
+    required: true
+    sort_order: 11
+
+  # Poslední otázky
+  - id: ai_future_role
+    type: single
+    text: "Jakou roli by podle Vás mohla hrát umělá inteligence v budoucnu při vytváření originálního umění?"
+    options:
+      - "Žádnou roli – AI nebude mít význam"
+      - "Spíše okrajovou roli – doplněk k lidské tvorbě"
+      - "Střední roli – kombinace lidské a AI tvorby"
+      - "Významnou roli – AI bude zásadní nástroj při tvorbě"
+      - "Dominantní roli – AI bude hlavním tvůrcem originálního umění"
+    required: true
+    sort_order: 12
+  - id: more_exhibitions
+    type: single
+    text: "Chtěl/a byste vidět více výstav kombinujících tradiční umění a moderní technologie, jako je AI?"
+    options:
+      - "Ano"
+      - "Ne"
+    required: true
+    sort_order: 13
+  - id: attitude_change
+    type: single
+    text: "Do jaké míry výstava změnila Váš postoj vůči využívání AI v oblasti umělecké tvorby?"
+    options:
+      - "Výrazně změnila k horšímu"
+      - "Spíše změnila k horšímu"
+      - "Nezměnila můj postoj"
+      - "Spíše změnila k lepšímu"
+      - "Výrazně změnila k lepšímu"
+    required: true
+    sort_order: 14

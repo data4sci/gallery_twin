@@ -1,0 +1,36 @@
+questions:
+  - id: favorite_genre
+    type: single
+    text: "Jaký je váš oblíbený žánr?"
+    options:
+      - "Fantazie"
+      - "Sci-fi"
+      - "Drama"
+    required: true
+    sort_order: 1
+  - id: favorite_colors
+    type: multi
+    text: "Které barvy máte rádi? (vyberte více)"
+    options:
+      - "Červená"
+      - "Modrá"
+      - "Zelená"
+      - "Žlutá"
+    required: false
+    sort_order: 2
+  - id: painting_rating
+    type: likert
+    text: "Jak moc se vám líbí tento obraz?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Vůbec ne"
+        5: "Velmi"
+    required: true
+    sort_order: 3
+  - id: exhibition_feedback
+    type: text
+    text: "Napište svůj názor na výstavu."
+    required: false
+    sort_order: 4

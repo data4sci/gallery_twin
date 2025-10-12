@@ -39,7 +39,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            font-size: 18px;
+            font-size: 1.05rem;
             line-height: 1.7;
         }
 
@@ -54,14 +54,14 @@
         .gallery-card {
             background: var(--color-highlight);
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 8px rgba(62, 47, 43, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             transition: all 0.3s ease;
         }
 
         .gallery-card:hover {
             background: var(--color-light);
-            box-shadow: 0 4px 16px rgba(62, 47, 43, 0.12);
-            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
         }
 
         /* Accessibility - Reduced motion */
@@ -97,7 +97,7 @@
     </main>
 
     <footer class="mt-12 footer-custom">
-        <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-center" style="color: var(--text-color); opacity: 0.8; border-top: 1px solid var(--border-color);">
+        <div class="max-w-7xl mx-auto px-4 py-6 text-sm text-center" style="color: var(--text-color); opacity: 0.75; border-top: 2px dashed var(--color-accent);">
             {{ site_copy.footer.copyright | safe if site_copy and site_copy.footer and site_copy.footer.copyright else '&copy; Gallery Twin — Gallery' }}
         </div>
     </footer>

@@ -8,7 +8,9 @@ footer:
   copyright: "&copy; Gallery Twin — A virtual gallery"
 
 index:
-  title: "Metamorfózy umění 2.0"
+  title: "Metamorphoses of Art 2.0"
+  presenter: "VSB - Technical University of Ostrava & Klára Sedlo present"
+  subtitle: "Art Through the Eyes of AI"
   lead: "Explore carefully curated digital exhibits and share your thoughts."
   start_button: "Start the tour"
 

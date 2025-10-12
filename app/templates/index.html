@@ -5,7 +5,7 @@
 {% block content %}
 <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
     <!-- Hero Section -->
-    <header class="text-center py-16 md:py-24">
+    <header class="hero-section text-center py-16 md:py-24">
         <h1 class="hero-title-main">
             {{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Metamorfózy umění 2.0' }}
         </h1>
@@ -42,7 +42,7 @@
             <h2 class="section-heading">
                 {{ site_copy.index.credits_title if site_copy and site_copy.index and site_copy.index.credits_title else 'Credits' }}
             </h2>
-            <ul class="space-y-3 list-disc list-inside credits-list">
+            <ul class="space-y-3 credits-list">
                 <li>
                     <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Originals:' }}</strong>
                     {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Klára Sedlo' }}
@@ -64,7 +64,7 @@
         <h2 class="section-heading">
             {{ site_copy.index.highlights_title if site_copy and site_copy.index and site_copy.index.highlights_title else 'What to Expect' }}
         </h2>
-        <ul class="space-y-3 list-disc list-inside">
+        <ul class="space-y-3">
             <li>{{ site_copy.index.highlight_1 if site_copy and site_copy.index and site_copy.index.highlight_1 else 'AI-assisted artworks exploring perception, emotion, and transformation' }}</li>
             <li>{{ site_copy.index.highlight_2 if site_copy and site_copy.index and site_copy.index.highlight_2 else 'A cross-disciplinary showcase bridging art, computer vision, and design' }}</li>
             <li>{{ site_copy.index.highlight_3 if site_copy and site_copy.index and site_copy.index.highlight_3 else 'Insights into creative pipelines behind the exhibited works' }}</li>
@@ -73,6 +73,25 @@
 </div>
 
 <style>
+    /* Hero Section */
+    .hero-section {
+        position: relative;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 120%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(255, 249, 233, 0.9) 0%, rgba(255, 249, 233, 0.3) 50%, transparent 100%);
+        border-radius: 50% 50% 0 0 / 20% 20% 0 0;
+        z-index: -1;
+        pointer-events: none;
+    }
+
     /* Hero Section Typography */
     .hero-title-main {
         font-size: clamp(2.25rem, 7vw, 4rem);
@@ -111,10 +130,13 @@
 
     /* Section Headings */
     .section-heading {
-        font-size: 1.75rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: var(--heading-color);
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-family: 'Inter', sans-serif;
     }
 
     /* Card Styling */
@@ -134,24 +156,24 @@
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background-color: var(--button-bg);
-        color: var(--color-dark);
+        background: linear-gradient(90deg, #E2B845 0%, #C93C30 100%);
+        color: #FFF9E9;
         font-weight: 700;
         font-size: 1.125rem;
-        padding: 0.875rem 2.5rem;
+        padding: 14px 32px;
         border-radius: 9999px;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 12px rgba(226, 184, 69, 0.3);
+        box-shadow: 0 4px 16px rgba(226, 184, 69, 0.4);
         text-decoration: none;
         width: 100%;
         justify-content: center;
     }
 
     .cta-button:hover {
-        background-color: var(--button-hover);
-        color: var(--color-light);
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(201, 60, 48, 0.4);
+        background: linear-gradient(90deg, #C93C30 0%, #E2B845 100%);
+        color: #FFF9E9;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(201, 60, 48, 0.5);
     }
 
     .cta-button:focus {
@@ -166,13 +188,77 @@
     }
 
     /* Credits List */
+    .credits-list {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .credits-list li {
+        line-height: 1.8;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .credits-list li::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
     .credits-list strong {
         color: var(--color-accent);
         font-weight: 600;
     }
 
-    .credits-list li {
-        line-height: 1.6;
+    /* What to Expect List */
+    section ul:not(.credits-list) {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    section ul:not(.credits-list) li {
+        padding-left: 1.5rem;
+        position: relative;
+        line-height: 1.8;
+    }
+
+    section ul:not(.credits-list) li::before {
+        content: "●";
+        position: absolute;
+        left: 0;
+        color: var(--color-secondary);
+        font-size: 0.8rem;
+    }
+
+    /* Fade-in animations */
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .gallery-card {
+        animation: fadeUp 0.6s ease-out backwards;
+    }
+
+    .gallery-card:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .gallery-card:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    section:last-of-type .gallery-card {
+        animation-delay: 0.3s;
     }
 
     /* Smooth scroll */
@@ -183,6 +269,10 @@
     @media (prefers-reduced-motion: reduce) {
         html {
             scroll-behavior: auto;
+        }
+
+        .gallery-card {
+            animation: none;
         }
     }
 </style>

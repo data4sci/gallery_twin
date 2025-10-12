@@ -6,6 +6,31 @@
     <title>{% block title %}Gallery Twin{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        /* Custom styles for enhanced landing page */
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #0b1224;
+            --text-primary: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #22d3ee;
+            --accent-blue: #60a5fa;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+        }
+
+        .gallery-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transition: background 0.3s ease;
+        }
+
+        /* Smooth animations */
+        * {
+            transition: transform 0.2s ease;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen font-sans" style="background-image: url('{{ url_for('static', path='img/background.png') }}'); background-repeat: repeat;">
     <header class="shadow-sm">

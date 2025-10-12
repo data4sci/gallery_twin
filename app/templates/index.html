@@ -3,18 +3,85 @@
 {% block title %}{{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Welcome' }}{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
-     <div class="bg-white p-6 rounded-lg shadow-md text-center">
-    <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Welcome to our virtual gallery' }}</h1>
-    {# Keep the canonical English heading text present for tests and fallback - do not display twice #}
-    <!-- Welcome to our virtual gallery -->
-     <p class="mb-8 text-lg">{{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'Culpa enim occaecat veniam fugiat cillum ut elit occaecat exercitation cupidatat excepteur et.' }}</p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="/selfeval"
-                    class="w-full sm:w-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded text-lg transition">
-                    {{ site_copy.index.start_button if site_copy and site_copy.index and site_copy.index.start_button else 'Start the tour' }}
-                </a>
+<div class="max-w-5xl mx-auto p-4 sm:p-6 md:p-8">
+    <!-- Hero Section -->
+    <header class="text-center py-8 md:py-12">
+        <div class="eyebrow text-sm tracking-widest uppercase font-bold mb-3 text-cyan-400">
+            {{ site_copy.index.eyebrow if site_copy and site_copy.index and site_copy.index.eyebrow else 'Virtual Exhibition' }}
         </div>
-    </div>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight">
+            {{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Metamorphoses 2.0' }}
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-400 font-medium mb-6">
+            {{ site_copy.index.subtitle if site_copy and site_copy.index and site_copy.index.subtitle else 'Art Through the Eyes of AI' }}
+        </p>
+        <p class="text-base md:text-lg max-w-3xl mx-auto mb-8 opacity-95 leading-relaxed">
+            {{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'A unique fusion of art, science, and artificial intelligence. Explore how AI perceives, transforms, and re-imagines human creativity through a curated collection of AI-assisted artworks.' }}
+        </p>
+        <div class="mt-8">
+            <a href="/selfeval"
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 to-cyan-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg transition hover:shadow-lg hover:scale-105">
+                {{ site_copy.index.start_button if site_copy and site_copy.index and site_copy.index.start_button else 'Start the tour' }} →
+            </a>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="grid md:grid-cols-2 gap-6 my-8">
+        <div class="gallery-card">
+            <h2 class="text-2xl font-semibold mb-4">
+                {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
+            </h2>
+            <p class="mb-4">
+                {{ site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'Metamorphoses 2.0 presents a dialogue between human imagination and machine perception. Each piece embodies a digital metamorphosis—where code becomes canvas and data becomes emotion.' }}
+            </p>
+            <p>
+                {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'The collection investigates aesthetic concepts such as transformation, ambiguity, and emergence through contemporary AI models and algorithmic processes.' }}
+            </p>
+        </div>
+        <div class="gallery-card">
+            <h2 class="text-2xl font-semibold mb-4">
+                {{ site_copy.index.credits_title if site_copy and site_copy.index and site_copy.index.credits_title else 'Credits' }}
+            </h2>
+            <ul class="space-y-2 list-disc list-inside">
+                <li>
+                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Originals:' }}</strong>
+                    {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Klára Sedlo' }}
+                </li>
+                <li>
+                    <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong>
+                    {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'Robert Šamárek' }}
+                </li>
+                <li>
+                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong>
+                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'ZUŠ Háj ve Slezsku' }}
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Highlights Section -->
+    <section class="gallery-card my-8">
+        <h2 class="text-2xl font-semibold mb-4">
+            {{ site_copy.index.highlights_title if site_copy and site_copy.index and site_copy.index.highlights_title else 'What to Expect' }}
+        </h2>
+        <ul class="space-y-2 list-disc list-inside">
+            <li>{{ site_copy.index.highlight_1 if site_copy and site_copy.index and site_copy.index.highlight_1 else 'AI-assisted artworks exploring perception, emotion, and transformation' }}</li>
+            <li>{{ site_copy.index.highlight_2 if site_copy and site_copy.index and site_copy.index.highlight_2 else 'A cross-disciplinary showcase bridging art, computer vision, and design' }}</li>
+            <li>{{ site_copy.index.highlight_3 if site_copy and site_copy.index and site_copy.index.highlight_3 else 'Insights into creative pipelines behind the exhibited works' }}</li>
+        </ul>
+    </section>
 </div>
+
+<style>
+    .gallery-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 24px;
+    }
+    .eyebrow {
+        letter-spacing: 0.2em;
+    }
+</style>
 {% endblock %}

@@ -9,20 +9,37 @@
     <style>
         /* Custom styles for enhanced landing page */
         :root {
-            --bg-primary: #0f172a;
-            --bg-secondary: #0b1224;
-            --text-primary: #e2e8f0;
-            --text-muted: #94a3b8;
-            --accent-cyan: #22d3ee;
-            --accent-blue: #60a5fa;
+            /* 🎨 Metamorphosis Blend Palette */
+            --color-primary:    #E2B845; /* Golden Ochre */
+            --color-secondary:  #C93C30; /* Vermilion Red */
+            --color-accent:     #7A8C3A; /* Olive Green */
+            --color-light:      #F4EAD0; /* Soft Cream */
+            --color-dark:       #3E2F2B; /* Deep Umber */
+            --color-highlight:  #FFF9E9; /* Warm Ivory */
+
+            /* Suggested usage */
+            --bg-color:         var(--color-light);
+            --text-color:       var(--color-dark);
+            --heading-color:    var(--color-dark);
+            --link-color:       var(--color-secondary);
+            --link-hover:       var(--color-primary);
+            --button-bg:        var(--color-primary);
+            --button-hover:     var(--color-secondary);
+            --border-color:     var(--color-accent);
         }
 
         body {
-            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .gallery-card {
+            background: var(--color-highlight);
+            border: 1px solid var(--border-color);
         }
 
         .gallery-card:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: var(--color-light);
             transition: background 0.3s ease;
         }
 

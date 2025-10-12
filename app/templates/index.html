@@ -6,21 +6,22 @@
 <div class="max-w-5xl mx-auto p-4 sm:p-6 md:p-8">
     <!-- Hero Section -->
     <header class="text-center py-8 md:py-12">
-        <div class="eyebrow text-sm tracking-widest uppercase font-bold mb-3 text-cyan-400">
+        <div class="eyebrow text-sm tracking-widest uppercase font-bold mb-3" style="color: var(--color-accent);">
             {{ site_copy.index.eyebrow if site_copy and site_copy.index and site_copy.index.eyebrow else 'Virtual Exhibition' }}
         </div>
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-2 leading-tight" style="color: var(--heading-color);">
             {{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Metamorphoses 2.0' }}
         </h1>
-        <p class="text-xl md:text-2xl text-gray-400 font-medium mb-6">
+        <p class="text-xl md:text-2xl font-medium mb-6" style="color: var(--color-accent);">
             {{ site_copy.index.subtitle if site_copy and site_copy.index and site_copy.index.subtitle else 'Art Through the Eyes of AI' }}
         </p>
-        <p class="text-base md:text-lg max-w-3xl mx-auto mb-8 opacity-95 leading-relaxed">
+        <p class="text-base md:text-lg max-w-3xl mx-auto mb-8 opacity-95 leading-relaxed" style="color: var(--text-color);">
             {{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'A unique fusion of art, science, and artificial intelligence. Explore how AI perceives, transforms, and re-imagines human creativity through a curated collection of AI-assisted artworks.' }}
         </p>
         <div class="mt-8">
             <a href="/selfeval"
-                class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-400 to-cyan-400 text-slate-900 font-bold py-3 px-8 rounded-full text-lg transition hover:shadow-lg hover:scale-105">
+                class="cta-button inline-flex items-center gap-2 font-bold py-3 px-8 rounded-full text-lg transition hover:shadow-lg hover:scale-105"
+                style="background-color: var(--button-bg); color: var(--color-dark);">
                 {{ site_copy.index.start_button if site_copy and site_copy.index and site_copy.index.start_button else 'Start the tour' }} →
             </a>
         </div>
@@ -75,13 +76,17 @@
 
 <style>
     .gallery-card {
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--color-highlight);
+        border: 1px solid var(--border-color);
         border-radius: 16px;
         padding: 24px;
     }
     .eyebrow {
         letter-spacing: 0.2em;
+    }
+    .cta-button:hover {
+        background-color: var(--button-hover) !important;
+        color: var(--color-light) !important;
     }
 </style>
 {% endblock %}

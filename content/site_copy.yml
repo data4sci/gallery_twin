@@ -9,10 +9,63 @@ footer:
 
 index:
   title: "Metamorphoses of Art 2.0"
-  presenter: "VSB - Technical University of Ostrava & Klára Sedlo present"
+  presenter: "VŠB-TUO & Klára Sedlo present"
   subtitle: "Art Through the Eyes of AI"
-  lead: "Explore carefully curated digital exhibits and share your thoughts."
-  start_button: "Start the tour"
+  lead: "A unique fusion of art, science, and artificial intelligence. Experience the exhibition in Prague or explore it online through this digital twin—an interactive gallery accessible from anywhere in the world."
+  explore_button: "Explore Digital Exhibition"
+  visit_button: "Visit in Prague"
+
+  # Two Ways to Experience section
+  experience_title: "Two Ways to Experience"
+  digital_title: "Explore Online"
+  digital_text: "Access the full exhibition from anywhere. This digital twin offers an interactive journey through all artworks with detailed insights into the AI processes behind each piece."
+  digital_feature_1: "Interactive artwork exploration"
+  digital_feature_2: "Technical insights and AI pipeline details"
+  digital_feature_3: "Available 24/7, accessible globally"
+
+  physical_title: "Visit in Prague"
+  physical_text: "Experience the artworks in person at ČVUT in Prague. Engage with the physical pieces, attend the opening reception, and meet the creators."
+  physical_feature_1: "In-person viewing of original works"
+  physical_feature_2: "Opening reception with creators"
+  physical_feature_3: "Guided tours and discussions"
+
+  # About section
+  about_title: "About the Exhibition"
+  about_text: "Metamorphoses 2.0 presents a dialogue between human imagination and machine perception. Each piece embodies a digital metamorphosis—where code becomes canvas and data becomes emotion."
+  about_text2: "The collection investigates aesthetic concepts such as transformation, ambiguity, and emergence through contemporary AI models and algorithmic processes."
+
+  # Credits section
+  credits_title: "Credits"
+  original_artist_label: "Original Artworks:"
+  original_artist: "Klára Sedlo"
+  ai_reproductions_label: "AI Reproductions:"
+  ai_reproductions: "Robert Šamárek"
+  human_reproductions_label: "Human Reproductions:"
+  human_reproductions: "ZUŠ Háj ve Slezsku"
+
+  # Visit in Prague section
+  visit_title: "Visit the Exhibition in Prague"
+
+  # Venue information
+  venue_title: "Exhibition Venue"
+  venue_location_label: "Location"
+  venue_location: "Czech Institute of Informatics, Robotics and Cybernetics ČVUT"
+  venue_address: "Jugoslávských partyzánů 1580/3, Praha 10"
+  venue_room: "Entrance B1, Atrium"
+  exhibition_duration_label: "Duration"
+  exhibition_duration: "November 13 – December 15, 2025"
+  exhibition_hours_label: "Opening Hours"
+  exhibition_hours: "Monday – Friday, 9:00 AM – 5:00 PM"
+  exhibition_admission_label: "Admission"
+  exhibition_admission: "Free and open to the public"
+
+  # Opening reception
+  vernissage_title: "Opening Reception"
+  vernissage_date_label: "Date"
+  vernissage_date: "November 13, 2025"
+  vernissage_time_label: "Time"
+  vernissage_time: "5:00 PM"
+  vernissage_description: "You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments."
 
 thanks:
   title: "Thank you for visiting"

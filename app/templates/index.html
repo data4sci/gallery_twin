@@ -16,14 +16,14 @@
             {{ site_copy.index.subtitle if site_copy and site_copy.index and site_copy.index.subtitle else 'Art Through the Eyes of AI' }}
         </p>
         <p class="hero-lead">
-            {{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'A unique fusion of art, science, and artificial intelligence. Experience the exhibition in Prague or explore it online through this digital twin—an interactive gallery accessible from anywhere in the world.' }}
+            {{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'Describe the exhibition and mention both physical and digital ways to experience it.' }}
         </p>
         <div class="hero-cta-group">
             <a href="/selfeval" class="cta-button cta-primary">
-                {{ site_copy.index.explore_button if site_copy and site_copy.index and site_copy.index.explore_button else 'Explore Digital Exhibition' }} →
+                {{ site_copy.index.explore_button if site_copy and site_copy.index and site_copy.index.explore_button else 'Start Digital Tour' }} →
             </a>
             <a href="#visit" class="cta-button cta-secondary">
-                {{ site_copy.index.visit_button if site_copy and site_copy.index and site_copy.index.visit_button else 'Visit in Prague' }}
+                {{ site_copy.index.visit_button if site_copy and site_copy.index and site_copy.index.visit_button else 'Physical Exhibition Info' }}
             </a>
         </div>
     </header>
@@ -39,12 +39,12 @@
                     {{ site_copy.index.digital_title if site_copy and site_copy.index and site_copy.index.digital_title else 'Explore Online' }}
                 </h3>
                 <p class="mb-4">
-                    {{ site_copy.index.digital_text if site_copy and site_copy.index and site_copy.index.digital_text else 'Access the full exhibition from anywhere. This digital twin offers an interactive journey through all artworks with detailed insights into the AI processes behind each piece.' }}
+                    {{ site_copy.index.digital_text if site_copy and site_copy.index and site_copy.index.digital_text else 'Describe the digital exhibition experience and its benefits.' }}
                 </p>
                 <ul class="space-y-2 experience-features">
-                    <li>{{ site_copy.index.digital_feature_1 if site_copy and site_copy.index and site_copy.index.digital_feature_1 else 'Interactive artwork exploration' }}</li>
-                    <li>{{ site_copy.index.digital_feature_2 if site_copy and site_copy.index and site_copy.index.digital_feature_2 else 'Technical insights and AI pipeline details' }}</li>
-                    <li>{{ site_copy.index.digital_feature_3 if site_copy and site_copy.index and site_copy.index.digital_feature_3 else 'Available 24/7, accessible globally' }}</li>
+                    <li>{{ site_copy.index.digital_feature_1 if site_copy and site_copy.index and site_copy.index.digital_feature_1 else 'Digital feature 1' }}</li>
+                    <li>{{ site_copy.index.digital_feature_2 if site_copy and site_copy.index and site_copy.index.digital_feature_2 else 'Digital feature 2' }}</li>
+                    <li>{{ site_copy.index.digital_feature_3 if site_copy and site_copy.index and site_copy.index.digital_feature_3 else 'Digital feature 3' }}</li>
                 </ul>
             </div>
             <div class="gallery-card card-padding">
@@ -52,12 +52,12 @@
                     {{ site_copy.index.physical_title if site_copy and site_copy.index and site_copy.index.physical_title else 'Visit in Prague' }}
                 </h3>
                 <p class="mb-4">
-                    {{ site_copy.index.physical_text if site_copy and site_copy.index and site_copy.index.physical_text else 'Experience the artworks in person at ČVUT in Prague. Engage with the physical pieces, attend the opening reception, and meet the creators.' }}
+                    {{ site_copy.index.physical_text if site_copy and site_copy.index and site_copy.index.physical_text else 'Describe the physical exhibition experience and its benefits.' }}
                 </p>
                 <ul class="space-y-2 experience-features">
-                    <li>{{ site_copy.index.physical_feature_1 if site_copy and site_copy.index and site_copy.index.physical_feature_1 else 'In-person viewing of original works' }}</li>
-                    <li>{{ site_copy.index.physical_feature_2 if site_copy and site_copy.index and site_copy.index.physical_feature_2 else 'Opening reception with creators' }}</li>
-                    <li>{{ site_copy.index.physical_feature_3 if site_copy and site_copy.index and site_copy.index.physical_feature_3 else 'Guided tours and discussions' }}</li>
+                    <li>{{ site_copy.index.physical_feature_1 if site_copy and site_copy.index and site_copy.index.physical_feature_1 else 'Physical feature 1' }}</li>
+                    <li>{{ site_copy.index.physical_feature_2 if site_copy and site_copy.index and site_copy.index.physical_feature_2 else 'Physical feature 2' }}</li>
+                    <li>{{ site_copy.index.physical_feature_3 if site_copy and site_copy.index and site_copy.index.physical_feature_3 else 'Physical feature 3' }}</li>
                 </ul>
             </div>
         </div>
@@ -70,10 +70,10 @@
                 {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
             </h2>
             <p class="mb-4">
-                {{ site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'Metamorphoses 2.0 presents a dialogue between human imagination and machine perception. Each piece embodies a digital metamorphosis—where code becomes canvas and data becomes emotion.' }}
+                {{ site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'First paragraph describing the exhibition concept and main themes.' }}
             </p>
             <p>
-                {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'The collection investigates aesthetic concepts such as transformation, ambiguity, and emergence through contemporary AI models and algorithmic processes.' }}
+                {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'Second paragraph with additional context about the artistic approach.' }}
             </p>
         </div>
         <div class="gallery-card card-padding">
@@ -83,15 +83,15 @@
             <ul class="space-y-3 credits-list">
                 <li>
                     <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong>
-                    {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Klára Sedlo' }}
+                    {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name' }}
                 </li>
                 <li>
                     <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong>
-                    {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'Robert Šamárek' }}
+                    {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name' }}
                 </li>
                 <li>
                     <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong>
-                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'ZUŠ Háj ve Slezsku' }}
+                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}
                 </li>
             </ul>
         </div>
@@ -111,24 +111,24 @@
                 <div class="venue-info">
                     <div class="info-item">
                         <strong class="info-label">{{ site_copy.index.venue_location_label if site_copy and site_copy.index and site_copy.index.venue_location_label else 'Location' }}</strong>
-                        <p class="info-text">{{ site_copy.index.venue_location if site_copy and site_copy.index and site_copy.index.venue_location else 'Czech Institute of Informatics, Robotics and Cybernetics ČVUT' }}</p>
-                        <p class="info-text info-address">{{ site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Jugoslávských partyzánů 1580/3, Praha 10' }}</p>
-                        <p class="info-text info-room">{{ site_copy.index.venue_room if site_copy and site_copy.index and site_copy.index.venue_room else 'Entrance B1, Atrium' }}</p>
+                        <p class="info-text">{{ site_copy.index.venue_location if site_copy and site_copy.index and site_copy.index.venue_location else 'Venue name' }}</p>
+                        <p class="info-text info-address">{{ site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Full address' }}</p>
+                        <p class="info-text info-room">{{ site_copy.index.venue_room if site_copy and site_copy.index and site_copy.index.venue_room else 'Room/Building details' }}</p>
                     </div>
 
                     <div class="info-item">
                         <strong class="info-label">{{ site_copy.index.exhibition_duration_label if site_copy and site_copy.index and site_copy.index.exhibition_duration_label else 'Duration' }}</strong>
-                        <p class="info-text">{{ site_copy.index.exhibition_duration if site_copy and site_copy.index and site_copy.index.exhibition_duration else 'November 13 – December 15, 2025' }}</p>
+                        <p class="info-text">{{ site_copy.index.exhibition_duration if site_copy and site_copy.index and site_copy.index.exhibition_duration else 'Exhibition dates' }}</p>
                     </div>
 
                     <div class="info-item">
                         <strong class="info-label">{{ site_copy.index.exhibition_hours_label if site_copy and site_copy.index and site_copy.index.exhibition_hours_label else 'Opening Hours' }}</strong>
-                        <p class="info-text">{{ site_copy.index.exhibition_hours if site_copy and site_copy.index and site_copy.index.exhibition_hours else 'Monday – Friday, 9:00 AM – 5:00 PM' }}</p>
+                        <p class="info-text">{{ site_copy.index.exhibition_hours if site_copy and site_copy.index and site_copy.index.exhibition_hours else 'Opening hours details' }}</p>
                     </div>
 
                     <div class="info-item">
                         <strong class="info-label">{{ site_copy.index.exhibition_admission_label if site_copy and site_copy.index and site_copy.index.exhibition_admission_label else 'Admission' }}</strong>
-                        <p class="info-text">{{ site_copy.index.exhibition_admission if site_copy and site_copy.index and site_copy.index.exhibition_admission else 'Free and open to the public' }}</p>
+                        <p class="info-text">{{ site_copy.index.exhibition_admission if site_copy and site_copy.index and site_copy.index.exhibition_admission else 'Admission details' }}</p>
                     </div>
                 </div>
             </div>
@@ -140,16 +140,16 @@
                 <div class="vernissage-info">
                     <div class="info-item">
                         <strong class="info-label">{{ site_copy.index.vernissage_date_label if site_copy and site_copy.index and site_copy.index.vernissage_date_label else 'Date' }}</strong>
-                        <p class="info-text">{{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'November 13, 2025' }}</p>
+                        <p class="info-text">{{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'Opening reception date' }}</p>
                     </div>
 
                     <div class="info-item">
                         <strong class="info-label">{{ site_copy.index.vernissage_time_label if site_copy and site_copy.index and site_copy.index.vernissage_time_label else 'Time' }}</strong>
-                        <p class="info-text">{{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else '5:00 PM' }}</p>
+                        <p class="info-text">{{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else 'Opening time' }}</p>
                     </div>
 
                     <p class="vernissage-description">
-                        {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments.' }}
+                        {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'Description of the opening reception event, invitation text.' }}
                     </p>
                 </div>
             </div>

@@ -31,48 +31,48 @@
     @keydown.window="handleKey($event)">
     
     <!-- Top navigation buttons -->
-    <div class="flex flex-col sm:flex-row justify-between mb-6 space-y-4 sm:space-y-0">
+    <div class="flex flex-col sm:flex-row justify-between mb-6 space-y-4 sm:space-y-0 fade-in">
         {% if prev_slug %}
-        <a href="{{ url_for('exhibit_detail', slug=prev_slug) }}" 
-            aria-label="Go to previous exhibit"
-            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
-            &laquo; Previous
+        <a href="{{ url_for('exhibit_detail', slug=prev_slug) }}"
+            aria-label="{{ site_copy.exhibit.prev_exhibit_label if site_copy and site_copy.exhibit else 'Go to previous exhibit' }}"
+            class="secondary-button w-full sm:w-auto justify-center">
+            &laquo; {{ site_copy.exhibit.previous_button if site_copy and site_copy.exhibit else 'Previous' }}
         </a>
         {% else %}
-        <a href="{{ url_for('index') }}" 
-            aria-label="Go to home page"
-            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
-            &laquo; Previous
+        <a href="{{ url_for('index') }}"
+            aria-label="{{ site_copy.exhibit.home_label if site_copy and site_copy.exhibit else 'Go to home page' }}"
+            class="secondary-button w-full sm:w-auto justify-center">
+            &laquo; {{ site_copy.exhibit.previous_button if site_copy and site_copy.exhibit else 'Previous' }}
         </a>
         {% endif %}
 
         {% if next_slug %}
-        <a href="{{ url_for('exhibit_detail', slug=next_slug) }}" 
-            aria-label="Go to next exhibit"
-            class="w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Next &raquo;
+        <a href="{{ url_for('exhibit_detail', slug=next_slug) }}"
+            aria-label="{{ site_copy.exhibit.next_exhibit_label if site_copy and site_copy.exhibit else 'Go to next exhibit' }}"
+            class="cta-button w-full sm:w-auto justify-center">
+            {{ site_copy.exhibit.next_button if site_copy and site_copy.exhibit else 'Next' }} &raquo;
         </a>
         {% else %}
         <a href="{{ url_for('thanks') }}"
-            class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Finish
+            class="cta-button w-full sm:w-auto justify-center">
+            {{ site_copy.exhibit.finish_button if site_copy and site_copy.exhibit else 'Finish' }} ✓
         </a>
         {% endif %}
     </div>
-    
-    <h1 class="text-3xl md:text-4xl font-bold mb-4">{{ exhibit.title }}</h1>
 
-    <div class="prose max-w-none mb-8">
+    <h1 class="text-3xl md:text-4xl font-bold mb-4 fade-in-delay-1">{{ exhibit.title }}</h1>
+
+    <div class="prose max-w-none mb-8 fade-in-delay-2">
         {{ exhibit.text_md | safe }}
     </div>
 
     {% if exhibit.master_image %}
-    <div 
+    <div
         x-data="{ showMaster: false }"
-        class="mb-8"
+        class="mb-8 fade-in-delay-2"
     >
-    <h2 class="text-2xl font-semibold mb-4">Original</h2>
-        <div class="bg-white p-4 rounded-lg shadow-md">
+    <h2 class="section-heading">{{ site_copy.exhibit.original_heading if site_copy and site_copy.exhibit else 'Original' }}</h2>
+        <div class="gallery-card p-4">
             <img 
                 src="{{ url_for('static', path=exhibit.master_image) }}" 
                 alt="{{ exhibit.title }}" 
@@ -90,7 +90,7 @@
                     <button 
                         class="absolute top-2 right-2 text-white text-3xl font-bold focus:outline-none"
                         @click="showMaster = false"
-                        aria-label="Close detail"
+                        aria-label="{{ site_copy.exhibit.close_label if site_copy and site_copy.exhibit else 'Close detail' }}"
                     >&times;</button>
                     <img 
                         src="{{ url_for('static', path=exhibit.master_image) }}" 
@@ -104,14 +104,14 @@
     {% endif %}
 
     {% if exhibit.images %}
-    <div 
+    <div
         x-data="{ selectedImage: null }"
-        class="mb-8"
+        class="mb-8 fade-in-delay-3"
     >
-    <h2 class="text-2xl font-semibold mb-4">Images</h2>
+    <h2 class="section-heading">{{ site_copy.exhibit.images_heading if site_copy and site_copy.exhibit else 'Images' }}</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {% for image in exhibit.images %}
-            <div class="bg-white p-4 rounded-lg shadow-md">
+            <div class="gallery-card p-4">
                 <img 
                     src="{{ url_for('static', path=image.path) }}" 
                     alt="{{ image.alt_text }}" 
@@ -129,10 +129,10 @@
                 @click.self="selectedImage = null"
             >
                 <div class="relative max-w-3xl w-full p-4">
-                    <button 
+                    <button
                         class="absolute top-2 right-2 text-white text-3xl font-bold focus:outline-none"
                         @click="selectedImage = null"
-                        aria-label="Close detail"
+                        aria-label="{{ site_copy.exhibit.close_label if site_copy and site_copy.exhibit else 'Close detail' }}"
                     >&times;</button>
                     <img 
                         :src="selectedImage" 
@@ -146,18 +146,18 @@
     {% endif %}
 
     {% if exhibit.audio_path %}
-    <div class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Audio guide</h2>
+    <div class="mb-8 fade-in-delay-3">
+    <h2 class="section-heading">{{ site_copy.exhibit.audio_heading if site_copy and site_copy.exhibit else 'Audio guide' }}</h2>
         <audio controls class="w-full" x-ref="audioPlayer">
             <source src="{{ url_for('static', path=exhibit.audio_path) }}" type="audio/mpeg">
-                        Your browser does not support audio playback.
+                        {{ site_copy.exhibit.audio_unsupported if site_copy and site_copy.exhibit else 'Your browser does not support audio playback.' }}
         </audio>
     </div>
     {% endif %}
 
     {% if exhibit.questions and not has_answered %}
-    <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-2xl font-semibold mb-4">Questionnaire</h2>
+    <div class="gallery-card card-padding fade-in-delay-3">
+    <h2 class="section-heading">{{ site_copy.exhibit.questionnaire_heading if site_copy and site_copy.exhibit else 'Questionnaire' }}</h2>
         {% if error %}
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <strong class="font-bold">Error:</strong>
@@ -233,51 +233,41 @@
             </div>
             {% endfor %}
 
-            <button type="submit" 
+            <button type="submit"
     :disabled="isSubmitting"
-    class="mt-4 w-full sm:w-auto bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-6 rounded flex items-center justify-center text-lg min-w-[200px] min-h-[56px]">
-    <span class="block">Save and continue</span>
-    <span x-show="isSubmitting" class="block">
-        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
-            fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
-        </svg>
-    Saving...
-    </span>
-    <span class="sr-only">Save and continue</span>
+    class="cta-button w-full sm:w-auto mt-4"
+    x-text="isSubmitting ? '{{ site_copy.exhibit.saving_text if site_copy and site_copy.exhibit else 'Saving...' }}' : '{{ site_copy.exhibit.save_button if site_copy and site_copy.exhibit else 'Save and continue' }} →'">
 </button>
         </form>
     </div>
     {% endif %}
 
+    <!-- Bottom navigation buttons -->
     <div class="flex flex-col sm:flex-row justify-between mt-8 space-y-4 sm:space-y-0">
         {% if prev_slug %}
-        <a href="{{ url_for('exhibit_detail', slug=prev_slug) }}" 
-            aria-label="Go to previous exhibit"
-            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
-            &laquo; Previous
+        <a href="{{ url_for('exhibit_detail', slug=prev_slug) }}"
+            aria-label="{{ site_copy.exhibit.prev_exhibit_label if site_copy and site_copy.exhibit else 'Go to previous exhibit' }}"
+            class="secondary-button w-full sm:w-auto justify-center">
+            &laquo; {{ site_copy.exhibit.previous_button if site_copy and site_copy.exhibit else 'Previous' }}
         </a>
         {% else %}
-        <a href="{{ url_for('index') }}" 
-            aria-label="Go to home page"
-            class="w-full sm:w-auto text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
-            &laquo; Previous
+        <a href="{{ url_for('index') }}"
+            aria-label="{{ site_copy.exhibit.home_label if site_copy and site_copy.exhibit else 'Go to home page' }}"
+            class="secondary-button w-full sm:w-auto justify-center">
+            &laquo; {{ site_copy.exhibit.previous_button if site_copy and site_copy.exhibit else 'Previous' }}
         </a>
         {% endif %}
 
         {% if next_slug %}
-        <a href="{{ url_for('exhibit_detail', slug=next_slug) }}" 
-            aria-label="Go to next exhibit"
-            class="w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Next &raquo;
+        <a href="{{ url_for('exhibit_detail', slug=next_slug) }}"
+            aria-label="{{ site_copy.exhibit.next_exhibit_label if site_copy and site_copy.exhibit else 'Go to next exhibit' }}"
+            class="cta-button w-full sm:w-auto justify-center">
+            {{ site_copy.exhibit.next_button if site_copy and site_copy.exhibit else 'Next' }} &raquo;
         </a>
         {% else %}
         <a href="{{ url_for('thanks') }}"
-            class="w-full sm:w-auto text-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            Finish
+            class="cta-button w-full sm:w-auto justify-center">
+            {{ site_copy.exhibit.finish_button if site_copy and site_copy.exhibit else 'Finish' }} ✓
         </a>
         {% endif %}
     </div>

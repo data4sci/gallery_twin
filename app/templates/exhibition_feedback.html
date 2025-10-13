@@ -1,14 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Zpětná vazba k výstavě{% endblock %}
+{% block title %}{{ site_copy.exhibition_feedback.title if site_copy and site_copy.exhibition_feedback else 'Zpětná vazba k výstavě' }}{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
-    <h1 class="text-3xl md:text-4xl font-bold mb-4">Zpětná vazba k výstavě</h1>
-    <p class="text-lg text-gray-600 mb-8">Děkujeme za účast na výstavě! Vaše názor nám velmi pomůže k dalšímu rozvoji.</p>
-    
-    <div class="bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold mb-4">Dotazník</h2>
+    <div class="fade-in">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">
+            {{ site_copy.exhibition_feedback.title if site_copy and site_copy.exhibition_feedback else 'Zpětná vazba k výstavě' }}
+        </h1>
+        <p class="text-lg text-gray-600 mb-8">
+            {{ site_copy.exhibition_feedback.lead if site_copy and site_copy.exhibition_feedback else 'Děkujeme za účast na výstavě! Vaše názor nám velmi pomůže k dalšímu rozvoji.' }}
+        </p>
+    </div>
+
+    <div class="gallery-card card-padding fade-in-delay-1">
+        <h2 class="section-heading">
+            {{ site_copy.exhibition_feedback.questionnaire_heading if site_copy and site_copy.exhibition_feedback else 'Dotazník' }}
+        </h2>
         
         <form method="post" action="{{ url_for('submit_exhibition_feedback') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -88,11 +96,8 @@
             </div>
             {% endfor %}
 
-            <button 
-                type="submit" 
-                class="w-full sm:w-auto bg-green-500 hover:bg-green-700 text-white font-bold py-4 px-6 rounded flex items-center justify-center text-lg min-w-[200px] min-h-[56px]"
-            >
-                <span>Odeslat zpětnou vazbu</span>
+            <button type="submit" class="cta-button w-full sm:w-auto">
+                {{ site_copy.exhibition_feedback.submit_button if site_copy and site_copy.exhibition_feedback else 'Odeslat zpětnou vazbu' }} →
             </button>
         </form>
     </div>

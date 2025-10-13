@@ -18,3 +18,30 @@ thanks:
   title: "Thank you for visiting"
   lead: "Your feedback is valuable to us."
   back_button: "Back to start"
+
+exhibit:
+  original_heading: "Original"
+  images_heading: "Reproductions"
+  audio_heading: "Audio guide"
+  questionnaire_heading: "Questionnaire"
+  previous_button: "Previous"
+  next_button: "Next"
+  finish_button: "Finish"
+  save_button: "Save and continue"
+  saving_text: "Saving..."
+  audio_unsupported: "Your browser does not support audio playback."
+  close_label: "Close detail"
+  prev_exhibit_label: "Go to previous exhibit"
+  next_exhibit_label: "Go to next exhibit"
+  home_label: "Go to home page"
+
+exhibition_feedback:
+  title: "Exhibition Feedback"
+  lead: "Thank you for participating in the exhibition! Your opinion is very valuable for our further development."
+  questionnaire_heading: "Questionnaire"
+  submit_button: "Submit feedback"
+
+selfeval:
+  default_title: "Self-evaluation questionnaire"
+  default_continue: "Continue to gallery"
+  select_option: "-- Select an option --"

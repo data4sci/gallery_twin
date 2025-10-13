@@ -70,6 +70,36 @@
             <li>{{ site_copy.index.highlight_3 if site_copy and site_copy.index and site_copy.index.highlight_3 else 'Insights into creative pipelines behind the exhibited works' }}</li>
         </ul>
     </section>
+
+    <!-- Exhibition Info Section -->
+    <section class="gallery-card card-padding my-12 md:my-16">
+        <h2 class="section-heading">
+            {{ site_copy.index.vernissage_title if site_copy and site_copy.index and site_copy.index.vernissage_title else 'Opening Reception' }}
+        </h2>
+        <div class="exhibition-info-grid">
+            <div class="info-group">
+                <div class="info-item">
+                    <strong class="info-label">{{ site_copy.index.vernissage_date_label if site_copy and site_copy.index and site_copy.index.vernissage_date_label else 'Date' }}</strong>
+                    <p class="info-text">{{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'November 13, 2025' }}</p>
+                </div>
+                <div class="info-item">
+                    <strong class="info-label">{{ site_copy.index.vernissage_time_label if site_copy and site_copy.index and site_copy.index.vernissage_time_label else 'Time' }}</strong>
+                    <p class="info-text">{{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else '5:00 PM' }}</p>
+                </div>
+            </div>
+            <div class="info-group">
+                <div class="info-item">
+                    <strong class="info-label">{{ site_copy.index.vernissage_location_label if site_copy and site_copy.index and site_copy.index.vernissage_location_label else 'Location' }}</strong>
+                    <p class="info-text">{{ site_copy.index.vernissage_location if site_copy and site_copy.index and site_copy.index.vernissage_location else 'Czech Institute of Informatics, Robotics and Cybernetics ČVUT' }}</p>
+                    <p class="info-text info-address">{{ site_copy.index.vernissage_address if site_copy and site_copy.index and site_copy.index.vernissage_address else 'Jugoslávských partyzánů 1580/3, Praha 10' }}</p>
+                    <p class="info-text info-room">{{ site_copy.index.vernissage_room if site_copy and site_copy.index and site_copy.index.vernissage_room else 'Entrance B1, Atrium' }}</p>
+                </div>
+            </div>
+        </div>
+        <p class="vernissage-description">
+            {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments.' }}
+        </p>
+    </section>
 </div>
 
 <style>
@@ -231,6 +261,72 @@
         left: 0;
         color: var(--color-secondary);
         font-size: 0.8rem;
+    }
+
+    /* Exhibition Info Section */
+    .exhibition-info-grid {
+        display: grid;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .exhibition-info-grid {
+            grid-template-columns: auto 1fr;
+            gap: 3rem;
+        }
+    }
+
+    .info-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .info-item {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    .info-item::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    .info-label {
+        display: block;
+        color: var(--color-accent);
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-text {
+        color: var(--text-color);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .info-address,
+    .info-room {
+        margin-top: 0.25rem;
+        font-size: 0.95rem;
+        opacity: 0.9;
+    }
+
+    .vernissage-description {
+        color: var(--text-color);
+        line-height: 1.75;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(226, 184, 69, 0.2);
+        font-style: italic;
     }
 
     /* Fade-in animations */

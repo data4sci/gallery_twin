@@ -233,11 +233,18 @@
             </div>
             {% endfor %}
 
+            <!-- Original button - commented out for debugging
             <button type="submit"
     :disabled="isSubmitting"
     class="cta-button w-full sm:w-auto mt-4"
     x-text="isSubmitting ? '{{ site_copy.exhibit.saving_text if site_copy and site_copy.exhibit else 'Saving...' }}' : '{{ site_copy.exhibit.save_button if site_copy and site_copy.exhibit else 'Save and continue' }} →'">
 </button>
+            -->
+
+            <!-- DEBUG: Simple HTML button with hardcoded text -->
+            <button type="submit" class="cta-button w-full sm:w-auto mt-4">
+                Save and continue →
+            </button>
         </form>
     </div>
     {% endif %}

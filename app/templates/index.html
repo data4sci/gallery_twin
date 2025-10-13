@@ -7,7 +7,7 @@
     <!-- Hero Section -->
     <header class="hero-section text-center py-16 md:py-24">
         <h1 class="hero-title-main">
-            {{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Metamorfózy umění 2.0' }}
+            {{ site_copy.index.title if site_copy and site_copy.index and site_copy.index.title else 'Metamorphoses of Art 2.0' }}
         </h1>
         <div class="hero-presenter">
             {{ site_copy.index.presenter if site_copy and site_copy.index and site_copy.index.presenter else 'VŠB-TUO & Klára Sedlo present' }}
@@ -16,14 +16,52 @@
             {{ site_copy.index.subtitle if site_copy and site_copy.index and site_copy.index.subtitle else 'Art Through the Eyes of AI' }}
         </p>
         <p class="hero-lead">
-            {{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'A unique fusion of art, science, and artificial intelligence. Explore how AI perceives, transforms, and re-imagines human creativity through a curated collection of AI-assisted artworks.' }}
+            {{ site_copy.index.lead if site_copy and site_copy.index and site_copy.index.lead else 'A unique fusion of art, science, and artificial intelligence. Experience the exhibition in Prague or explore it online through this digital twin—an interactive gallery accessible from anywhere in the world.' }}
         </p>
-        <div class="mt-10">
-            <a href="/selfeval" class="cta-button">
-                {{ site_copy.index.start_button if site_copy and site_copy.index and site_copy.index.start_button else 'Start the tour' }} →
+        <div class="hero-cta-group">
+            <a href="/selfeval" class="cta-button cta-primary">
+                {{ site_copy.index.explore_button if site_copy and site_copy.index and site_copy.index.explore_button else 'Explore Digital Exhibition' }} →
+            </a>
+            <a href="#visit" class="cta-button cta-secondary">
+                {{ site_copy.index.visit_button if site_copy and site_copy.index and site_copy.index.visit_button else 'Visit in Prague' }}
             </a>
         </div>
     </header>
+
+    <!-- Two Ways to Experience -->
+    <section class="dual-experience-section my-12 md:my-16">
+        <h2 class="section-heading text-center mb-8">
+            {{ site_copy.index.experience_title if site_copy and site_copy.index and site_copy.index.experience_title else 'Two Ways to Experience' }}
+        </h2>
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="gallery-card card-padding">
+                <h3 class="experience-heading">
+                    {{ site_copy.index.digital_title if site_copy and site_copy.index and site_copy.index.digital_title else 'Explore Online' }}
+                </h3>
+                <p class="mb-4">
+                    {{ site_copy.index.digital_text if site_copy and site_copy.index and site_copy.index.digital_text else 'Access the full exhibition from anywhere. This digital twin offers an interactive journey through all artworks with detailed insights into the AI processes behind each piece.' }}
+                </p>
+                <ul class="space-y-2 experience-features">
+                    <li>{{ site_copy.index.digital_feature_1 if site_copy and site_copy.index and site_copy.index.digital_feature_1 else 'Interactive artwork exploration' }}</li>
+                    <li>{{ site_copy.index.digital_feature_2 if site_copy and site_copy.index and site_copy.index.digital_feature_2 else 'Technical insights and AI pipeline details' }}</li>
+                    <li>{{ site_copy.index.digital_feature_3 if site_copy and site_copy.index and site_copy.index.digital_feature_3 else 'Available 24/7, accessible globally' }}</li>
+                </ul>
+            </div>
+            <div class="gallery-card card-padding">
+                <h3 class="experience-heading">
+                    {{ site_copy.index.physical_title if site_copy and site_copy.index and site_copy.index.physical_title else 'Visit in Prague' }}
+                </h3>
+                <p class="mb-4">
+                    {{ site_copy.index.physical_text if site_copy and site_copy.index and site_copy.index.physical_text else 'Experience the artworks in person at ČVUT in Prague. Engage with the physical pieces, attend the opening reception, and meet the creators.' }}
+                </p>
+                <ul class="space-y-2 experience-features">
+                    <li>{{ site_copy.index.physical_feature_1 if site_copy and site_copy.index and site_copy.index.physical_feature_1 else 'In-person viewing of original works' }}</li>
+                    <li>{{ site_copy.index.physical_feature_2 if site_copy and site_copy.index and site_copy.index.physical_feature_2 else 'Opening reception with creators' }}</li>
+                    <li>{{ site_copy.index.physical_feature_3 if site_copy and site_copy.index and site_copy.index.physical_feature_3 else 'Guided tours and discussions' }}</li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
     <!-- About Section -->
     <section class="grid md:grid-cols-2 gap-8 my-12 md:my-16">
@@ -44,7 +82,7 @@
             </h2>
             <ul class="space-y-3 credits-list">
                 <li>
-                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Originals:' }}</strong>
+                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong>
                     {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Klára Sedlo' }}
                 </li>
                 <li>
@@ -59,46 +97,63 @@
         </div>
     </section>
 
-    <!-- Highlights Section -->
-    <section class="gallery-card card-padding my-12 md:my-16">
-        <h2 class="section-heading">
-            {{ site_copy.index.highlights_title if site_copy and site_copy.index and site_copy.index.highlights_title else 'What to Expect' }}
-        </h2>
-        <ul class="space-y-3">
-            <li>{{ site_copy.index.highlight_1 if site_copy and site_copy.index and site_copy.index.highlight_1 else 'AI-assisted artworks exploring perception, emotion, and transformation' }}</li>
-            <li>{{ site_copy.index.highlight_2 if site_copy and site_copy.index and site_copy.index.highlight_2 else 'A cross-disciplinary showcase bridging art, computer vision, and design' }}</li>
-            <li>{{ site_copy.index.highlight_3 if site_copy and site_copy.index and site_copy.index.highlight_3 else 'Insights into creative pipelines behind the exhibited works' }}</li>
-        </ul>
-    </section>
-
     <!-- Exhibition Info Section -->
-    <section class="gallery-card card-padding my-12 md:my-16">
-        <h2 class="section-heading">
-            {{ site_copy.index.vernissage_title if site_copy and site_copy.index and site_copy.index.vernissage_title else 'Opening Reception' }}
+    <section id="visit" class="my-12 md:my-16">
+        <h2 class="section-heading text-center mb-8">
+            {{ site_copy.index.visit_title if site_copy and site_copy.index and site_copy.index.visit_title else 'Visit the Exhibition in Prague' }}
         </h2>
-        <div class="exhibition-info-grid">
-            <div class="info-group">
-                <div class="info-item">
-                    <strong class="info-label">{{ site_copy.index.vernissage_date_label if site_copy and site_copy.index and site_copy.index.vernissage_date_label else 'Date' }}</strong>
-                    <p class="info-text">{{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'November 13, 2025' }}</p>
-                </div>
-                <div class="info-item">
-                    <strong class="info-label">{{ site_copy.index.vernissage_time_label if site_copy and site_copy.index and site_copy.index.vernissage_time_label else 'Time' }}</strong>
-                    <p class="info-text">{{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else '5:00 PM' }}</p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Venue Information -->
+            <div class="gallery-card card-padding">
+                <h3 class="visit-section-title">{{ site_copy.index.venue_title if site_copy and site_copy.index and site_copy.index.venue_title else 'Exhibition Venue' }}</h3>
+
+                <div class="venue-info">
+                    <div class="info-item">
+                        <strong class="info-label">{{ site_copy.index.venue_location_label if site_copy and site_copy.index and site_copy.index.venue_location_label else 'Location' }}</strong>
+                        <p class="info-text">{{ site_copy.index.venue_location if site_copy and site_copy.index and site_copy.index.venue_location else 'Czech Institute of Informatics, Robotics and Cybernetics ČVUT' }}</p>
+                        <p class="info-text info-address">{{ site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Jugoslávských partyzánů 1580/3, Praha 10' }}</p>
+                        <p class="info-text info-room">{{ site_copy.index.venue_room if site_copy and site_copy.index and site_copy.index.venue_room else 'Entrance B1, Atrium' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong class="info-label">{{ site_copy.index.exhibition_duration_label if site_copy and site_copy.index and site_copy.index.exhibition_duration_label else 'Duration' }}</strong>
+                        <p class="info-text">{{ site_copy.index.exhibition_duration if site_copy and site_copy.index and site_copy.index.exhibition_duration else 'November 13 – December 15, 2025' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong class="info-label">{{ site_copy.index.exhibition_hours_label if site_copy and site_copy.index and site_copy.index.exhibition_hours_label else 'Opening Hours' }}</strong>
+                        <p class="info-text">{{ site_copy.index.exhibition_hours if site_copy and site_copy.index and site_copy.index.exhibition_hours else 'Monday – Friday, 9:00 AM – 5:00 PM' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong class="info-label">{{ site_copy.index.exhibition_admission_label if site_copy and site_copy.index and site_copy.index.exhibition_admission_label else 'Admission' }}</strong>
+                        <p class="info-text">{{ site_copy.index.exhibition_admission if site_copy and site_copy.index and site_copy.index.exhibition_admission else 'Free and open to the public' }}</p>
+                    </div>
                 </div>
             </div>
-            <div class="info-group">
-                <div class="info-item">
-                    <strong class="info-label">{{ site_copy.index.vernissage_location_label if site_copy and site_copy.index and site_copy.index.vernissage_location_label else 'Location' }}</strong>
-                    <p class="info-text">{{ site_copy.index.vernissage_location if site_copy and site_copy.index and site_copy.index.vernissage_location else 'Czech Institute of Informatics, Robotics and Cybernetics ČVUT' }}</p>
-                    <p class="info-text info-address">{{ site_copy.index.vernissage_address if site_copy and site_copy.index and site_copy.index.vernissage_address else 'Jugoslávských partyzánů 1580/3, Praha 10' }}</p>
-                    <p class="info-text info-room">{{ site_copy.index.vernissage_room if site_copy and site_copy.index and site_copy.index.vernissage_room else 'Entrance B1, Atrium' }}</p>
+
+            <!-- Opening Reception -->
+            <div class="gallery-card card-padding vernissage-highlight">
+                <h3 class="visit-section-title">{{ site_copy.index.vernissage_title if site_copy and site_copy.index and site_copy.index.vernissage_title else 'Opening Reception' }}</h3>
+
+                <div class="vernissage-info">
+                    <div class="info-item">
+                        <strong class="info-label">{{ site_copy.index.vernissage_date_label if site_copy and site_copy.index and site_copy.index.vernissage_date_label else 'Date' }}</strong>
+                        <p class="info-text">{{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'November 13, 2025' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong class="info-label">{{ site_copy.index.vernissage_time_label if site_copy and site_copy.index and site_copy.index.vernissage_time_label else 'Time' }}</strong>
+                        <p class="info-text">{{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else '5:00 PM' }}</p>
+                    </div>
+
+                    <p class="vernissage-description">
+                        {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments.' }}
+                    </p>
                 </div>
             </div>
         </div>
-        <p class="vernissage-description">
-            {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments.' }}
-        </p>
     </section>
 </div>
 
@@ -181,40 +236,71 @@
         }
     }
 
-    /* CTA Button */
+    /* CTA Buttons */
+    .hero-cta-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+        margin-top: 2.5rem;
+    }
+
+    @media (min-width: 640px) {
+        .hero-cta-group {
+            flex-direction: row;
+            justify-content: center;
+        }
+    }
+
     .cta-button {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        background: linear-gradient(90deg, #E2B845 0%, #C93C30 100%);
-        color: #FFF9E9;
         font-weight: 700;
         font-size: 1.125rem;
         padding: 14px 32px;
         border-radius: 9999px;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 16px rgba(226, 184, 69, 0.4);
         text-decoration: none;
         width: 100%;
         justify-content: center;
-    }
-
-    .cta-button:hover {
-        background: linear-gradient(90deg, #C93C30 0%, #E2B845 100%);
-        color: #FFF9E9;
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 8px 24px rgba(201, 60, 48, 0.5);
-    }
-
-    .cta-button:focus {
-        outline: 3px solid var(--color-accent);
-        outline-offset: 3px;
     }
 
     @media (min-width: 640px) {
         .cta-button {
             width: auto;
         }
+    }
+
+    .cta-primary {
+        background: linear-gradient(90deg, #E2B845 0%, #C93C30 100%);
+        color: #FFF9E9;
+        box-shadow: 0 4px 16px rgba(226, 184, 69, 0.4);
+    }
+
+    .cta-primary:hover {
+        background: linear-gradient(90deg, #C93C30 0%, #E2B845 100%);
+        color: #FFF9E9;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(201, 60, 48, 0.5);
+    }
+
+    .cta-secondary {
+        background: transparent;
+        color: var(--color-primary);
+        border: 2px solid var(--color-primary);
+    }
+
+    .cta-secondary:hover {
+        background: var(--color-primary);
+        color: #FFF9E9;
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 4px 16px rgba(226, 184, 69, 0.3);
+    }
+
+    .cta-button:focus {
+        outline: 3px solid var(--color-accent);
+        outline-offset: 3px;
     }
 
     /* Credits List */
@@ -263,24 +349,54 @@
         font-size: 0.8rem;
     }
 
-    /* Exhibition Info Section */
-    .exhibition-info-grid {
-        display: grid;
-        gap: 2rem;
-        margin-bottom: 2rem;
+    /* Two Ways to Experience Section */
+    .experience-heading {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--heading-color);
+        margin-bottom: 1rem;
     }
 
-    @media (min-width: 768px) {
-        .exhibition-info-grid {
-            grid-template-columns: auto 1fr;
-            gap: 3rem;
-        }
+    .experience-features {
+        list-style: none;
+        padding-left: 0;
     }
 
-    .info-group {
+    .experience-features li {
+        padding-left: 1.5rem;
+        position: relative;
+        line-height: 1.8;
+    }
+
+    .experience-features li::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--color-primary);
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    /* Visit Info Section */
+    .visit-section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: var(--color-accent);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .venue-info,
+    .vernissage-info {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
+    }
+
+    .vernissage-highlight {
+        background: linear-gradient(135deg, rgba(255, 249, 233, 0.5) 0%, rgba(226, 184, 69, 0.1) 100%);
+        border: 2px solid rgba(226, 184, 69, 0.3);
     }
 
     .info-item {

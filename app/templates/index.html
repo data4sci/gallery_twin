@@ -28,6 +28,40 @@
         </div>
     </header>
 
+    <!-- About Section -->
+    <section class="grid md:grid-cols-2 gap-8 my-12 md:my-16">
+        <div class="gallery-card card-padding">
+            <h2 class="section-heading">
+                {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
+            </h2>
+            <p class="mb-4">
+                {{ site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'First paragraph describing the exhibition concept and main themes.' }}
+            </p>
+            <p>
+                {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'Second paragraph with additional context about the artistic approach.' }}
+            </p>
+        </div>
+        <div class="gallery-card card-padding">
+            <h2 class="section-heading">
+                {{ site_copy.index.credits_title if site_copy and site_copy.index and site_copy.index.credits_title else 'Credits' }}
+            </h2>
+            <ul class="space-y-3 credits-list">
+                <li>
+                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
+                    {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name' }}
+                </li>
+                <li>
+                    <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong><br>
+                    {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name' }}
+                </li>
+                <li>
+                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
+                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}
+                </li>
+            </ul>
+        </div>
+    </section>
+
     <!-- Two Ways to Experience -->
     <section class="dual-experience-section my-12 md:my-16">
         <h2 class="section-heading text-center mb-8">
@@ -60,40 +94,6 @@
                     <li>{{ site_copy.index.physical_feature_3 if site_copy and site_copy.index and site_copy.index.physical_feature_3 else 'Physical feature 3' }}</li>
                 </ul>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="grid md:grid-cols-2 gap-8 my-12 md:my-16">
-        <div class="gallery-card card-padding">
-            <h2 class="section-heading">
-                {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
-            </h2>
-            <p class="mb-4">
-                {{ site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'First paragraph describing the exhibition concept and main themes.' }}
-            </p>
-            <p>
-                {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'Second paragraph with additional context about the artistic approach.' }}
-            </p>
-        </div>
-        <div class="gallery-card card-padding">
-            <h2 class="section-heading">
-                {{ site_copy.index.credits_title if site_copy and site_copy.index and site_copy.index.credits_title else 'Credits' }}
-            </h2>
-            <ul class="space-y-3 credits-list">
-                <li>
-                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
-                    {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name' }}
-                </li>
-                <li>
-                    <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong><br>
-                    {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name' }}
-                </li>
-                <li>
-                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
-                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}
-                </li>
-            </ul>
         </div>
     </section>
 

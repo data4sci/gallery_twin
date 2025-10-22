@@ -35,26 +35,26 @@
         </h2>
         <div class="grid md:grid-cols-2 gap-8">
             <div class="gallery-card card-padding">
-                <h3 class="experience-heading">
+                <h2 class="section-heading">
                     {{ site_copy.index.digital_title if site_copy and site_copy.index and site_copy.index.digital_title else 'Explore Online' }}
-                </h3>
+                </h2>
                 <p class="mb-4">
                     {{ site_copy.index.digital_text if site_copy and site_copy.index and site_copy.index.digital_text else 'Describe the digital exhibition experience and its benefits.' }}
                 </p>
-                <ul class="space-y-2 experience-features">
+                <ul class="space-y-3 credits-list">
                     <li>{{ site_copy.index.digital_feature_1 if site_copy and site_copy.index and site_copy.index.digital_feature_1 else 'Digital feature 1' }}</li>
                     <li>{{ site_copy.index.digital_feature_2 if site_copy and site_copy.index and site_copy.index.digital_feature_2 else 'Digital feature 2' }}</li>
                     <li>{{ site_copy.index.digital_feature_3 if site_copy and site_copy.index and site_copy.index.digital_feature_3 else 'Digital feature 3' }}</li>
                 </ul>
             </div>
             <div class="gallery-card card-padding">
-                <h3 class="experience-heading">
+                <h2 class="section-heading">
                     {{ site_copy.index.physical_title if site_copy and site_copy.index and site_copy.index.physical_title else 'Visit in Prague' }}
-                </h3>
+                </h2>
                 <p class="mb-4">
                     {{ site_copy.index.physical_text if site_copy and site_copy.index and site_copy.index.physical_text else 'Describe the physical exhibition experience and its benefits.' }}
                 </p>
-                <ul class="space-y-2 experience-features">
+                <ul class="space-y-3 credits-list">
                     <li>{{ site_copy.index.physical_feature_1 if site_copy and site_copy.index and site_copy.index.physical_feature_1 else 'Physical feature 1' }}</li>
                     <li>{{ site_copy.index.physical_feature_2 if site_copy and site_copy.index and site_copy.index.physical_feature_2 else 'Physical feature 2' }}</li>
                     <li>{{ site_copy.index.physical_feature_3 if site_copy and site_copy.index and site_copy.index.physical_feature_3 else 'Physical feature 3' }}</li>
@@ -82,15 +82,15 @@
             </h2>
             <ul class="space-y-3 credits-list">
                 <li>
-                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong>
+                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
                     {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name' }}
                 </li>
                 <li>
-                    <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong>
+                    <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong><br>
                     {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name' }}
                 </li>
                 <li>
-                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong>
+                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
                     {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}
                 </li>
             </ul>
@@ -106,52 +106,47 @@
         <div class="grid md:grid-cols-2 gap-8">
             <!-- Venue Information -->
             <div class="gallery-card card-padding">
-                <h3 class="visit-section-title">{{ site_copy.index.venue_title if site_copy and site_copy.index and site_copy.index.venue_title else 'Exhibition Venue' }}</h3>
+                <h2 class="section-heading">{{ site_copy.index.venue_title if site_copy and site_copy.index and site_copy.index.venue_title else 'Exhibition Venue' }}</h2>
 
-                <div class="venue-info">
-                    <div class="info-item">
-                        <strong class="info-label">{{ site_copy.index.venue_location_label if site_copy and site_copy.index and site_copy.index.venue_location_label else 'Location' }}</strong>
-                        <p class="info-text">{{ site_copy.index.venue_location if site_copy and site_copy.index and site_copy.index.venue_location else 'Venue name' }}</p>
-                        <p class="info-text info-address">{{ site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Full address' }}</p>
-                        <p class="info-text info-room">{{ site_copy.index.venue_room if site_copy and site_copy.index and site_copy.index.venue_room else 'Room/Building details' }}</p>
-                    </div>
-
-                    <div class="info-item">
-                        <strong class="info-label">{{ site_copy.index.exhibition_duration_label if site_copy and site_copy.index and site_copy.index.exhibition_duration_label else 'Duration' }}</strong>
-                        <p class="info-text">{{ site_copy.index.exhibition_duration if site_copy and site_copy.index and site_copy.index.exhibition_duration else 'Exhibition dates' }}</p>
-                    </div>
-
-                    <div class="info-item">
-                        <strong class="info-label">{{ site_copy.index.exhibition_hours_label if site_copy and site_copy.index and site_copy.index.exhibition_hours_label else 'Opening Hours' }}</strong>
-                        <p class="info-text">{{ site_copy.index.exhibition_hours if site_copy and site_copy.index and site_copy.index.exhibition_hours else 'Opening hours details' }}</p>
-                    </div>
-
-                    <div class="info-item">
-                        <strong class="info-label">{{ site_copy.index.exhibition_admission_label if site_copy and site_copy.index and site_copy.index.exhibition_admission_label else 'Admission' }}</strong>
-                        <p class="info-text">{{ site_copy.index.exhibition_admission if site_copy and site_copy.index and site_copy.index.exhibition_admission else 'Admission details' }}</p>
-                    </div>
-                </div>
+                <ul class="space-y-3 credits-list">
+                    <li>
+                        <strong>{{ site_copy.index.venue_location_label if site_copy and site_copy.index and site_copy.index.venue_location_label else 'Location:' }}</strong><br>
+                        {{ site_copy.index.venue_location if site_copy and site_copy.index and site_copy.index.venue_location else 'Venue name' }},<br>
+                        {{ site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Full address' }},<br>
+                        {{ site_copy.index.venue_room if site_copy and site_copy.index and site_copy.index.venue_room else 'Room/Building details' }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.exhibition_duration_label if site_copy and site_copy.index and site_copy.index.exhibition_duration_label else 'Duration:' }}</strong><br>
+                        {{ site_copy.index.exhibition_duration if site_copy and site_copy.index and site_copy.index.exhibition_duration else 'Exhibition dates' }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.exhibition_hours_label if site_copy and site_copy.index and site_copy.index.exhibition_hours_label else 'Opening Hours:' }}</strong><br>
+                        {{ site_copy.index.exhibition_hours if site_copy and site_copy.index and site_copy.index.exhibition_hours else 'Opening hours details' }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.exhibition_admission_label if site_copy and site_copy.index and site_copy.index.exhibition_admission_label else 'Admission:' }}</strong><br>
+                        {{ site_copy.index.exhibition_admission if site_copy and site_copy.index and site_copy.index.exhibition_admission else 'Admission details' }}
+                    </li>
+                </ul>
             </div>
 
             <!-- Opening Reception -->
-            <div class="gallery-card card-padding vernissage-highlight">
-                <h3 class="visit-section-title">{{ site_copy.index.vernissage_title if site_copy and site_copy.index and site_copy.index.vernissage_title else 'Opening Reception' }}</h3>
+            <div class="gallery-card card-padding">
+                <h2 class="section-heading">{{ site_copy.index.vernissage_title if site_copy and site_copy.index and site_copy.index.vernissage_title else 'Opening Reception' }}</h2>
 
-                <div class="vernissage-info">
-                    <div class="info-item">
-                        <strong class="info-label">{{ site_copy.index.vernissage_date_label if site_copy and site_copy.index and site_copy.index.vernissage_date_label else 'Date' }}</strong>
-                        <p class="info-text">{{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'Opening reception date' }}</p>
-                    </div>
-
-                    <div class="info-item">
-                        <strong class="info-label">{{ site_copy.index.vernissage_time_label if site_copy and site_copy.index and site_copy.index.vernissage_time_label else 'Time' }}</strong>
-                        <p class="info-text">{{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else 'Opening time' }}</p>
-                    </div>
-
-                    <p class="vernissage-description">
-                        {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'Description of the opening reception event, invitation text.' }}
-                    </p>
-                </div>
+                <ul class="space-y-3 credits-list">
+                    <li>
+                        <strong>{{ site_copy.index.vernissage_date_label if site_copy and site_copy.index and site_copy.index.vernissage_date_label else 'Date:' }}</strong><br>
+                        {{ site_copy.index.vernissage_date if site_copy and site_copy.index and site_copy.index.vernissage_date else 'Opening reception date' }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.vernissage_time_label if site_copy and site_copy.index and site_copy.index.vernissage_time_label else 'Time:' }}</strong><br>
+                        {{ site_copy.index.vernissage_time if site_copy and site_copy.index and site_copy.index.vernissage_time else 'Opening time' }}
+                    </li>
+                </ul>
+                <p class="vernissage-description">
+                    {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'Description of the opening reception event, invitation text.' }}
+                </p>
             </div>
         </div>
     </section>
@@ -329,113 +324,7 @@
         font-weight: 600;
     }
 
-    /* What to Expect List */
-    section ul:not(.credits-list) {
-        list-style: none;
-        padding-left: 0;
-    }
-
-    section ul:not(.credits-list) li {
-        padding-left: 1.5rem;
-        position: relative;
-        line-height: 1.8;
-    }
-
-    section ul:not(.credits-list) li::before {
-        content: "●";
-        position: absolute;
-        left: 0;
-        color: var(--color-secondary);
-        font-size: 0.8rem;
-    }
-
-    /* Two Ways to Experience Section */
-    .experience-heading {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--heading-color);
-        margin-bottom: 1rem;
-    }
-
-    .experience-features {
-        list-style: none;
-        padding-left: 0;
-    }
-
-    .experience-features li {
-        padding-left: 1.5rem;
-        position: relative;
-        line-height: 1.8;
-    }
-
-    .experience-features li::before {
-        content: "▸";
-        position: absolute;
-        left: 0;
-        color: var(--color-primary);
-        font-size: 1.1rem;
-        font-weight: bold;
-    }
-
-    /* Visit Info Section */
-    .visit-section-title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: var(--color-accent);
-        margin-bottom: 1.5rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .venue-info,
-    .vernissage-info {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .vernissage-highlight {
-        background: linear-gradient(135deg, rgba(255, 249, 233, 0.5) 0%, rgba(226, 184, 69, 0.1) 100%);
-        border: 2px solid rgba(226, 184, 69, 0.3);
-    }
-
-    .info-item {
-        position: relative;
-        padding-left: 1.5rem;
-    }
-
-    .info-item::before {
-        content: "▸";
-        position: absolute;
-        left: 0;
-        color: var(--color-primary);
-        font-size: 1.1rem;
-        font-weight: bold;
-    }
-
-    .info-label {
-        display: block;
-        color: var(--color-accent);
-        font-weight: 600;
-        font-size: 0.875rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 0.5rem;
-    }
-
-    .info-text {
-        color: var(--text-color);
-        font-size: 1rem;
-        line-height: 1.6;
-        margin: 0;
-    }
-
-    .info-address,
-    .info-room {
-        margin-top: 0.25rem;
-        font-size: 0.95rem;
-        opacity: 0.9;
-    }
+    /* Removed unused styles - all cards now use unified .section-heading and .credits-list styles */
 
     .vernissage-description {
         color: var(--text-color);

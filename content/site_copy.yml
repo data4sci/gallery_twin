@@ -26,8 +26,8 @@ index:
   physical_title: "Visit in Prague"
   physical_text: "Experience the artworks in person at ČVUT in Prague. Engage with the physical pieces, attend the opening reception, and meet the creators."
   physical_feature_1: "In-person viewing of original works"
-  physical_feature_2: "Opening reception with creators"
-  physical_feature_3: "Guided tours and discussions"
+  physical_feature_2: "Exhibition of AI and human reproductions next to originals"
+  physical_feature_3: "Opening reception with creators"
 
   # About section
   about_title: "About the Exhibition"
@@ -53,9 +53,9 @@ index:
   venue_address: "Jugoslávských partyzánů 1580/3, Praha 10"
   venue_room: "Entrance B1, Atrium"
   exhibition_duration_label: "Duration"
-  exhibition_duration: "November 13 – December 15, 2025"
+  exhibition_duration: "November 13, 2025 – January 4, 2026"
   exhibition_hours_label: "Opening Hours"
-  exhibition_hours: "Monday – Friday, 9:00 AM – 5:00 PM"
+  exhibition_hours: "TODO: Specify opening hours"
   exhibition_admission_label: "Admission"
   exhibition_admission: "Free and open to the public"
 
@@ -64,8 +64,8 @@ index:
   vernissage_date_label: "Date"
   vernissage_date: "November 13, 2025"
   vernissage_time_label: "Time"
-  vernissage_time: "5:00 PM"
-  vernissage_description: "You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments."
+  vernissage_time: "TODO: Specify time"
+  vernissage_description: "TODO: specify... You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments."
 
 thanks:
   title: "Thank you for visiting"

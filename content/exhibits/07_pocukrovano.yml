@@ -31,16 +31,6 @@ questions:
     required: true
     layout: horizontal
   - type: "single"
-    text: "Which of these reproductions do you like the most?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the least?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
     text: "Which of these reproductions do you think has the highest artistic value? (regardless of fidelity to the original)"
     options: ["A", "B", "C", "D", "E", "F"]
     required: true
@@ -50,12 +40,12 @@ questions:
     options: ["A", "B", "C", "D", "E", "F"]
     required: true
     layout: horizontal
-  - type: "single"
+  - type: "multi"
     text: "Which of these reproductions do you think was definitely created by a human?"
     options: ["A", "B", "C", "D", "E", "F"]
     required: true
     layout: horizontal
-  - type: "single"
+  - type: "multi"
     text: "Which of these reproductions do you think was definitely created by artificial intelligence?"
     options: ["A", "B", "C", "D", "E", "F"]
     required: true
@@ -67,6 +57,16 @@ questions:
     layout: horizontal
   - type: "single"
     text: "Which of these reproductions would you definitely not pay for?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you like the most?"
+    options: ["A", "B", "C", "D", "E", "F"]
+    required: true
+    layout: horizontal
+  - type: "single"
+    text: "Which of these reproductions do you like the least?"
     options: ["A", "B", "C", "D", "E", "F"]
     required: true
     layout: horizontal

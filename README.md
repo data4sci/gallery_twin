@@ -17,10 +17,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 # 3. Instalace závislostí
 uv sync
 
-# 4. Inicializace databáze
+# 4. Konfigurace (pro vývoj lze použít výchozí hodnoty)
+cp .env.example .env
+
+# 5. Inicializace databáze
 uv run alembic upgrade head
 
-# 5. Spuštění aplikace
+# 6. Spuštění aplikace
 uv run uvicorn app.main:app --reload
 ```
 
@@ -33,12 +36,12 @@ Aplikace běží na `http://localhost:8000`
 git clone https://github.com/data4sci/gallery_twin.git
 cd gallery_twin
 
-# 2. Konfigurace
+# 2. Konfigurace prostředí
 cp .env.example .env
 nano .env  # Nastavte SECRET_KEY a ADMIN_PASSWORD
+# Vygenerujte SECRET_KEY: python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 
 # 3. Spuštění
-chmod +x deploy.sh
 ./deploy.sh
 ```
 
@@ -94,18 +97,28 @@ uv run mypy app/           # Type checking
 
 ### Proměnné prostředí (.env)
 
+Před prvním spuštěním vytvořte `.env` soubor z šablony:
+
 ```bash
+cp .env.example .env
+```
+
+Minimální konfigurace:
+
+```bash
+DATABASE_URL=sqlite+aiosqlite:///./db/gallery.db
 SECRET_KEY=your-secret-key-min-32-chars
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=strong-password
-DATABASE_URL=sqlite:///./db/gallery.db
 ```
 
-Generování SECRET_KEY:
+Generování bezpečného SECRET_KEY:
 
 ```bash
 python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
+
+**DŮLEŽITÉ:** Vždy změňte `SECRET_KEY` a `ADMIN_PASSWORD` před nasazením na produkční server!
 
 ## Správa na serveru
 

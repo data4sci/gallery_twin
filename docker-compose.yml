@@ -5,18 +5,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: gallery_twin
     ports:
       - "8000:8000"
     volumes:
-      - gallery_db:/app/db
+      - ./db:/app/db
       - ./content:/app/content
-    environment:
-      - DB_PATH=/app/db/gallery.db
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=password
-      - SECRET_KEY=a-very-secret-key
-    command: >
-      bash -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"
-
-volumes:
-  gallery_db:
+      - ./static:/app/static
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

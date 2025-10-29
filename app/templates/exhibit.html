@@ -62,8 +62,40 @@
 
     <h1 class="text-3xl md:text-4xl font-bold mb-4 fade-in-delay-1">{{ exhibit.title }}</h1>
 
-    <div class="prose max-w-none mb-8 fade-in-delay-2">
-        {{ exhibit.text_md | safe }}
+    <div class="mb-8 fade-in-delay-2"
+         x-data="{
+             expanded: false,
+             needsExpand: false,
+             init() {
+                 this.$nextTick(() => {
+                     const content = this.$refs.textContent;
+                     if (content && content.scrollHeight > 300) {
+                         this.needsExpand = true;
+                     } else {
+                         this.expanded = true;
+                     }
+                 });
+             }
+         }">
+        <div class="prose max-w-none relative"
+             :class="{ 'max-h-[100px] overflow-hidden': !expanded && needsExpand }"
+             x-ref="textContent">
+            {{ exhibit.text_md | safe }}
+            <div x-show="!expanded && needsExpand"
+                 class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none">
+            </div>
+        </div>
+        <button x-show="needsExpand"
+                @click="expanded = !expanded"
+                class="mt-4 text-blue-600 hover:text-blue-800 font-medium flex items-center gap-2 transition-colors">
+            <span x-text="expanded ? '{{ site_copy.exhibit.show_less_button if site_copy and site_copy.exhibit else 'Show less' }}' : '{{ site_copy.exhibit.show_more_button if site_copy and site_copy.exhibit else 'Show more' }}'"></span>
+            <svg x-show="!expanded" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+            <svg x-show="expanded" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
+            </svg>
+        </button>
     </div>
 
     {% if exhibit.master_image %}

@@ -3,84 +3,68 @@ lead: "Help us understand our visitors — this short form takes less than a min
 continue_button: "Continue to gallery"
 questions:
   - id: gender
-    text: "Gender"
+    text: "Sex"
     type: single
     required: true
     options:
-      - male
-      - female
-      - other
-      - prefer not to say
+      - Male
+      - Female
+      - Other
 
   - id: age
-    text: "Age category"
+    text: "Age Category"
     type: single
     required: true
     options:
-      - under 17
-      - 18–24
-      - 25–34
-      - 35–44
-      - 45–54
-      - 55–64
+      - under 18
+      - 19-24
+      - 25-34
+      - 35-44
+      - 45-54
+      - 55-64
       - 65+
 
   - id: education
-    text: "Highest education completed"
+    text: "Education"
     type: single
     required: true
     options:
-      - Primary school
-      - High school / Secondary
-      - Bachelor’s degree
-      - Master’s degree
-      - Doctoral degree (PhD)
-      - Other / prefer not to say
+      - Elementary
+      - Secondary
+      - Higher vocational school
+      - University
 
-  - id: income
-    text: "Do you have a regular personal income?"
+  - id: work_status
+    text: "Occupation"
     type: single
     required: true
     options:
-      - "yes"
-      - "no"
-      - prefer not to say
+      - Student
+      - Employed
+      - Self-employed
+      - Entrepreneur
+      - On parental leave
+      - Unemployed
+      - Retired
 
-  - id: ai_replace_artists
-    text: "Are you afraid that AI would replace creative professionals?"
+  - id: ai_fan
+    text: "To what extent do you consider yourself a fan of AI?"
     type: likert
     required: true
     options:
       min: 1
       max: 5
       labels:
-        1: "Definitely not"
-        2: "Rather not"
-        3: "Neutral"
-        4: "Rather yes"
-        5: "Definitely yes"
-
-  - id: tech_interest
-    text: "How do you feel about modern technologies, including AI?"
-    type: likert
-    required: true
-    options:
-      min: 1
-      max: 5
-      labels:
-        1: "I avoid them"
-        2: "I don't like them"
-        3: "Neutral"
-        4: "I like them"
-        5: "I actively use them"
+        1: "Not at all"
+        5: "Very much"
 
   - id: artist
     text: "Are you an active artist?"
     type: single
     required: true
     options:
-      - "yes"
-      - "no"
+      - "YES"
+      - "NO"
 
   - id: art_field
     text: "In which areas do you create art?"
@@ -98,27 +82,13 @@ questions:
       - digital art
       - other
 
-  - id: ai_usage
-    text: "Do you use AI in your work or personal life?"
-    type: single
+  - id: ai_user
+    text: "Do you consider yourself an active AI user?"
+    type: likert
     required: true
     options:
-      - yes, regularly
-      - yes, sometimes
-      - "no"
-      - not sure
-
-  - id: work_status
-    text: "What is your current work status?"
-    type: single
-    required: true
-    options:
-      - student
-      - employee (full-time)
-      - employee (part-time)
-      - self-employed
-      - unemployed
-      - parental leave
-      - retired
-      - other
-      - prefer not to say
+      min: 1
+      max: 5
+      labels:
+        1: "Not at all"
+        5: "Very much"

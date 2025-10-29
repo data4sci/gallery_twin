@@ -1,157 +1,199 @@
 questions:
-  # Kognitivní složka
+  # 1) Cognitive component
   - id: deep_thinking
     type: likert
-    text: "Měl/a jsem nutkání k hlubokému zamyšlení."
+    text: "During the exhibition I felt an urge to reflect deeply."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 1
   - id: absorbed_content
     type: likert
-    text: "Byl/a jsem pohlcen/a obsahem obrazů nebo jejich reprodukcí."
+    text: "During the exhibition I was absorbed/immersed in the content of the paintings."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 2
   - id: new_information
     type: likert
-    text: "Získal/a jsem nové informace nebo poznatky."
+    text: "During the exhibition I acquired new information or insights."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 3
   - id: new_thoughts
     type: likert
-    text: "Získal/a jsem podněty k novým myšlenkám."
+    text: "During the exhibition I received stimuli for new ideas."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 4
   - id: meaning_reflection
     type: likert
-    text: "Pociťoval/a jsem nutkání přemýšlet o významu vystavovaných děl."
+    text: "During the exhibition I felt compelled to think about the meaning of the exhibited works."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 5
   - id: new_questions
     type: likert
-    text: "Měl/a jsem nutkání klást si nové otázky."
+    text: "During the exhibition I felt an urge to ask new questions."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 6
 
-  # Emoce
+  # 2) Emotions
   - id: felt_calm
     type: likert
-    text: "Cítil/a jsem se klidný/á."
+    text: "During the exhibition I felt calm."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 7
   - id: felt_good
     type: likert
-    text: "Měl/a jsem dobrý pocit."
+    text: "During the exhibition I felt good."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 8
   - id: colors_vitality
     type: likert
-    text: "Měl/a jsem dojem, že ve mně barvy a kompozice obrazů vyvolávají pocit živosti."
+    text: "During the exhibition I had the impression that the colors and compositions evoked a sense of vitality in me."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 9
   - id: positive_emotions
     type: likert
-    text: "Cítil/a jsem spíše pozitivní nebo příjemné emoce. Pociťoval/a jsem radost při pohledu na vystavovaná díla."
+    text: "During the exhibition I felt positive or pleasant emotions."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 10
-  - id: absorbed_emotions
+
+  # 3) Self-reflection
+  - id: reconsider_life
     type: likert
-    text: "Byl/a jsem pohlcen/a emocemi, které ve mě obrazy vyvolávaly."
+    text: "The exhibited paintings made me reconsider certain aspects of my personal life."
     options:
       min: 1
       max: 5
       labels:
-        1: "Naprosto nesouhlasím"
-        5: "Naprosto souhlasím"
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 11
-
-  # Poslední otázky
-  - id: ai_future_role
-    type: single
-    text: "Jakou roli by podle Vás mohla hrát umělá inteligence v budoucnu při vytváření originálního umění?"
+  - id: discover_self
+    type: likert
+    text: "The exhibited paintings made me discover new aspects of myself."
     options:
-      - "Žádnou roli – AI nebude mít význam"
-      - "Spíše okrajovou roli – doplněk k lidské tvorbě"
-      - "Střední roli – kombinace lidské a AI tvorby"
-      - "Významnou roli – AI bude zásadní nástroj při tvorbě"
-      - "Dominantní roli – AI bude hlavním tvůrcem originálního umění"
+      min: 1
+      max: 5
+      labels:
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 12
-  - id: more_exhibitions
-    type: single
-    text: "Chtěl/a byste vidět více výstav kombinujících tradiční umění a moderní technologie, jako je AI?"
+  - id: personally_meaningful
+    type: likert
+    text: "The exhibited paintings made me realize that they are personally meaningful to me."
     options:
-      - "Ano"
-      - "Ne"
+      min: 1
+      max: 5
+      labels:
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 13
-  - id: attitude_change
-    type: single
-    text: "Do jaké míry výstava změnila Váš postoj vůči využívání AI v oblasti umělecké tvorby?"
+  - id: common_identity
+    type: likert
+    text: "The exhibited paintings made me realize that they have something in common with who I am."
     options:
-      - "Výrazně změnila k horšímu"
-      - "Spíše změnila k horšímu"
-      - "Nezměnila můj postoj"
-      - "Spíše změnila k lepšímu"
-      - "Výrazně změnila k lepšímu"
+      min: 1
+      max: 5
+      labels:
+        1: "Strongly disagree"
+        5: "Strongly agree"
     required: true
     sort_order: 14
+
+  # 4) AI future role
+  - id: ai_future_role
+    type: likert
+    text: "What role do you think artificial intelligence could play in the future in creating original art?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "No role at all"
+        5: "A very significant role"
+    required: true
+    sort_order: 15
+
+  # 5) More exhibitions
+  - id: more_exhibitions
+    type: likert
+    text: "Would you like to see more exhibitions that combine traditional art and modern technologies such as AI?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Definitely no"
+        5: "Definitely yes"
+    required: true
+    sort_order: 16
+
+  # 6) Attitude change
+  - id: attitude_change
+    type: likert
+    text: "Did the exhibition change your attitude toward the use of AI in artistic creation?"
+    options:
+      min: 1
+      max: 5
+      labels:
+        1: "Definitely no"
+        5: "Definitely yes"
+    required: true
+    sort_order: 17

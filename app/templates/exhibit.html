@@ -80,7 +80,7 @@
         <div class="prose max-w-none relative"
              :class="{ 'max-h-[100px] overflow-hidden': !expanded && needsExpand }"
              x-ref="textContent">
-            {{ exhibit.text_md | safe }}
+            {{ exhibit.text_md | markdown | safe }}
             <div x-show="!expanded && needsExpand"
                  class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent pointer-events-none">
             </div>

@@ -16,6 +16,7 @@ from jinja2 import pass_context
 
 from contextlib import asynccontextmanager
 from app.services.content_loader import get_yaml_slugs
+from markdown_it import MarkdownIt
 
 
 @asynccontextmanager
@@ -47,6 +48,18 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Centralized templates instance so we can register globals in one place
 templates = Jinja2Templates(directory="app/templates")
+
+# Initialize markdown parser
+md = MarkdownIt()
+
+# Register markdown filter
+def markdown_filter(text):
+    """Convert markdown to HTML."""
+    if not text:
+        return ""
+    return md.render(text)
+
+templates.env.filters["markdown"] = markdown_filter
 
 # Load site copy (texts for header/footer/index/thanks) and register as template global
 site_copy = load_site_copy(content_dir="content") or {}

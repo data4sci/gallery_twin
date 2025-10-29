@@ -1,100 +1,165 @@
-# Virtuální Galerie (gallery_twin)
+# Gallery Twin
 
-Webová aplikace pro virtuální galerii. Návštěvníci procházejí expozicemi (obrázky, text, audio) a vyplňují dotazníky. Administrátor má přístup k datům a exportům.
+Webová aplikace pro virtuální galerii s interaktivními expozicemi a dotazníky pro návštěvníky. Administrátor má přístup k výsledkům a analytickým datům.
+
+## Rychlý start
+
+### Lokální vývoj
+
+```bash
+# 1. Klonování projektu
+git clone https://github.com/data4sci/gallery_twin.git
+cd gallery_twin
+
+# 2. Instalace uv (pokud ještě nemáte)
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 3. Instalace závislostí
+uv sync
+
+# 4. Inicializace databáze
+uv run alembic upgrade head
+
+# 5. Spuštění aplikace
+uv run uvicorn app.main:app --reload
+```
+
+Aplikace běží na `http://localhost:8000`
+
+### Deployment na server
+
+```bash
+# 1. Klonování na server
+git clone https://github.com/data4sci/gallery_twin.git
+cd gallery_twin
+
+# 2. Konfigurace
+cp .env.example .env
+nano .env  # Nastavte SECRET_KEY a ADMIN_PASSWORD
+
+# 3. Spuštění
+chmod +x deploy.sh
+./deploy.sh
+```
 
 ## Funkcionalita
 
 **Návštěvníci:**
 
-- Procházení expozic s obrázky, textem (Markdown) a audio
-- Vyplňování dotazníků (výběr z možností, Likertova škála, text)
-- Automatické ukládání postupu v anonymní session
+- Interaktivní expozice (obrázky, Markdown text, audio)
+- Dotazníky (výběr z možností, Likertova škála, textové odpovědi)
+- Automatické ukládání postupu
 
 **Administrátor:**
 
-- Zabezpečený přístup na `/admin`
-- Dashboard s metrikami (návštěvy, míra dokončení)
-- Přehled a filtrování odpovědí
-- CSV export
+- Přístup na `/admin` s přihlášením
+- Dashboard s metrikami a statistikami
+- Filtrování a export odpovědí do CSV
 
 ## Technologie
 
 - **Backend:** FastAPI, SQLModel, SQLite
 - **Frontend:** Jinja2, Tailwind CSS, Alpine.js
-- **Migrace:** Alembic
-- **Nástroje:** uv, ruff, mypy, pytest
+- **Deployment:** Docker, Docker Compose
 
-## Struktura
+## Struktura projektu
 
 ```
 gallery_twin/
-├── app/
-│   ├── main.py
-│   ├── models.py
-│   ├── schemas.py
-│   └── routers/
-├── alembic/
-├── tests/
-└── Dockerfile
+├── app/              # FastAPI aplikace
+├── content/          # YAML soubory s obsahem expozic
+├── static/           # CSS, JS, obrázky
+├── alembic/          # Databázové migrace
+├── db/               # SQLite databáze (ignorováno gitem)
+└── tests/            # Testy
 ```
 
-## Instalace
+## Vývoj
+
+### Testování
 
 ```bash
-# Klonování a setup
-git clone <URL>
-cd gallery_twin
-uv sync
-
-# Konfigurace
-cp .env.example .env  # upravte ADMIN_PASSWORD
-
-# Databáze a spuštění
-uv run alembic upgrade head
-uv run uvicorn app.main:app --reload
+uv run pytest              # Základní testy
+uv run pytest --cov=app    # S pokrytím
 ```
 
-Aplikace běží na `http://127.0.0.1:8000`
-
-## Testování
+### Kontrola kódu
 
 ```bash
-pytest
+uv run ruff check .        # Linting
+uv run mypy app/           # Type checking
 ```
 
-## Docker
+## Konfigurace
+
+### Proměnné prostředí (.env)
 
 ```bash
-docker compose up --build
+SECRET_KEY=your-secret-key-min-32-chars
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=strong-password
+DATABASE_URL=sqlite:///./db/gallery.db
 ```
 
-## Deployment
-
-### Azure Web Apps
+Generování SECRET_KEY:
 
 ```bash
-# Build a push
-docker build -t <acr-name>.azurecr.io/gallery-twin:latest .
-az acr login --name <acr-name>
-docker push <acr-name>.azurecr.io/gallery-twin:latest
-
-# Nastavte env proměnné: SECRET_KEY, ADMIN_USERNAME, ADMIN_PASSWORD
-# Připojte Azure Files pro SQLite databázi na /app/gallery.db
+python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 ```
 
-### AWS ECS/Fargate
+## Správa na serveru
+
+### Běžné operace
 
 ```bash
-# ECR setup
-aws ecr create-repository --repository-name gallery-twin
-docker build -t gallery-twin .
-aws ecr get-login-password | docker login --username AWS --password-stdin <account>.dkr.ecr.<region>.amazonaws.com
-docker tag gallery-twin:latest <account>.dkr.ecr.<region>.amazonaws.com/gallery-twin:latest
-docker push <account>.dkr.ecr.<region>.amazonaws.com/gallery-twin:latest
-
-# Nastavte env proměnné a EFS volume pro databázi
+docker compose restart          # Restart aplikace
+docker compose logs -f          # Zobrazení logů
+docker compose down             # Zastavení
+./deploy.sh                     # Aktualizace po změnách
 ```
 
-### Health Check
+### Záloha databáze
 
-Aplikace poskytuje health check na `/health` pro monitoring.
+```bash
+# Vytvoření zálohy
+cp db/gallery.db db/gallery_backup_$(date +%Y%m%d).db
+
+# Obnovení ze zálohy
+docker compose down
+cp db/gallery_backup_YYYYMMDD.db db/gallery.db
+docker compose up -d
+```
+
+## Reverse proxy (Nginx)
+
+Příklad konfigurace pro integraci s univerzitní doménou:
+
+```nginx
+location / {
+    proxy_pass http://localhost:8000;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+}
+```
+
+Health check endpoint: `http://localhost:8000/health`
+
+## Troubleshooting
+
+```bash
+# Kontrola běhu aplikace
+docker compose logs -f
+
+# Restart při problémech
+docker compose restart
+
+# Oprávnění k databázi
+chmod 755 db/
+chmod 644 db/gallery.db
+
+# Změna portu (v docker-compose.yml)
+ports:
+  - "8001:8000"
+```

@@ -1,56 +1,39 @@
-# Stage 1: Builder
-FROM python:3.12-slim-bookworm AS builder
+# 1. Use official Python image
+FROM python:3.12-slim
 
-WORKDIR /app
-
-# Install uv and required packages
+# 2. Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh \
-    && apt-get clean \
+    gcc \
+    build-essential \
+    libsqlite3-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Add uv to PATH
-ENV PATH="/root/.local/bin:${PATH}"
-
-# Copy only necessary files for dependency installation
-COPY pyproject.toml uv.lock ./
-
-# Install dependencies
-RUN uv sync
-RUN uv pip install --system -e .
-RUN uv pip install --system alembic
-
-# Stage 2: Runner
-FROM python:3.12-slim-bookworm AS runner
-
+# 3. Set working directory in container
 WORKDIR /app
 
-# Create non-root user
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+# 4. Install uv
+RUN pip install uv
 
-# Copy installed packages from builder
-COPY --from=builder /usr/local/lib/python3.12/site-packages/ /usr/local/lib/python3.12/site-packages/
-COPY --from=builder /usr/local/bin/ /usr/local/bin/
+# 5. Copy dependency files
+COPY pyproject.toml uv.lock ./
 
-# Copy application code
-COPY app/ ./app/
-COPY content/ ./content/
-COPY static/ ./static/
-COPY alembic/ ./alembic/
-COPY alembic.ini ./alembic.ini
+# 6. Install project dependencies
+RUN uv sync
 
-# Create db directory and set permissions
-RUN mkdir -p /app/db && chown -R appuser:appuser /app
+# 7. Copy rest of application code
+COPY ./app ./app
+COPY ./content ./content
+COPY ./static ./static
+COPY ./alembic ./alembic
 
-# Switch to non-root user
-USER appuser
+# 8. Set non-sensitive default environment variables
+ENV DATABASE_URL="sqlite+aiosqlite:///./db/gallery.db"
+ENV DEBUG="false"
+ENV SESSION_TTL="2592000"
+ENV ALLOWED_ORIGINS='["*"]'
 
-# Expose port
+# 9. Expose port where application will run
 EXPOSE 8000
 
-# Ensure CLI tools (alembic, uvicorn) are in PATH
-ENV PATH="/usr/local/bin:${PATH}"
-
-# Run migrations and then start the application
-CMD alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
+# 10. Run migrations and start application
+CMD uv run alembic -c alembic/alembic.ini upgrade head && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000

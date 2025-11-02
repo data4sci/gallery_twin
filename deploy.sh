@@ -11,12 +11,9 @@ if ! command -v docker &> /dev/null; then
     exit 1
 fi
 
-# Check if Docker Compose is available
-if ! docker compose version &> /dev/null; then
-    echo "❌ Error: Docker Compose is not available"
-    echo "Install Docker Compose plugin: sudo apt install docker-compose-plugin"
-    exit 1
-fi
+# Configuration
+CONTAINER_NAME="gallery-twin-app"
+IMAGE_NAME="gallery-twin"
 
 # Create db directory if it doesn't exist
 if [ ! -d "db" ]; then
@@ -37,37 +34,49 @@ if [ ! -f ".env" ]; then
     fi
 fi
 
-# Stop existing containers
-echo "🛑 Stopping existing containers..."
-docker compose down
-
 # Pull latest changes (if in git repo)
 if [ -d ".git" ]; then
     echo "📥 Pulling latest changes..."
     git pull || echo "⚠️  Warning: Could not pull latest changes"
 fi
 
-# Build and start containers
-echo "🔨 Building and starting containers..."
-docker compose up -d --build
+# Stop and remove existing container
+echo "🛑 Stopping existing container..."
+docker stop "$CONTAINER_NAME" 2>/dev/null || true
+docker rm "$CONTAINER_NAME" 2>/dev/null || true
 
-# Wait for application to be ready
+# Build Docker image
+echo "🔨 Building Docker image..."
+docker build -t "$IMAGE_NAME" .
+
+# Start container
+echo "🚀 Starting container..."
+docker run -d \
+    -p 8000:8000 \
+    -v "$(pwd)/db:/app/db" \
+    --env-file .env \
+    --name "$CONTAINER_NAME" \
+    --restart unless-stopped \
+    "$IMAGE_NAME"
+
+# Wait for application to start
 echo "⏳ Waiting for application to start..."
 sleep 5
 
-# Check if application is running
-if docker compose ps | grep -q "Up"; then
+# Check if container is running
+if docker ps | grep -q "$CONTAINER_NAME"; then
     echo "✅ Deployment successful!"
     echo ""
     echo "Application is running at http://localhost:8000"
     echo "Admin panel: http://localhost:8000/admin"
     echo ""
     echo "Useful commands:"
-    echo "  docker compose logs -f    # View logs"
-    echo "  docker compose restart    # Restart application"
-    echo "  docker compose down       # Stop application"
+    echo "  docker logs -f $CONTAINER_NAME       # View logs"
+    echo "  docker restart $CONTAINER_NAME       # Restart application"
+    echo "  docker stop $CONTAINER_NAME          # Stop application"
+    echo "  docker start $CONTAINER_NAME         # Start application"
 else
-    echo "❌ Error: Containers failed to start"
-    echo "Check logs with: docker compose logs"
+    echo "❌ Error: Container failed to start"
+    echo "Check logs with: docker logs $CONTAINER_NAME"
     exit 1
 fi

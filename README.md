@@ -45,6 +45,10 @@ nano .env  # Nastavte SECRET_KEY a ADMIN_PASSWORD
 ./deploy.sh
 ```
 
+## Azure deployment
+
+Startup Command: `gunicorn --bind=0.0.0.0:${PORT:-8000} --workers 1 --worker-class uvicorn.workers.UvicornWorker --timeout 20 app.main:app`
+
 ## Funkcionalita
 
 **Návštěvníci:**

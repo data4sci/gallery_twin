@@ -185,6 +185,7 @@ docker run -d -p 8000:8000 -v $(pwd)/db:/app/db --env-file .env --name gallery-t
 Místo předávání jednotlivých proměnných můžete použít `.env` soubor:
 
 ```bash
+mkdir -p db
 docker run -d -p 8000:8000 \
   -v $(pwd)/db:/app/db \
   --env-file .env \

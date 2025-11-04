@@ -317,6 +317,8 @@ async def sample_answer(
     db_session: AsyncSession, sample_session: Session, sample_exhibit_with_questions: Exhibit
 ) -> Answer:
     """Create a sample text answer."""
+    # Refresh to load relationships
+    await db_session.refresh(sample_exhibit_with_questions, ["questions"])
     question = sample_exhibit_with_questions.questions[0]
     answer = Answer(
         session_id=sample_session.id,

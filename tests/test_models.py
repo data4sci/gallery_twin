@@ -61,8 +61,10 @@ async def test_exhibit_slug_uniqueness(db_session: AsyncSession):
 
 
 @pytest.mark.asyncio
-async def test_exhibit_relationships(sample_exhibit_with_images: Exhibit):
+async def test_exhibit_relationships(db_session, sample_exhibit_with_images: Exhibit):
     """Test exhibit relationships with images and questions."""
+    # Refresh to load relationships
+    await db_session.refresh(sample_exhibit_with_images, ["images"])
     assert len(sample_exhibit_with_images.images) == 3
     assert all(img.exhibit_id == sample_exhibit_with_images.id for img in sample_exhibit_with_images.images)
 
@@ -291,6 +293,8 @@ async def test_answer_text_value(
     db_session: AsyncSession, sample_session: Session, sample_exhibit_with_questions: Exhibit
 ):
     """Test creating a text answer."""
+    # Refresh to load relationships
+    await db_session.refresh(sample_exhibit_with_questions, ["questions"])
     question = sample_exhibit_with_questions.questions[0]  # TEXT type
     answer = Answer(
         session_id=sample_session.id,
@@ -311,6 +315,8 @@ async def test_answer_multi_choice_json(
     db_session: AsyncSession, sample_session: Session, sample_exhibit_with_questions: Exhibit
 ):
     """Test creating a multi-choice answer with JSON."""
+    # Refresh to load relationships
+    await db_session.refresh(sample_exhibit_with_questions, ["questions"])
     question = sample_exhibit_with_questions.questions[2]  # MULTI type
     answer = Answer(
         session_id=sample_session.id,
@@ -326,8 +332,10 @@ async def test_answer_multi_choice_json(
 
 
 @pytest.mark.asyncio
-async def test_answer_relationships(sample_answer: Answer, sample_session: Session):
+async def test_answer_relationships(db_session, sample_answer: Answer, sample_session: Session):
     """Test answer relationships with session and question."""
+    # Refresh to load relationships
+    await db_session.refresh(sample_answer, ["session", "question"])
     assert sample_answer.session_id == sample_session.id
     assert sample_answer.session.id == sample_session.id
     assert sample_answer.question.text == "What did you think?"

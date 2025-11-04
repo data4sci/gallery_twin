@@ -154,7 +154,10 @@ async def test_track_session_reuses_existing_valid_session(db_session, sample_se
 @pytest.mark.asyncio
 async def test_track_session_updates_last_activity(db_session, sample_session):
     """Test that track_session updates last_activity timestamp."""
-    original_time = sample_session.last_activity
+    from datetime import timezone
+
+    # Ensure original_time is timezone aware
+    original_time = sample_session.last_activity.replace(tzinfo=timezone.utc)
 
     # Mock request
     request = Mock()
@@ -171,7 +174,9 @@ async def test_track_session_updates_last_activity(db_session, sample_session):
         accept_language="en-US",
     )
 
-    assert session_obj.last_activity >= original_time
+    # Make comparison timezone-aware
+    updated_time = session_obj.last_activity.replace(tzinfo=timezone.utc)
+    assert updated_time >= original_time
 
 
 @pytest.mark.asyncio

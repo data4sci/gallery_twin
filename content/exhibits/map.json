@@ -1,0 +1,110 @@
+{
+  "01_bludicka": {
+    "dalle": "D",
+    "flux": "C",
+    "imagen": "E",
+    "qwen": "G",
+    "human_1": "F",
+    "human_2": "B",
+    "human_3": "A"
+  },
+  "02_bezici": {
+    "dalle": "G",
+    "flux": "E",
+    "imagen": "B",
+    "qwen": "F",
+    "human_1": "C",
+    "human_2": "D",
+    "human_3": "A"
+  },
+  "03_dva": {
+    "dalle": "D",
+    "flux": "B",
+    "imagen": "G",
+    "qwen": "E",
+    "human_1": "A",
+    "human_2": "F",
+    "human_3": "C"
+  },
+  "04_fanousci": {
+    "dalle": "B",
+    "flux": "D",
+    "imagen": "G",
+    "qwen": "C",
+    "human_1": "A",
+    "human_2": "E",
+    "human_3": "F"
+  },
+  "05_hazeni": {
+    "dalle": "F",
+    "flux": "D",
+    "imagen": "C",
+    "qwen": "B",
+    "human_1": "A",
+    "human_2": "E",
+    "human_3": "G"
+  },
+  "06_kucharka": {
+    "dalle": "A",
+    "flux": "C",
+    "imagen": "E",
+    "qwen": "F",
+    "human_1": "G",
+    "human_2": "D",
+    "human_3": "B"
+  },
+  "07_pocukrovano": {
+    "dalle": "E",
+    "flux": "G",
+    "imagen": "B",
+    "qwen": "D",
+    "human_1": "F",
+    "human_2": "A",
+    "human_3": "C"
+  },
+  "08_rozklad": {
+    "dalle": "F",
+    "flux": "E",
+    "imagen": "G",
+    "qwen": "A",
+    "human_1": "B",
+    "human_2": "C",
+    "human_3": "D"
+  },
+  "09_sklizen": {
+    "dalle": "A",
+    "flux": "F",
+    "imagen": "G",
+    "qwen": "B",
+    "human_1": "E",
+    "human_2": "D",
+    "human_3": "C"
+  },
+  "10_slunce": {
+    "dalle": "C",
+    "flux": "F",
+    "imagen": "G",
+    "qwen": "A",
+    "human_1": "D",
+    "human_2": "B",
+    "human_3": "E"
+  },
+  "11_upiri": {
+    "dalle": "E",
+    "flux": "B",
+    "imagen": "G",
+    "qwen": "C",
+    "human_1": "A",
+    "human_2": "D",
+    "human_3": "F"
+  },
+  "12_zongler": {
+    "dalle": "E",
+    "flux": "G",
+    "imagen": "C",
+    "qwen": "A",
+    "human_1": "D",
+    "human_2": "F",
+    "human_3": "B"
+  }
+}

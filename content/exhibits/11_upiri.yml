@@ -1,111 +1,228 @@
 slug: art-11
-master_image: "img/Upíří kousnutí.jpg"
+master_image: img/Upíří kousnutí.jpg
 images:
-  - path: "img/DALL-E/Upíří kousnutí_dalle3_v1.png"
-    alt: "A"
-  - path: "img/FLUX.1-Krea-dev/Upíří kousnutí_flux.jpeg"
-    alt: "B"
-  - path: "img/Imagen-4/Upíří kousnutí_imagen.png"
-    alt: "C"
-  - path: "img/Qwen/Upíří kousnutí_qwen.png"
-    alt: "D"
-  - path: "img/human/Upíří kousnutí_1.png"
-    alt: "E"
-  - path: "img/human/Upíří kousnutí_2.png"
-    alt: "F"
-  - path: "img/human/Upíří kousnutí_3.png"
-    alt: "G"
+- path: img/human/Upíří kousnutí_1.png
+  alt: A
+- path: img/FLUX.1-Krea-dev/Upíří kousnutí_flux.jpeg
+  alt: B
+- path: img/Qwen/Upíří kousnutí_qwen.png
+  alt: C
+- path: img/human/Upíří kousnutí_2.png
+  alt: D
+- path: img/DALL-E/Upíří kousnutí_dalle3_v1.png
+  alt: E
+- path: img/human/Upíří kousnutí_3.png
+  alt: F
+- path: img/Imagen-4/Upíří kousnutí_imagen.png
+  alt: G
+title: Upíří kousnutí
+text_md: 'Bold, looping forms and vivid colors intertwine to form a fragmented abstract
+  figure. Layered shapes suggest human features entwined with decorative patterns,
+  merging playful geometry with mystery and emotional tension.
 
-title: "Upíří kousnutí"
-text_md: |
-  Bold, looping forms and vivid colors intertwine to form a fragmented abstract figure. Layered shapes suggest human features entwined with decorative patterns, merging playful geometry with mystery and emotional tension.
 
   ## Content
 
-  The painting depicts two abstract, intertwining figures locked in an embrace. The left figure has light, curly hair and a blue eye peeking through arms; the right has long brown hair and an intense red eye. One gaze seems contemplative or sad, the other direct and penetrating. Together they evoke intimacy, guardianship, or internal duality.
+
+  The painting depicts two abstract, intertwining figures locked in an embrace. The
+  left figure has light, curly hair and a blue eye peeking through arms; the right
+  has long brown hair and an intense red eye. One gaze seems contemplative or sad,
+  the other direct and penetrating. Together they evoke intimacy, guardianship, or
+  internal duality.
+
 
   ## Elements Arrangement
 
-  Entangled figures fill the center, extending toward the foreground and edges. A flat blue area beneath hints at support without defining space. To the left, a stylized wooden chair or architectural form rises vertically, adding structure. Bright, ribbon-like elements wrap the forms like clothing or symbolic mantles. Without a horizon line, the compressed space focuses on the central shapes.
+
+  Entangled figures fill the center, extending toward the foreground and edges. A
+  flat blue area beneath hints at support without defining space. To the left, a stylized
+  wooden chair or architectural form rises vertically, adding structure. Bright, ribbon-like
+  elements wrap the forms like clothing or symbolic mantles. Without a horizon line,
+  the compressed space focuses on the central shapes.
+
 
   ## Notable Details
 
-  Notable details include stacked, donut-shaped yellow forms between the bodies, possibly symbolic or whimsical. Bold stripes (red, yellow, white, blue, green) on fabric-like shapes add decorative or ceremonial references. Textural brushwork gives the hair and garments movement. The stylized chair suggests ritual, while the saturated palette intensifies the emotional impact. Small red dots on the lower left hint at further symbolism.
+
+  Notable details include stacked, donut-shaped yellow forms between the bodies, possibly
+  symbolic or whimsical. Bold stripes (red, yellow, white, blue, green) on fabric-like
+  shapes add decorative or ceremonial references. Textural brushwork gives the hair
+  and garments movement. The stylized chair suggests ritual, while the saturated palette
+  intensifies the emotional impact. Small red dots on the lower left hint at further
+  symbolism.
+
 
   ## Overall Composition
 
-  A tight, nearly square format contains interlocked curving forms, creating tension and containment. Rhythmic contours guide the eye around the bodies and colored bands, with the red eye at top center as the main focal point. The vertical chair contrasts horizontal curves, adding energy and grounding the scene. Arcing color bands and the blue base frame the image, lending a meditative, iconic quality.
+
+  A tight, nearly square format contains interlocked curving forms, creating tension
+  and containment. Rhythmic contours guide the eye around the bodies and colored bands,
+  with the red eye at top center as the main focal point. The vertical chair contrasts
+  horizontal curves, adding energy and grounding the scene. Arcing color bands and
+  the blue base frame the image, lending a meditative, iconic quality.
+
 
   ## Artistic Style
 
-  Modernist abstraction with Cubist deconstruction and Pop Art flair: flat picture plane, geometric interlocking curvilinear shapes. Bulging segments recall Cubism; bold outlines and smooth, cartoon-like surfaces evoke Pop Art. Ornamental details also hint at indigenous and folk motifs.
+
+  Modernist abstraction with Cubist deconstruction and Pop Art flair: flat picture
+  plane, geometric interlocking curvilinear shapes. Bulging segments recall Cubism;
+  bold outlines and smooth, cartoon-like surfaces evoke Pop Art. Ornamental details
+  also hint at indigenous and folk motifs.
+
 
   ## Technique
 
-  Likely oil or acrylic on canvas, with smooth, controlled brushwork and glossy, plastic-like surfaces. Clean curved edges and volumetric modeling—especially in hair and donut forms—contrast with minimal expressive marks. The polished, uniform finish blurs foreground and background for a consistent stylized effect.
+
+  Likely oil or acrylic on canvas, with smooth, controlled brushwork and glossy, plastic-like
+  surfaces. Clean curved edges and volumetric modeling—especially in hair and donut
+  forms—contrast with minimal expressive marks. The polished, uniform finish blurs
+  foreground and background for a consistent stylized effect.
+
 
   ## Color Palette
 
-  A vivid palette of primary (red, yellow, blue) and saturated secondary (green, brown, ochre) hues. High-contrast, bright colors energize the image, pairing warm and cool tones for impact. Stylized light and shadow emphasize form over realism, creating a playful, dynamic, surreal mood in a modernist vein.
-audio: "audio/Upíří kousnutí.mp3"
+
+  A vivid palette of primary (red, yellow, blue) and saturated secondary (green, brown,
+  ochre) hues. High-contrast, bright colors energize the image, pairing warm and cool
+  tones for impact. Stylized light and shadow emphasize form over realism, creating
+  a playful, dynamic, surreal mood in a modernist vein.
+
+  '
+audio: audio/Upíří kousnutí.mp3
 questions:
-  - type: "single"
-    text: "Which of these reproductions do you think is most faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think is least faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the highest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the lowest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by a human?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by artificial intelligence?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you be most willing to pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you definitely not pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the most?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the least?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions has the strongest emotional impact on you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions evokes no emotions in you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is most faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is least faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the highest artistic value?
+    (regardless of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the lowest artistic value? (regardless
+    of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by a human?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by artificial
+    intelligence?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you be most willing to pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you definitely not pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the most?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the least?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions has the strongest emotional impact on you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions evokes no emotions in you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal

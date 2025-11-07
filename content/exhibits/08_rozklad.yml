@@ -1,126 +1,255 @@
 slug: art-8
-master_image: "img/Rozklad z karet.jpg"
+master_image: img/Rozklad z karet.jpg
 images:
-  - path: "img/DALL-E/Rozklad z karet_dalle3_v1.png"
-    alt: "A"
-  - path: "img/FLUX.1-Krea-dev/Rozklad z karet_flux.jpeg"
-    alt: "B"
-  - path: "img/Imagen-4/Rozklad z karet_imagen.png"
-    alt: "C"
-  - path: "img/Qwen/Rozklad z karet_qwen.png"
-    alt: "D"
-  - path: "img/human/Rozklad z karet_1.png"
-    alt: "E"
-  - path: "img/human/Rozklad z karet_2.png"
-    alt: "F"
-  - path: "img/human/Rozklad z karet_3.png"
-    alt: "G"
+- path: img/Qwen/Rozklad z karet_qwen.png
+  alt: A
+- path: img/human/Rozklad z karet_1.png
+  alt: B
+- path: img/human/Rozklad z karet_2.png
+  alt: C
+- path: img/human/Rozklad z karet_3.png
+  alt: D
+- path: img/FLUX.1-Krea-dev/Rozklad z karet_flux.jpeg
+  alt: E
+- path: img/DALL-E/Rozklad z karet_dalle3_v1.png
+  alt: F
+- path: img/Imagen-4/Rozklad z karet_imagen.png
+  alt: G
+title: Rozklad z karet
+text_md: 'A contemplative figure in a yellow coat sits amid disembodied hands, mouths,
+  and eyes, her expression uneasy introspection. Surreal, overlapping forms radiate
+  from her head, forming a chaotic cascade of fragmented faces and intense gazes that
+  immerse the viewer in psychological overwhelm.
 
-title: "Rozklad z karet"
-text_md: |
-  A contemplative figure in a yellow coat sits amid disembodied hands, mouths, and eyes, her expression uneasy introspection. Surreal, overlapping forms radiate from her head, forming a chaotic cascade of fragmented faces and intense gazes that immerse the viewer in psychological overwhelm.
 
   ## Content
 
-  The artwork centers on a woman in a bright yellow jacket, positioned low and centered. She looks slightly upward and to her left, with closed lips and raised brows conveying pensiveness and concern. Surrounding her head, billowing clusters of fragmented faces, eyes, mouths, and hands in reds and pinks seem to emerge from or envelop her. Many eyes stare in different directions, and mouths gape in alarm. Several hands present simple-symbol cards. The arrangement evokes psychological turmoil, anxiety, and overstimulation as the figure is overwhelmed by the chaotic swarm.
+
+  The artwork centers on a woman in a bright yellow jacket, positioned low and centered.
+  She looks slightly upward and to her left, with closed lips and raised brows conveying
+  pensiveness and concern. Surrounding her head, billowing clusters of fragmented
+  faces, eyes, mouths, and hands in reds and pinks seem to emerge from or envelop
+  her. Many eyes stare in different directions, and mouths gape in alarm. Several
+  hands present simple-symbol cards. The arrangement evokes psychological turmoil,
+  anxiety, and overstimulation as the figure is overwhelmed by the chaotic swarm.
+
 
   ## Elements Arrangement
 
+
   The composition is layered into foreground, middle ground, and background.
 
-  - Foreground: the sharply rendered central figure, her oversized hands and cards projecting toward the viewer.
-  - Middle ground: a thick, swirling pillar of semi-transparent faces and features rising around her.
+
+  - Foreground: the sharply rendered central figure, her oversized hands and cards
+  projecting toward the viewer.
+
+  - Middle ground: a thick, swirling pillar of semi-transparent faces and features
+  rising around her.
+
   - Background: deep blacks and dark reds frame the vivid central forms.
 
-  There's no distinct ground plane or horizon; depth is suggested by overlapping, dreamlike forms. No architectural or natural elements—this is a psychological, surreal setting.
+
+  There''s no distinct ground plane or horizon; depth is suggested by overlapping,
+  dreamlike forms. No architectural or natural elements—this is a psychological, surreal
+  setting.
+
 
   ## Notable Details
 
+
   - Proliferation of eyes and mouths, symbolizing heightened perception or inner voices
+
   - Hands holding naive-style cards, suggesting fate, choice, or confusion
+
   - Color contrast from yellow/orange garments to vivid reds and inky blacks
+
   - Recurring yellow coat buttons linking real and surreal elements
+
   - Fluid, painterly faces reinforcing motion and unrest
+
   - A lone forehead eye amid the swirls, hinting at inner vision or altered consciousness
+
 
   ## Overall Composition
 
-  A dynamic, vertical structure creates upward movement as features rise like psychic flames. In a vertical rectangle format, the design emphasizes ascent, introspection, and overload. Balance is achieved by symmetrically arranged hands and faces around the central axis. The focal point is the woman's face near the lower center, guiding the eye upward through multiplying forms. Clouds of faces frame and redirect focus to the subject while dissolving into abstraction, conveying intense emotion, inner conflict, and subjective complexity.
+
+  A dynamic, vertical structure creates upward movement as features rise like psychic
+  flames. In a vertical rectangle format, the design emphasizes ascent, introspection,
+  and overload. Balance is achieved by symmetrically arranged hands and faces around
+  the central axis. The focal point is the woman''s face near the lower center, guiding
+  the eye upward through multiplying forms. Clouds of faces frame and redirect focus
+  to the subject while dissolving into abstraction, conveying intense emotion, inner
+  conflict, and subjective complexity.
+
 
   ## Artistic Style
 
+
   Surrealist and Psychological Expressionist:
 
-  - Surrealist in the dreamlike, irrational juxtaposition and multiplication of facial features and hands
+
+  - Surrealist in the dreamlike, irrational juxtaposition and multiplication of facial
+  features and hands
+
   - Expressionist in the distorted, fragmented portrayal of psychological struggle
+
   - Repetition and visual "meltdown" of faces mark a departure from traditional realism
+
 
   ## Technique
 
-  Executed in oil on canvas, suggested by rich blending, glazing, and textured brushwork. The central figure is rendered in tight, realistic detail, while surrounding areas dissolve into loose, gestural strokes. Moderate impasto in expressive zones adds a tactile, chaotic surface. Layering and wet-on-wet blending appear in swirling reds, merging controlled portraiture with abstract mark-making for strong textural contrast.
+
+  Executed in oil on canvas, suggested by rich blending, glazing, and textured brushwork.
+  The central figure is rendered in tight, realistic detail, while surrounding areas
+  dissolve into loose, gestural strokes. Moderate impasto in expressive zones adds
+  a tactile, chaotic surface. Layering and wet-on-wet blending appear in swirling
+  reds, merging controlled portraiture with abstract mark-making for strong textural
+  contrast.
+
 
   ## Color Palette
 
-  Dominated by warm, saturated reds and yellows (in the erupting fragments and clothing), contrasted with pale flesh tones and deep blacks for chiaroscuro drama. Cooler blue and violet accents in the cards offer relief. The intentionally discordant, repeated hues and tonal blocks unify the scene while amplifying psychological tension.
-audio: "audio/Rozklad z karet.mp3"
+
+  Dominated by warm, saturated reds and yellows (in the erupting fragments and clothing),
+  contrasted with pale flesh tones and deep blacks for chiaroscuro drama. Cooler blue
+  and violet accents in the cards offer relief. The intentionally discordant, repeated
+  hues and tonal blocks unify the scene while amplifying psychological tension.
+
+  '
+audio: audio/Rozklad z karet.mp3
 questions:
-  - type: "single"
-    text: "Which of these reproductions do you think is most faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think is least faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the highest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the lowest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by a human?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by artificial intelligence?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you be most willing to pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you definitely not pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the most?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the least?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions has the strongest emotional impact on you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions evokes no emotions in you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is most faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is least faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the highest artistic value?
+    (regardless of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the lowest artistic value? (regardless
+    of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by a human?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by artificial
+    intelligence?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you be most willing to pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you definitely not pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the most?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the least?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions has the strongest emotional impact on you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions evokes no emotions in you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal

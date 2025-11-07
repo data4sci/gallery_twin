@@ -1,111 +1,232 @@
 slug: art-6
-master_image: "img/Kuchařka.png"
+master_image: img/Kuchařka.png
 images:
-  - path: "img/DALL-E/Kuchařka_dalle3_v1.png"
-    alt: "A"
-  - path: "img/FLUX.1-Krea-dev/Kuchařka_flux.jpeg"
-    alt: "B"
-  - path: "img/Imagen-4/Kuchařka_imagen.png"
-    alt: "C"
-  - path: "img/Qwen/Kuchařka_qwen.png"
-    alt: "D"
-  - path: "img/human/Kuchařka_1.png"
-    alt: "E"
-  - path: "img/human/Kuchařka_2.png"
-    alt: "F"
-  - path: "img/human/Kuchařka_3.png"
-    alt: "G"
+- path: img/DALL-E/Kuchařka_dalle3_v1.png
+  alt: A
+- path: img/human/Kuchařka_3.png
+  alt: B
+- path: img/FLUX.1-Krea-dev/Kuchařka_flux.jpeg
+  alt: C
+- path: img/human/Kuchařka_2.png
+  alt: D
+- path: img/Imagen-4/Kuchařka_imagen.png
+  alt: E
+- path: img/Qwen/Kuchařka_qwen.png
+  alt: F
+- path: img/human/Kuchařka_1.png
+  alt: G
+title: Kuchařka
+text_md: 'A humanoid figure with a white flower head sits against a dark background,
+  wearing a gold-buttoned coat over a multicolored striped garment. Red, pointed shapes
+  radiate beneath it, and its gently clasped hands hold a green glass bottle at the
+  center. Bright hues and surreal forms evoke curiosity.
 
-title: "Kuchařka"
-text_md: |
-  A humanoid figure with a white flower head sits against a dark background, wearing a gold-buttoned coat over a multicolored striped garment. Red, pointed shapes radiate beneath it, and its gently clasped hands hold a green glass bottle at the center. Bright hues and surreal forms evoke curiosity.
 
   ## Content
 
-  The subject is a single, surreal figure at center. Its head is a white blossom with a brownish core instead of facial features, giving an unreadable expression. The torso is clad in a vibrant striped tunic (red, yellow, blue) with a blue, red-patterned collar and a green cloak fastened by large buttons. The red-and-white striped sleeves end in blue cuffs. The figure's hands cradle a round green bottle at midsection. Its lower half transforms into a skirt of dense, red, petal- or spike-like shapes cascading downward. The pose suggests it is protecting or presenting the bottle.
+
+  The subject is a single, surreal figure at center. Its head is a white blossom with
+  a brownish core instead of facial features, giving an unreadable expression. The
+  torso is clad in a vibrant striped tunic (red, yellow, blue) with a blue, red-patterned
+  collar and a green cloak fastened by large buttons. The red-and-white striped sleeves
+  end in blue cuffs. The figure''s hands cradle a round green bottle at midsection.
+  Its lower half transforms into a skirt of dense, red, petal- or spike-like shapes
+  cascading downward. The pose suggests it is protecting or presenting the bottle.
+
 
   ## Elements Arrangement
 
-  The figure dominates the foreground on an uncertain plane merging into deep shadow. The near-black background remains formless. A broad blue arc frames the left side and top, isolating the figure. A small, flame-like red form hovers in the upper left. There is no horizon or architecture, compressing space to focus on the figure.
+
+  The figure dominates the foreground on an uncertain plane merging into deep shadow.
+  The near-black background remains formless. A broad blue arc frames the left side
+  and top, isolating the figure. A small, flame-like red form hovers in the upper
+  left. There is no horizon or architecture, compressing space to focus on the figure.
+
 
   ## Notable Details
 
-  Key features include the flower-head, symbolizing anonymity or metamorphosis. The costume's gold buttons, embroidery, and bold colors hint at folklore or celebration. The skirt's sharp, pepper-like spikes suggest both defense and menace. The central bottle implies secrets or elixirs. Contrasting textures—smooth petals, glossy spikes, rich fabrics—add intrigue. The blue arc and floating red shape imply motion or otherworldliness.
+
+  Key features include the flower-head, symbolizing anonymity or metamorphosis. The
+  costume''s gold buttons, embroidery, and bold colors hint at folklore or celebration.
+  The skirt''s sharp, pepper-like spikes suggest both defense and menace. The central
+  bottle implies secrets or elixirs. Contrasting textures—smooth petals, glossy spikes,
+  rich fabrics—add intrigue. The blue arc and floating red shape imply motion or otherworldliness.
+
 
   ## Overall Composition
 
-  Vertically oriented, the composition centers on the seated (or standing) figure, forming a pyramidal silhouette. The round flower-head and radial skirt spikes guide the eye toward the bottle. Symmetry in posture balances the piece, while color and detail variances add dynamism. The blue arc encircles the figure, directing attention back to the bottle. The blank background heightens the dreamlike mystery.
+
+  Vertically oriented, the composition centers on the seated (or standing) figure,
+  forming a pyramidal silhouette. The round flower-head and radial skirt spikes guide
+  the eye toward the bottle. Symmetry in posture balances the piece, while color and
+  detail variances add dynamism. The blue arc encircles the figure, directing attention
+  back to the bottle. The blank background heightens the dreamlike mystery.
+
 
   ## Artistic Style
 
-  This work reflects contemporary Surrealism, blending dreamlike imagery and uncanny pairings (a flower-headed figure in theatrical attire holding a bottle). Its soft modeling and smooth transitions recall Magic Realism and pop-surrealism. Vivid contrasts and playful patterns evoke modern illustration and graphic design sensibilities.
+
+  This work reflects contemporary Surrealism, blending dreamlike imagery and uncanny
+  pairings (a flower-headed figure in theatrical attire holding a bottle). Its soft
+  modeling and smooth transitions recall Magic Realism and pop-surrealism. Vivid contrasts
+  and playful patterns evoke modern illustration and graphic design sensibilities.
+
 
   ## Technique
 
-  Likely oil or acrylic on canvas, indicated by deep hues, subtle glazes, and blended transitions (notably in the flower-head and shiny spikes). Brushwork is refined, with smooth gradients and minimal visible strokes. Contours are crisp where shapes meet. The artist contrasts hard, glossy skirt spikes with soft petals and matte fabric. Highlights and shadows lend a sculptural quality, while layered paint and a modern palette create a contemporary twist.
+
+  Likely oil or acrylic on canvas, indicated by deep hues, subtle glazes, and blended
+  transitions (notably in the flower-head and shiny spikes). Brushwork is refined,
+  with smooth gradients and minimal visible strokes. Contours are crisp where shapes
+  meet. The artist contrasts hard, glossy skirt spikes with soft petals and matte
+  fabric. Highlights and shadows lend a sculptural quality, while layered paint and
+  a modern palette create a contemporary twist.
+
 
   ## Color Palette
 
-  The palette is bold and saturated: deep red, forest green, bright blue, golden yellow. Primary costume colors contrast with the inky black background, making the figure pop. The flower-head's cool whites and pale grays with a brown center offer calm relief. Warm reds in the skirt are offset by cool blue shadows. High contrasts emphasize key forms—the bottle, the head, the buttons—adding drama and theatrical flair.
-audio: "audio/Kuchařka.mp3"
+
+  The palette is bold and saturated: deep red, forest green, bright blue, golden yellow.
+  Primary costume colors contrast with the inky black background, making the figure
+  pop. The flower-head''s cool whites and pale grays with a brown center offer calm
+  relief. Warm reds in the skirt are offset by cool blue shadows. High contrasts emphasize
+  key forms—the bottle, the head, the buttons—adding drama and theatrical flair.
+
+  '
+audio: audio/Kuchařka.mp3
 questions:
-  - type: "single"
-    text: "Which of these reproductions do you think is most faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think is least faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the highest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the lowest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by a human?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by artificial intelligence?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you be most willing to pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you definitely not pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the most?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the least?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions has the strongest emotional impact on you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions evokes no emotions in you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is most faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is least faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the highest artistic value?
+    (regardless of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the lowest artistic value? (regardless
+    of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by a human?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by artificial
+    intelligence?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you be most willing to pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you definitely not pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the most?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the least?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions has the strongest emotional impact on you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions evokes no emotions in you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal

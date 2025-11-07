@@ -1,111 +1,235 @@
 slug: art-12
-master_image: "img/Žonglér.png"
+master_image: img/Žonglér.png
 images:
-  - path: "img/DALL-E/Žonglér_dalle3_v1.png"
-    alt: "A"
-  - path: "img/FLUX.1-Krea-dev/Žonglér_flux.jpeg"
-    alt: "B"
-  - path: "img/Imagen-4/Žonglér_imagen.png"
-    alt: "C"
-  - path: "img/Qwen/Žonglér_qwen.png"
-    alt: "D"
-  - path: "img/human/Žonglér_1.png"
-    alt: "E"
-  - path: "img/human/Žonglér_2.png"
-    alt: "F"
-  - path: "img/human/Žonglér_3.png"
-    alt: "G"
+- path: img/Qwen/Žonglér_qwen.png
+  alt: A
+- path: img/human/Žonglér_3.png
+  alt: B
+- path: img/Imagen-4/Žonglér_imagen.png
+  alt: C
+- path: img/human/Žonglér_1.png
+  alt: D
+- path: img/DALL-E/Žonglér_dalle3_v1.png
+  alt: E
+- path: img/human/Žonglér_2.png
+  alt: F
+- path: img/FLUX.1-Krea-dev/Žonglér_flux.jpeg
+  alt: G
+title: Žonglér
+text_md: 'A towering, fur-covered figure with multiple hands rises from a golden wheat
+  field, its head a luminous, cloud-like form. Against a dark night sky, a floating
+  yellow orb near its outstretched hands deepens the surreal mystery.
 
-title: "Žonglér"
-text_md: |
-  A towering, fur-covered figure with multiple hands rises from a golden wheat field, its head a luminous, cloud-like form. Against a dark night sky, a floating yellow orb near its outstretched hands deepens the surreal mystery.
 
   ## Content
 
-  A surreal anthropomorphic form stands in a wheat field. Its body is dense, sunflower-colored fur with three human arms emerging on the right—one cupped, one relaxed, one with splayed fingers. Its head is a large, white, flower-like structure with soft petals and a central opening, like a dandelion seen from above. To the left floats a bright orange-yellow orb, suggesting sun or moon. The floral head leaves no facial features.
+
+  A surreal anthropomorphic form stands in a wheat field. Its body is dense, sunflower-colored
+  fur with three human arms emerging on the right—one cupped, one relaxed, one with
+  splayed fingers. Its head is a large, white, flower-like structure with soft petals
+  and a central opening, like a dandelion seen from above. To the left floats a bright
+  orange-yellow orb, suggesting sun or moon. The floral head leaves no facial features.
+
 
   ## Elements Arrangement
 
-  The figure stands centrally in the foreground, rising from the wheat to reach into the black sky. The middle ground is the golden field, the background a deep, stark sky that highlights the orb and figure. A flat plane of wheat stalks hints at a faint blue horizon below the figure. There are no buildings—only stylized wheat and minimal land. The shallow depth centers attention on the figure and its surroundings.
+
+  The figure stands centrally in the foreground, rising from the wheat to reach into
+  the black sky. The middle ground is the golden field, the background a deep, stark
+  sky that highlights the orb and figure. A flat plane of wheat stalks hints at a
+  faint blue horizon below the figure. There are no buildings—only stylized wheat
+  and minimal land. The shallow depth centers attention on the figure and its surroundings.
+
 
   ## Notable Details
 
-  Key details are the three realistic hands emerging from the textured fur, contrasting with the fantastical form. The meticulously shaded fur captures light and shadow. The flower-head has soft gradients and blurred edges, amplifying dreamlike ambiguity. The sharp, luminous orange orb echoes the wheat below. The black sky as negative space heightens the figure's surreal isolation. The gently detailed wheat balances the figure's complexity.
+
+  Key details are the three realistic hands emerging from the textured fur, contrasting
+  with the fantastical form. The meticulously shaded fur captures light and shadow.
+  The flower-head has soft gradients and blurred edges, amplifying dreamlike ambiguity.
+  The sharp, luminous orange orb echoes the wheat below. The black sky as negative
+  space heightens the figure''s surreal isolation. The gently detailed wheat balances
+  the figure''s complexity.
+
 
   ## Overall Composition
 
-  Vertically oriented, the composition emphasizes the figure's towering, totemic presence against the night sky. Central symmetry aligns all elements on a vertical axis. The viewer's gaze moves from the flower-head, down the textured body and hands, then to the orb and wheat. The contrast between detailed foreground and abstract background adds tension. The orb and flower-head serve as dual focal points, guiding the eye in an arc. The vertical format reinforces the figure's sculptural quality and themes of growth, transformation, and natural cycles.
+
+  Vertically oriented, the composition emphasizes the figure''s towering, totemic
+  presence against the night sky. Central symmetry aligns all elements on a vertical
+  axis. The viewer''s gaze moves from the flower-head, down the textured body and
+  hands, then to the orb and wheat. The contrast between detailed foreground and abstract
+  background adds tension. The orb and flower-head serve as dual focal points, guiding
+  the eye in an arc. The vertical format reinforces the figure''s sculptural quality
+  and themes of growth, transformation, and natural cycles.
+
 
   ## Artistic Style
 
-  The style is primarily Surrealist, with dreamlike imagery and unexpected juxtapositions—human hands, a flower-head, and a furry form merging with the field. The altered anatomy, floating orb, and poetic ambiguity echo Surrealism's exploration of the unconscious, reminiscent of Yves Tanguy or Leonora Carrington. Subtle hints of Magic Realism appear in the detailed, tangible rendering of fantastical elements.
+
+  The style is primarily Surrealist, with dreamlike imagery and unexpected juxtapositions—human
+  hands, a flower-head, and a furry form merging with the field. The altered anatomy,
+  floating orb, and poetic ambiguity echo Surrealism''s exploration of the unconscious,
+  reminiscent of Yves Tanguy or Leonora Carrington. Subtle hints of Magic Realism
+  appear in the detailed, tangible rendering of fantastical elements.
+
 
   ## Technique
 
-  Executed in oil on canvas, the piece features rich blends and smooth gradients, visible in the glowing orb, nuanced flesh tones, and flowing fur textures. Refined, layered brushwork renders tactile textures—fur, skin, wheat—realistically, while the flower and background have soft, diffused edges and a slight sfumato. The smooth surface and controlled transitions suggest glazing or wet-on-wet blending. Detailed organic forms contrast with flatter, nearly abstract color areas.
+
+  Executed in oil on canvas, the piece features rich blends and smooth gradients,
+  visible in the glowing orb, nuanced flesh tones, and flowing fur textures. Refined,
+  layered brushwork renders tactile textures—fur, skin, wheat—realistically, while
+  the flower and background have soft, diffused edges and a slight sfumato. The smooth
+  surface and controlled transitions suggest glazing or wet-on-wet blending. Detailed
+  organic forms contrast with flatter, nearly abstract color areas.
+
 
   ## Color Palette
 
-  The palette features warm earth tones—yellows, golds, ochres—in the wheat and fur, set against a cool, dark backdrop that isolates the figure. The orb adds a luminous warm yellow, its saturation making it a focal point. The hands are naturalistic pinks and creams against the deep sky. Warm yellows and oranges subtly contrast with cooler purples and blues near the horizon. Striking contrasts and harmonious relationships enhance the otherworldly, surreal mood.
-audio: "audio/Žonglér.mp3"
+
+  The palette features warm earth tones—yellows, golds, ochres—in the wheat and fur,
+  set against a cool, dark backdrop that isolates the figure. The orb adds a luminous
+  warm yellow, its saturation making it a focal point. The hands are naturalistic
+  pinks and creams against the deep sky. Warm yellows and oranges subtly contrast
+  with cooler purples and blues near the horizon. Striking contrasts and harmonious
+  relationships enhance the otherworldly, surreal mood.
+
+  '
+audio: audio/Žonglér.mp3
 questions:
-  - type: "single"
-    text: "Which of these reproductions do you think is most faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think is least faithful to the original?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the highest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you think has the lowest artistic value? (regardless of fidelity to the original)"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by a human?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "multi"
-    text: "Which of these reproductions do you think was definitely created by artificial intelligence?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you be most willing to pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions would you definitely not pay for?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the most?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions do you like the least?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions has the strongest emotional impact on you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
-  - type: "single"
-    text: "Which of these reproductions evokes no emotions in you?"
-    options: ["A", "B", "C", "D", "E", "F"]
-    required: true
-    layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is most faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think is least faithful to the original?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the highest artistic value?
+    (regardless of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you think has the lowest artistic value? (regardless
+    of fidelity to the original)
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by a human?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: multi
+  text: Which of these reproductions do you think was definitely created by artificial
+    intelligence?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you be most willing to pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions would you definitely not pay for?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the most?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions do you like the least?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions has the strongest emotional impact on you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal
+- type: single
+  text: Which of these reproductions evokes no emotions in you?
+  options:
+  - A
+  - B
+  - C
+  - D
+  - E
+  - F
+  required: true
+  layout: horizontal

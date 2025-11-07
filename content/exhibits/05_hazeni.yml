@@ -9,10 +9,12 @@ images:
     alt: "C"
   - path: "img/Qwen/Házení okem_qwen.png"
     alt: "D"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Házení okem_1.png"
     alt: "E"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Házení okem_2.png"
     alt: "F"
+  - path: "img/human/Házení okem_3.png"
+    alt: "G"
 
 title: "Házení okem"
 text_md: |

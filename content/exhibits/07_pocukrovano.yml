@@ -9,10 +9,12 @@ images:
     alt: "C"
   - path: "img/Qwen/Pocukrováno_qwen.png"
     alt: "D"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Pocukrováno_1.png"
     alt: "E"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Pocukrováno_2.png"
     alt: "F"
+  - path: "img/human/Pocukrováno_3.png"
+    alt: "G"
 
 title: "Pocukrováno"
 text_md: |

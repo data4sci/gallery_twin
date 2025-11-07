@@ -1,18 +1,20 @@
 slug: art-3
 master_image: "img/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta.jpg"
 images:
-  - path: "img/Imagen-4/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_qwen.png"
-    alt: "A"
   - path: "img/DALL-E/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_dalle3_v1.png"
+    alt: "A"
+  - path: "img/FLUX.1-Krea-dev/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_flux.jpeg"
     alt: "B"
-  - path: "img/example_image_1.png"
+  - path: "img/Imagen-4/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_qwen.png"
     alt: "C"
   - path: "img/Qwen/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_qwen.png"
     alt: "D"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_1.png"
     alt: "E"
-  - path: "img/FLUX.1-Krea-dev/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_flux.jpeg"
+  - path: "img/human/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_2.png"
     alt: "F"
+  - path: "img/human/Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta_3.png"
+    alt: "G"
 
 title: "Dva přátelé, v tomto životě bohužel inkarnovaní do lišky a bažanta"
 text_md: |

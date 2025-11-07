@@ -9,10 +9,12 @@ images:
     alt: "C"
   - path: "img/Qwen/Slunce_qwen.png"
     alt: "D"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Slunce_1.png"
     alt: "E"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Slunce_2.png"
     alt: "F"
+  - path: "img/human/Slunce_3.png"
+    alt: "G"
 
 title: "Slunce"
 text_md: |

@@ -1,18 +1,20 @@
 slug: art-2
 master_image: "img/Běžící věž.png"
 images:
-  - path: "img/Imagen-4/Běžící věž_imagen.png"
-    alt: "A"
   - path: "img/DALL-E/Běžící věž_dalle3_v1.png"
+    alt: "A"
+  - path: "img/FLUX.1-Krea-dev/Běžící věž_flux.jpeg"
     alt: "B"
-  - path: "img/example_image_1.png"
+  - path: "img/Imagen-4/Běžící věž_imagen.png"
     alt: "C"
   - path: "img/Qwen/Běžící věž_qwen.png"
     alt: "D"
-  - path: "img/example_image_1.png"
+  - path: "img/human/Běžící věž_1.png"
     alt: "E"
-  - path: "img/FLUX.1-Krea-dev/Běžící věž_flux.jpeg"
+  - path: "img/human/Běžící věž_2.png"
     alt: "F"
+  - path: "img/human/Běžící věž_3.png"
+    alt: "G"
 
 title: "Běžící věž"
 text_md: |

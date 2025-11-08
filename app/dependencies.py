@@ -11,6 +11,7 @@ from starlette.status import HTTP_403_FORBIDDEN
 
 from app.db import get_async_session
 from app.models import Session
+from app.services.exhibit_order import generate_random_exhibit_order
 
 SECRET_KEY = os.getenv("SECRET_KEY", "a-very-secret-key")
 
@@ -65,10 +66,15 @@ async def track_session(
         # - Cookie was invalid
         # - Session was not found in DB
         # - Session was expired
+
+        # Generate random exhibit order for new session
+        exhibit_order = generate_random_exhibit_order()
+
         db_session_obj = Session(
             uuid=uuid.uuid4(),
             user_agent=user_agent,
             accept_lang=accept_language,
+            exhibit_order_json={"order": exhibit_order},
         )
         db_session.add(db_session_obj)
         await db_session.commit()

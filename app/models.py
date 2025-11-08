@@ -112,6 +112,11 @@ class Session(TimestampMixin, SQLModel, table=True):
     exhibition_feedback_json: Optional[dict] = Field(
         default=None, sa_column=Column(JSON), description="Zpětná vazba k celé výstavě"
     )
+    exhibit_order_json: Optional[dict] = Field(
+        default=None,
+        sa_column=Column(JSON),
+        description="Randomizované pořadí exhibit slugs pro tuto session",
+    )
     last_activity: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True)),

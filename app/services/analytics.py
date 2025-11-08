@@ -12,7 +12,7 @@ from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.functions import coalesce
 
-from app.models import Answer, Exhibit, Question, Session
+from app.models import Answer, Event, EventType, Exhibit, Question, Session
 
 
 # ============================================================================

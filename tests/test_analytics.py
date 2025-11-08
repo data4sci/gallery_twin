@@ -1,8 +1,12 @@
 """
-Tests for analytics service.
+Tests for the new refactored analytics service.
 
-Tests all analytics calculations including session stats, completion rates,
-self-evaluation aggregation, time tracking, and exhibition feedback analysis.
+Tests the modern analytics functions that power the admin dashboard:
+- Visitor metrics (sessions with selfeval_json)
+- Detailed selfeval statistics (all 8 fields)
+- Enhanced exhibition feedback (17 questions)
+- Exhibit questionnaire statistics
+- Main dashboard orchestrator
 """
 
 import pytest
@@ -10,503 +14,355 @@ from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
 from app.services import analytics
-from app.models import Session, Exhibit, Question, Answer, Event, EventType
+from app.models import Session, Exhibit, Question, Answer, QuestionType
 
 
 # ============================================================================
-# Session Statistics Tests
-# ============================================================================
-
-
-@pytest.mark.asyncio
-async def test_get_total_sessions_empty_db(db_session):
-    """Test total sessions count with empty database."""
-    total = await analytics.get_total_sessions(db_session)
-    assert total == 0
-
-
-@pytest.mark.asyncio
-async def test_get_total_sessions(db_session):
-    """Test total sessions count."""
-    db_session.add(Session(uuid=uuid4()))
-    db_session.add(Session(uuid=uuid4()))
-    db_session.add(Session(uuid=uuid4()))
-    await db_session.commit()
-
-    total = await analytics.get_total_sessions(db_session)
-    assert total == 3
-
-
-@pytest.mark.asyncio
-async def test_get_completed_sessions(db_session):
-    """Test counting completed sessions."""
-    db_session.add(Session(uuid=uuid4(), completed=True))
-    db_session.add(Session(uuid=uuid4(), completed=True))
-    db_session.add(Session(uuid=uuid4(), completed=False))
-    await db_session.commit()
-
-    completed = await analytics.get_completed_sessions(db_session)
-    assert completed == 2
-
-
-@pytest.mark.asyncio
-async def test_get_completion_rate(db_session):
-    """Test completion rate calculation."""
-    # Session 1: completed
-    db_session.add(Session(uuid=uuid4(), completed=True))
-    # Session 2: not completed
-    db_session.add(Session(uuid=uuid4(), completed=False))
-    # Session 3: not completed
-    db_session.add(Session(uuid=uuid4(), completed=False))
-    await db_session.commit()
-
-    # Expected: 1 completed out of 3 total = 33.33%
-    completion_rate = await analytics.get_completion_rate(db_session)
-    assert completion_rate == pytest.approx(1 / 3 * 100)
-
-
-@pytest.mark.asyncio
-async def test_get_completion_rate_no_sessions(db_session):
-    """Test completion rate with no sessions."""
-    completion_rate = await analytics.get_completion_rate(db_session)
-    assert completion_rate == 0.0
-
-
-@pytest.mark.asyncio
-async def test_get_completion_rate_all_completed(db_session):
-    """Test completion rate when all sessions are completed."""
-    db_session.add(Session(uuid=uuid4(), completed=True))
-    db_session.add(Session(uuid=uuid4(), completed=True))
-    await db_session.commit()
-
-    completion_rate = await analytics.get_completion_rate(db_session)
-    assert completion_rate == 100.0
-
-
-# ============================================================================
-# Self-Evaluation Statistics Tests
+# Visitor Metrics Tests
 # ============================================================================
 
 
 @pytest.mark.asyncio
-async def test_get_selfeval_stats(db_session):
-    """Test aggregation of self-evaluation data."""
-    db_session.add_all(
-        [
-            Session(
-                uuid=uuid4(),
-                selfeval_json={
-                    "gender": "male",
-                    "education": "vysokoskolske",
-                    "age": "30",
-                },
-            ),
-            Session(
-                uuid=uuid4(),
-                selfeval_json={
-                    "gender": "female",
-                    "education": "stredoskolske",
-                    "age": "25",
-                },
-            ),
-            Session(
-                uuid=uuid4(),
-                selfeval_json={
-                    "gender": "male",
-                    "education": "vysokoskolske",
-                    "age": "40",
-                },
-            ),
-            Session(
-                uuid=uuid4(), selfeval_json={"gender": "other", "age": "25"}
-            ),  # Missing education
-            Session(uuid=uuid4(), selfeval_json={}),  # Empty json
-        ]
-    )
-    await db_session.commit()
-
-    stats = await analytics.get_selfeval_stats(db_session)
-
-    assert stats["total_selfeval"] == 5
-    assert stats["gender_counts"] == {"male": 2, "female": 1, "other": 1, "N/A": 1}
-    assert stats["education_counts"] == {
-        "vysokoskolske": 2,
-        "stredoskolske": 1,
-        "N/A": 2,
-    }
-    assert stats["avg_age"] == pytest.approx(30.0)
-    assert stats["min_age"] == 25
-    assert stats["max_age"] == 40
+async def test_get_visitor_count_empty_db(db_session):
+    """Test visitor count with empty database."""
+    count = await analytics.get_visitor_count(db_session)
+    assert count == 0
 
 
 @pytest.mark.asyncio
-async def test_get_selfeval_stats_empty_db(db_session):
-    """Test self-eval stats with no data."""
-    stats = await analytics.get_selfeval_stats(db_session)
+async def test_get_visitor_count(db_session):
+    """Test visitor count - only counts sessions with valid selfeval_json."""
+    db_session.add_all([
+        Session(uuid=uuid4(), selfeval_json={"gender": "male", "age": "30"}),
+        Session(uuid=uuid4(), selfeval_json={"gender": "female"}),
+        Session(uuid=uuid4(), selfeval_json={}),  # Empty - not counted
+        Session(uuid=uuid4(), selfeval_json=None),  # Null - not counted
+    ])
+    await db_session.commit()
+
+    count = await analytics.get_visitor_count(db_session)
+    assert count == 2  # Only first two count (non-empty selfeval)
+
+
+@pytest.mark.asyncio
+async def test_get_visitors_over_time(db_session):
+    """Test daily visitor breakdown."""
+    now = datetime.now(timezone.utc)
+    yesterday = now - timedelta(days=1)
+
+    db_session.add_all([
+        Session(uuid=uuid4(), selfeval_json={"gender": "male"}, created_at=now),
+        Session(uuid=uuid4(), selfeval_json={"gender": "female"}, created_at=now),
+        Session(uuid=uuid4(), selfeval_json={"gender": "other"}, created_at=yesterday),
+    ])
+    await db_session.commit()
+
+    visitors = await analytics.get_visitors_over_time(db_session)
+
+    assert len(visitors) == 2  # 2 different days
+    # Check that we have counts for both days
+    dates = [v["date"] for v in visitors]
+    counts = [v["count"] for v in visitors]
+    assert sum(counts) == 3  # Total of 3 visitors
+
+
+@pytest.mark.asyncio
+async def test_get_exhibition_feedback_percentage(db_session):
+    """Test feedback percentage calculation."""
+    db_session.add_all([
+        Session(uuid=uuid4(), selfeval_json={"gender": "male"},
+                exhibition_feedback_json={"deep_thinking": "5"}),
+        Session(uuid=uuid4(), selfeval_json={"gender": "female"},
+                exhibition_feedback_json={}),  # Empty - not counted
+        Session(uuid=uuid4(), selfeval_json={"gender": "other"}),  # No feedback
+    ])
+    await db_session.commit()
+
+    percentage = await analytics.get_exhibition_feedback_percentage(db_session)
+    assert percentage == pytest.approx(33.3, rel=0.1)  # 1 out of 3
+
+
+# ============================================================================
+# Selfeval Statistics Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_get_detailed_selfeval_stats(db_session):
+    """Test comprehensive selfeval statistics for all 8 fields."""
+    db_session.add_all([
+        Session(uuid=uuid4(), selfeval_json={
+            "gender": "male",
+            "age": "30",
+            "education": "university",
+            "work_status": "employed",
+            "ai_fan": "4",
+            "artist": "yes",
+            "art_field": "painting",
+            "ai_user": "3",
+        }),
+        Session(uuid=uuid4(), selfeval_json={
+            "gender": "female",
+            "age": "25",
+            "education": "university",
+            "work_status": "student",
+            "ai_fan": "5",
+            "artist": "no",
+            "ai_user": "2",
+        }),
+        Session(uuid=uuid4(), selfeval_json={}),  # Empty - not counted
+    ])
+    await db_session.commit()
+
+    stats = await analytics.get_detailed_selfeval_stats(db_session)
+
+    assert stats["total_selfeval"] == 2
+    assert stats["fields"]["gender"]["counts"] == {"male": 1, "female": 1}
+    assert stats["fields"]["gender"]["percentages"]["male"] == 50.0
+    assert stats["fields"]["education"]["counts"]["university"] == 2
+
+
+@pytest.mark.asyncio
+async def test_get_detailed_selfeval_stats_empty_db(db_session):
+    """Test selfeval stats with no data."""
+    stats = await analytics.get_detailed_selfeval_stats(db_session)
 
     assert stats["total_selfeval"] == 0
-    # Empty DB returns empty dict for counts
-    assert stats["gender_counts"] == {}
-    assert stats["education_counts"] == {}
-    assert stats["avg_age"] is None
-    assert stats["min_age"] is None
-    assert stats["max_age"] is None
-
-
-@pytest.mark.asyncio
-async def test_get_selfeval_stats_missing_age(db_session):
-    """Test self-eval stats when age is missing."""
-    db_session.add_all(
-        [
-            Session(
-                uuid=uuid4(),
-                selfeval_json={"gender": "male", "education": "vysokoskolske"},
-            ),  # No age
-            Session(
-                uuid=uuid4(),
-                selfeval_json={"gender": "female", "education": "stredoskolske"},
-            ),  # No age
-        ]
-    )
-    await db_session.commit()
-
-    stats = await analytics.get_selfeval_stats(db_session)
-
-    assert stats["avg_age"] is None
-    assert stats["min_age"] is None
-    assert stats["max_age"] is None
+    assert stats["fields"] == {}
 
 
 # ============================================================================
-# Time Per Exhibit Tests
+# Exhibition Feedback Tests
 # ============================================================================
 
 
 @pytest.mark.asyncio
-async def test_get_average_time_per_exhibit(db_session):
-    """Test the complex logic of pairing start/end events for duration."""
-    exhibit1 = Exhibit(slug="ex1", title="E1", text_md="...", order_index=1)
-    exhibit2 = Exhibit(slug="ex2", title="E2", text_md="...", order_index=2)
-    session1 = Session(uuid=uuid4())
-    session2 = Session(uuid=uuid4())
-    db_session.add_all([exhibit1, exhibit2, session1, session2])
+async def test_get_enhanced_exhibition_feedback_stats(db_session):
+    """Test comprehensive exhibition feedback for all 17 questions."""
+    db_session.add_all([
+        Session(uuid=uuid4(), exhibition_feedback_json={
+            "deep_thinking": "5",
+            "absorbed_content": "4",
+            "new_information": "5",
+            "new_thoughts": "4",
+            "meaning_reflection": "5",
+            "new_questions": "3",
+            "felt_calm": "4",
+            "felt_good": "5",
+            "colors_vitality": "4",
+            "positive_emotions": "5",
+            "reconsider_life": "3",
+            "discover_self": "3",
+            "personally_meaningful": "4",
+            "common_identity": "3",
+            "ai_future_role": "5",
+            "more_exhibitions": "5",
+            "attitude_change": "4",
+        }),
+        Session(uuid=uuid4(), exhibition_feedback_json={
+            "deep_thinking": "4",
+            "absorbed_content": "4",
+            "new_information": "3",
+            "new_thoughts": "3",
+            "meaning_reflection": "4",
+            "new_questions": "3",
+            "felt_calm": "5",
+            "felt_good": "4",
+            "colors_vitality": "4",
+            "positive_emotions": "4",
+            "reconsider_life": "2",
+            "discover_self": "2",
+            "personally_meaningful": "3",
+            "common_identity": "2",
+            "ai_future_role": "4",
+            "more_exhibitions": "5",
+            "attitude_change": "3",
+        }),
+    ])
     await db_session.commit()
 
-    now = datetime.now(timezone.utc)
-
-    db_session.add_all(
-        [
-            # Session 1, Exhibit 1: 10 seconds
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit1.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit1.id,
-                event_type=EventType.VIEW_END,
-                timestamp=now + timedelta(seconds=10),
-            ),
-            # Session 1, Exhibit 1: another 5 seconds (re-entry)
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit1.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now + timedelta(seconds=20),
-            ),
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit1.id,
-                event_type=EventType.VIEW_END,
-                timestamp=now + timedelta(seconds=25),
-            ),
-            # Session 2, Exhibit 1: 30 seconds
-            Event(
-                session_id=session2.id,
-                exhibit_id=exhibit1.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-            Event(
-                session_id=session2.id,
-                exhibit_id=exhibit1.id,
-                event_type=EventType.VIEW_END,
-                timestamp=now + timedelta(seconds=30),
-            ),
-            # Session 2, Exhibit 2: 60 seconds
-            Event(
-                session_id=session2.id,
-                exhibit_id=exhibit2.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-            Event(
-                session_id=session2.id,
-                exhibit_id=exhibit2.id,
-                event_type=EventType.VIEW_END,
-                timestamp=now + timedelta(seconds=60),
-            ),
-            # Incomplete event (no end)
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit2.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-        ]
-    )
-    await db_session.commit()
-
-    avg_times = await analytics.get_average_time_per_exhibit(db_session)
-
-    # Exhibit 1: (10 + 5 + 30) / 3 = 15 seconds
-    assert avg_times[exhibit1.id] == pytest.approx(15.0)
-    # Exhibit 2: 60 / 1 = 60 seconds
-    assert avg_times[exhibit2.id] == pytest.approx(60.0)
-
-
-@pytest.mark.asyncio
-async def test_get_average_time_per_exhibit_empty_db(db_session):
-    """Test average time with no events."""
-    avg_times = await analytics.get_average_time_per_exhibit(db_session)
-    assert avg_times == {}
-
-
-@pytest.mark.asyncio
-async def test_get_average_time_per_exhibit_unpaired_events(db_session):
-    """Test that unpaired events are ignored."""
-    exhibit = Exhibit(slug="ex1", title="E1", text_md="...", order_index=1)
-    session = Session(uuid=uuid4())
-    db_session.add_all([exhibit, session])
-    await db_session.commit()
-
-    now = datetime.now(timezone.utc)
-
-    # Only START events, no END
-    db_session.add_all(
-        [
-            Event(
-                session_id=session.id,
-                exhibit_id=exhibit.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-            Event(
-                session_id=session.id,
-                exhibit_id=exhibit.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now + timedelta(seconds=10),
-            ),
-        ]
-    )
-    await db_session.commit()
-
-    avg_times = await analytics.get_average_time_per_exhibit(db_session)
-    assert avg_times == {}
-
-
-@pytest.mark.asyncio
-async def test_get_average_time_per_exhibit_filters_invalid_durations(db_session):
-    """Test that invalid durations (negative or > 3600s) are filtered."""
-    exhibit = Exhibit(slug="ex1", title="E1", text_md="...", order_index=1)
-    session = Session(uuid=uuid4())
-    db_session.add_all([exhibit, session])
-    await db_session.commit()
-
-    now = datetime.now(timezone.utc)
-
-    # Add a very long duration (over 1 hour)
-    db_session.add_all(
-        [
-            Event(
-                session_id=session.id,
-                exhibit_id=exhibit.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-            Event(
-                session_id=session.id,
-                exhibit_id=exhibit.id,
-                event_type=EventType.VIEW_END,
-                timestamp=now + timedelta(seconds=3700),  # > 3600 seconds
-            ),
-        ]
-    )
-    await db_session.commit()
-
-    avg_times = await analytics.get_average_time_per_exhibit(db_session)
-    # Should be filtered out
-    assert avg_times == {}
-
-
-# ============================================================================
-# Exhibition Feedback Statistics Tests
-# ============================================================================
-
-
-@pytest.mark.asyncio
-async def test_get_exhibition_feedback_stats(db_session):
-    """Test exhibition feedback statistics."""
-    db_session.add_all(
-        [
-            Session(
-                uuid=uuid4(),
-                completed=True,
-                exhibition_feedback_json={
-                    "exhibition_rating": "5",
-                    "ai_art_opinion": "Amazing experience!",
-                },
-            ),
-            Session(
-                uuid=uuid4(),
-                completed=True,
-                exhibition_feedback_json={
-                    "exhibition_rating": "4",
-                    "ai_art_opinion": "Very good.",
-                },
-            ),
-            Session(
-                uuid=uuid4(),
-                completed=True,
-                exhibition_feedback_json={
-                    "exhibition_rating": "5",
-                    "ai_art_opinion": "Loved it!",
-                },
-            ),
-        ]
-    )
-    await db_session.commit()
-
-    stats = await analytics.get_exhibition_feedback_stats(db_session)
-
-    assert stats["total_feedback"] == 3
-    assert stats["avg_rating"] == pytest.approx(4.67, rel=0.01)
-    assert stats["rating_distribution"] == {4: 1, 5: 2}
-    assert stats["ai_opinion_count"] == 3
-    assert len(stats["ai_opinions"]) == 3
-
-
-@pytest.mark.asyncio
-async def test_get_exhibition_feedback_stats_empty_db(db_session):
-    """Test exhibition feedback stats with no data."""
-    stats = await analytics.get_exhibition_feedback_stats(db_session)
-
-    assert stats["total_feedback"] == 0
-    assert stats["avg_rating"] is None
-    assert stats["rating_distribution"] == {}
-    assert stats["ai_opinion_count"] == 0
-    assert stats["ai_opinions"] == []
-
-
-@pytest.mark.asyncio
-async def test_get_exhibition_feedback_stats_missing_opinions(db_session):
-    """Test feedback stats when AI opinions are missing."""
-    db_session.add_all(
-        [
-            Session(
-                uuid=uuid4(),
-                completed=True,
-                exhibition_feedback_json={
-                    "exhibition_rating": "5",
-                    "ai_art_opinion": "",  # Empty
-                },
-            ),
-            Session(
-                uuid=uuid4(),
-                completed=True,
-                exhibition_feedback_json={
-                    "exhibition_rating": "4",
-                    # No ai_art_opinion key
-                },
-            ),
-        ]
-    )
-    await db_session.commit()
-
-    stats = await analytics.get_exhibition_feedback_stats(db_session)
+    stats = await analytics.get_enhanced_exhibition_feedback_stats(db_session)
 
     assert stats["total_feedback"] == 2
-    assert stats["ai_opinion_count"] == 0  # Both filtered out
+    assert "cognitive" in stats["categories"]
+    assert "emotions" in stats["categories"]
+    assert "self_reflection" in stats["categories"]
+
+    # Test specific question
+    deep_thinking = stats["categories"]["cognitive"]["questions"]["deep_thinking"]
+    assert deep_thinking["avg"] == 4.5
+    assert deep_thinking["distribution"] == {4: 1, 5: 1}
+
+
+@pytest.mark.asyncio
+async def test_get_enhanced_exhibition_feedback_stats_empty_db(db_session):
+    """Test exhibition feedback with no data."""
+    stats = await analytics.get_enhanced_exhibition_feedback_stats(db_session)
+
+    assert stats["total_feedback"] == 0
+    assert stats["categories"] == {}
 
 
 # ============================================================================
-# Full Dashboard Statistics Tests
+# Exhibit Question Statistics Tests
 # ============================================================================
 
 
 @pytest.mark.asyncio
-async def test_get_full_dashboard_stats(db_session):
-    """Test full dashboard stats integration."""
+async def test_get_exhibit_question_stats(db_session):
+    """Test exhibit statistics showing session counts."""
+    exhibit1 = Exhibit(slug="ex1", title="Exhibit 1", text_md="...", order_index=1)
+    exhibit2 = Exhibit(slug="ex2", title="Exhibit 2", text_md="...", order_index=2)
+
+    db_session.add_all([exhibit1, exhibit2])
+    await db_session.commit()
+
+    # Add questions
+    q1 = Question(exhibit_id=exhibit1.id, text="Q1", type=QuestionType.TEXT, sort_order=0)
+    q2 = Question(exhibit_id=exhibit2.id, text="Q2", type=QuestionType.TEXT, sort_order=0)
+    db_session.add_all([q1, q2])
+    await db_session.commit()
+
+    # Add sessions and answers
+    session1 = Session(uuid=uuid4())
+    session2 = Session(uuid=uuid4())
+    db_session.add_all([session1, session2])
+    await db_session.commit()
+
+    db_session.add_all([
+        Answer(session_id=session1.id, question_id=q1.id, value_text="Answer 1"),
+        Answer(session_id=session2.id, question_id=q1.id, value_text="Answer 2"),
+        Answer(session_id=session1.id, question_id=q2.id, value_text="Answer 3"),
+    ])
+    await db_session.commit()
+
+    stats = await analytics.get_exhibit_question_stats(db_session)
+
+    assert len(stats) == 2
+    assert stats[0]["exhibit_slug"] == "ex1"
+    assert stats[0]["sessions_answered"] == 2  # Both sessions answered
+    assert stats[1]["exhibit_slug"] == "ex2"
+    assert stats[1]["sessions_answered"] == 1  # Only session1 answered
+
+
+@pytest.mark.asyncio
+async def test_get_exhibit_question_stats_empty_db(db_session):
+    """Test exhibit stats with no data."""
+    stats = await analytics.get_exhibit_question_stats(db_session)
+    assert stats == []
+
+
+# ============================================================================
+# Main Dashboard Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_get_new_dashboard_stats(db_session):
+    """Test main dashboard orchestrator integration."""
     # Create complete test data
     exhibit = Exhibit(slug="ex1", title="E1", text_md="...", order_index=1)
-    session1 = Session(
+    db_session.add(exhibit)
+    await db_session.commit()
+
+    question = Question(exhibit_id=exhibit.id, text="Q1", type=QuestionType.TEXT, sort_order=0)
+    db_session.add(question)
+    await db_session.commit()
+
+    session = Session(
         uuid=uuid4(),
-        completed=True,
-        selfeval_json={"gender": "male", "education": "vysokoskolske", "age": "30"},
-        exhibition_feedback_json={
-            "exhibition_rating": "5",
-            "ai_art_opinion": "Great!",
-        },
+        selfeval_json={"gender": "male", "age": "30"},
+        exhibition_feedback_json={"deep_thinking": "5", "absorbed_content": "4"},
     )
-    session2 = Session(uuid=uuid4(), completed=False)
-    db_session.add_all([exhibit, session1, session2])
+    db_session.add(session)
     await db_session.commit()
 
-    # Add events
-    now = datetime.now(timezone.utc)
-    db_session.add_all(
-        [
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit.id,
-                event_type=EventType.VIEW_START,
-                timestamp=now,
-            ),
-            Event(
-                session_id=session1.id,
-                exhibit_id=exhibit.id,
-                event_type=EventType.VIEW_END,
-                timestamp=now + timedelta(seconds=30),
-            ),
-        ]
-    )
+    db_session.add(Answer(session_id=session.id, question_id=question.id, value_text="Test"))
     await db_session.commit()
 
-    stats = await analytics.get_full_dashboard_stats(db_session)
+    stats = await analytics.get_new_dashboard_stats(db_session)
 
-    # Verify KPIs - should have exactly 2 sessions (from this test only)
-    # Note: db_session fixture provides isolated database per test
-    assert stats["kpis"]["sessions_count"] == 2
-    assert stats["kpis"]["completion_rate"] == pytest.approx(50.0)
-    assert stats["kpis"]["average_time"] == pytest.approx(30.0)
+    # Verify structure
+    assert "basic_dashboard" in stats
+    assert "selfeval_stats" in stats
+    assert "exhibition_feedback_stats" in stats
+    assert "exhibit_question_stats" in stats
 
-    # Verify selfeval stats
-    # Note: SQLite counts sessions with non-null selfeval_json
-    # Both sessions may have selfeval_json (even if empty dict), so check >= 1
-    assert stats["selfeval_stats"]["total_selfeval"] >= 1
-    assert "male" in stats["selfeval_stats"]["gender_counts"]
-    # At least one male in the data
-    assert stats["selfeval_stats"]["gender_counts"]["male"] >= 1
+    # Verify basic dashboard
+    assert stats["basic_dashboard"]["visitor_count"] == 1
+    assert stats["basic_dashboard"]["total_exhibit_answers"] == 1
+    assert stats["basic_dashboard"]["feedback_count"] == 1
 
-    # Verify exhibit times
-    assert f"exhibit_{exhibit.id}" in stats["exhibit_times"]
-    assert stats["exhibit_times"][f"exhibit_{exhibit.id}"] == pytest.approx(30.0)
+    # Verify selfeval
+    assert stats["selfeval_stats"]["total_selfeval"] == 1
 
-    # Verify feedback stats
-    # May have more than expected if SQLite counts empty JSONs
-    assert stats["exhibition_feedback"]["total_feedback"] >= 1
-    # Check that we have a rating
-    if stats["exhibition_feedback"]["avg_rating"] is not None:
-        assert stats["exhibition_feedback"]["avg_rating"] >= 4.0
+    # Verify exhibition feedback
+    assert stats["exhibition_feedback_stats"]["total_feedback"] == 1
+
+    # Verify exhibit stats
+    assert len(stats["exhibit_question_stats"]) == 1
 
 
 @pytest.mark.asyncio
-async def test_get_full_dashboard_stats_empty_db(db_session):
-    """Test full dashboard stats with empty database."""
-    stats = await analytics.get_full_dashboard_stats(db_session)
+async def test_get_new_dashboard_stats_empty_db(db_session):
+    """Test main dashboard with empty database."""
+    stats = await analytics.get_new_dashboard_stats(db_session)
 
-    assert stats["kpis"]["sessions_count"] == 0
-    assert stats["kpis"]["completion_rate"] == 0.0
-    assert stats["kpis"]["average_time"] == "N/A"
+    assert stats["basic_dashboard"]["visitor_count"] == 0
+    assert stats["basic_dashboard"]["total_exhibit_answers"] == 0
+    assert stats["selfeval_stats"]["total_selfeval"] == 0
+    assert stats["exhibition_feedback_stats"]["total_feedback"] == 0
+    assert stats["exhibit_question_stats"] == []
+
+
+# ============================================================================
+# Exhibit Completion Tests
+# ============================================================================
+
+
+@pytest.mark.asyncio
+async def test_get_avg_exhibits_per_visitor(db_session):
+    """Test average exhibits completed per visitor."""
+    # Create 3 exhibits
+    exhibits = [
+        Exhibit(slug=f"ex{i}", title=f"E{i}", text_md="...", order_index=i)
+        for i in range(1, 4)
+    ]
+    db_session.add_all(exhibits)
+    await db_session.commit()
+
+    # Create questions for each exhibit
+    questions = [
+        Question(exhibit_id=ex.id, text=f"Q{ex.id}", type=QuestionType.TEXT, sort_order=0)
+        for ex in exhibits
+    ]
+    db_session.add_all(questions)
+    await db_session.commit()
+
+    # Create 2 visitors (with selfeval)
+    session1 = Session(uuid=uuid4(), selfeval_json={"gender": "male"})
+    session2 = Session(uuid=uuid4(), selfeval_json={"gender": "female"})
+    db_session.add_all([session1, session2])
+    await db_session.commit()
+
+    # Session 1 answered all 3 exhibits
+    # Session 2 answered only 1 exhibit
+    db_session.add_all([
+        Answer(session_id=session1.id, question_id=questions[0].id, value_text="A1"),
+        Answer(session_id=session1.id, question_id=questions[1].id, value_text="A2"),
+        Answer(session_id=session1.id, question_id=questions[2].id, value_text="A3"),
+        Answer(session_id=session2.id, question_id=questions[0].id, value_text="A4"),
+    ])
+    await db_session.commit()
+
+    avg = await analytics.get_avg_exhibits_per_visitor(db_session)
+
+    # (3 + 1) / 2 = 2.0
+    assert avg == 2.0
+
+
+@pytest.mark.asyncio
+async def test_get_avg_exhibits_per_visitor_no_visitors(db_session):
+    """Test average exhibits with no visitors."""
+    avg = await analytics.get_avg_exhibits_per_visitor(db_session)
+    assert avg == 0.0

@@ -74,79 +74,42 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Gender Distribution -->
-                <div class="bg-gray-50 p-5 rounded-lg border">
-                    <h3 class="font-bold text-lg mb-3 text-gray-800">Gender</h3>
-                    {% if selfeval_stats.gender_counts %}
-                        <ul class="space-y-2">
-                            {% for gender, count in selfeval_stats.gender_counts.items() %}
-                                <li class="flex justify-between items-center">
-                                    <span class="text-gray-700">{{ gender }}:</span>
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-semibold">{{ count }}</span>
-                                        <span class="text-sm text-gray-500">({{ selfeval_stats.gender_percentages[gender] }}%)</span>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-gray-500">No data</p>
-                    {% endif %}
-                </div>
+            <!-- Define field labels for better display -->
+            {% set field_labels = {
+                'gender': 'Gender',
+                'age': 'Age',
+                'education': 'Education',
+                'work_status': 'Work Status',
+                'ai_fan': 'AI Enthusiasm (1-5)',
+                'artist': 'Is Artist',
+                'art_field': 'Art Field',
+                'ai_user': 'AI Usage (1-5)'
+            } %}
 
-                <!-- Education Distribution -->
-                <div class="bg-gray-50 p-5 rounded-lg border">
-                    <h3 class="font-bold text-lg mb-3 text-gray-800">Education</h3>
-                    {% if selfeval_stats.education_counts %}
-                        <ul class="space-y-2">
-                            {% for education, count in selfeval_stats.education_counts.items() %}
-                                <li class="flex justify-between items-center">
-                                    <span class="text-gray-700 text-sm">{{ education }}:</span>
-                                    <div class="flex items-center gap-2">
-                                        <span class="font-semibold">{{ count }}</span>
-                                        <span class="text-sm text-gray-500">({{ selfeval_stats.education_percentages[education] }}%)</span>
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-gray-500">No data</p>
-                    {% endif %}
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for field_name, field_data in selfeval_stats.fields.items() %}
+                    <div class="bg-gray-50 p-5 rounded-lg border">
+                        <h3 class="font-bold text-lg mb-3 text-gray-800">
+                            {{ field_labels.get(field_name, field_name|title) }}
+                        </h3>
 
-                <!-- Age Statistics -->
-                <div class="bg-gray-50 p-5 rounded-lg border">
-                    <h3 class="font-bold text-lg mb-3 text-gray-800">Age</h3>
-                    <ul class="space-y-2">
-                        <li class="flex justify-between">
-                            <span class="text-gray-700">Average:</span>
-                            <span class="font-semibold">{{ selfeval_stats.age_avg if selfeval_stats.age_avg else "N/A" }}</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span class="text-gray-700">Min:</span>
-                            <span class="font-semibold">{{ selfeval_stats.age_min if selfeval_stats.age_min else "N/A" }}</span>
-                        </li>
-                        <li class="flex justify-between">
-                            <span class="text-gray-700">Max:</span>
-                            <span class="font-semibold">{{ selfeval_stats.age_max if selfeval_stats.age_max else "N/A" }}</span>
-                        </li>
-                    </ul>
-
-                    {% if selfeval_stats.age_distribution %}
-                        <div class="mt-4 pt-4 border-t">
-                            <h4 class="text-sm font-semibold mb-2 text-gray-700">Distribution:</h4>
-                            <ul class="space-y-1 text-sm">
-                                {% for age_range, count in selfeval_stats.age_distribution.items() %}
-                                    <li class="flex justify-between">
-                                        <span class="text-gray-600">{{ age_range }}:</span>
-                                        <span class="font-medium">{{ count }}</span>
+                        {% if field_data.counts %}
+                            <ul class="space-y-2">
+                                {% for value, count in field_data.counts.items() %}
+                                    <li class="flex justify-between items-center">
+                                        <span class="text-gray-700 text-sm">{{ value }}:</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="font-semibold">{{ count }}</span>
+                                            <span class="text-xs text-gray-500">({{ field_data.percentages[value] }}%)</span>
+                                        </div>
                                     </li>
                                 {% endfor %}
                             </ul>
-                        </div>
-                    {% endif %}
-                </div>
+                        {% else %}
+                            <p class="text-gray-500 text-sm">No data</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
             </div>
         {% else %}
             <p class="text-gray-500">No self-evaluation questionnaires have been submitted yet.</p>
@@ -160,53 +123,58 @@
         <h2 class="text-2xl font-bold mb-6">Exhibition Feedback</h2>
 
         {% if exhibition_feedback_stats.total_feedback > 0 %}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <!-- Overall Rating -->
-                <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
-                    <h3 class="font-bold text-lg mb-2 text-gray-800">Overall Rating</h3>
-                    <div class="text-5xl font-bold text-blue-600 mb-2">
-                        {{ exhibition_feedback_stats.avg_rating }}<span class="text-2xl text-gray-600">/5.0</span>
-                    </div>
-                    <div class="text-sm text-gray-600">
-                        Based on {{ exhibition_feedback_stats.total_feedback }} responses
-                    </div>
-                </div>
-
-                <!-- Rating Distribution -->
-                <div class="bg-gray-50 p-6 rounded-lg border">
-                    <h3 class="font-bold text-lg mb-4 text-gray-800">Rating Distribution</h3>
-                    {% for rating in range(5, 0, -1) %}
-                        <div class="flex items-center mb-2">
-                            <span class="w-12 text-sm font-medium">{{ rating }}★</span>
-                            <div class="flex-1 bg-gray-200 rounded-full h-5 mx-2">
-                                {% set count = exhibition_feedback_stats.rating_distribution.get(rating, 0) %}
-                                {% set percentage = exhibition_feedback_stats.rating_percentages.get(rating, 0) %}
-                                <div class="bg-blue-500 h-5 rounded-full flex items-center justify-end pr-2"
-                                     style="width: {{ percentage }}%">
-                                    {% if percentage > 0 %}
-                                        <span class="text-xs text-white font-medium">{{ percentage }}%</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <span class="w-10 text-sm text-right">{{ count }}</span>
-                        </div>
-                    {% endfor %}
-                </div>
+            <div class="mb-6">
+                <p class="text-lg text-gray-700">
+                    <span class="font-bold text-2xl text-blue-600">{{ exhibition_feedback_stats.total_feedback }}</span>
+                    visitors completed the exhibition feedback questionnaire
+                </p>
             </div>
 
-            <!-- AI Art Opinions -->
-            {% if exhibition_feedback_stats.ai_opinions %}
-                <div class="mt-6">
-                    <h3 class="font-bold text-lg mb-3">AI Art Opinions ({{ exhibition_feedback_stats.ai_opinion_count }} total)</h3>
-                    <div class="space-y-3 max-h-96 overflow-y-auto bg-gray-50 p-4 rounded-lg border">
-                        {% for opinion in exhibition_feedback_stats.ai_opinions %}
-                            <div class="bg-white p-4 rounded-lg border-l-4 border-blue-500 shadow-sm">
-                                <p class="text-sm italic text-gray-700">"{{ opinion }}"</p>
+            <!-- Categories -->
+            {% for category_id, category_data in exhibition_feedback_stats.categories.items() %}
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800 border-b-2 border-gray-200 pb-2">
+                        {{ category_data.label }}
+                    </h3>
+
+                    <div class="space-y-6">
+                        {% for question_id, question_data in category_data.questions.items() %}
+                            <div class="bg-gray-50 p-5 rounded-lg border">
+                                <!-- Question text and average -->
+                                <div class="flex justify-between items-start mb-3">
+                                    <p class="text-sm text-gray-700 flex-1 pr-4">{{ question_data.text }}</p>
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-blue-600">
+                                            {{ question_data.avg }}<span class="text-sm text-gray-600">/5.0</span>
+                                        </div>
+                                        <div class="text-xs text-gray-500">average</div>
+                                    </div>
+                                </div>
+
+                                <!-- Distribution bars -->
+                                <div class="space-y-1">
+                                    {% for rating in range(5, 0, -1) %}
+                                        <div class="flex items-center">
+                                            <span class="w-8 text-xs font-medium text-gray-600">{{ rating }}★</span>
+                                            <div class="flex-1 bg-gray-200 rounded-full h-4 mx-2">
+                                                {% set count = question_data.distribution.get(rating, 0) %}
+                                                {% set percentage = question_data.percentages.get(rating, 0) %}
+                                                <div class="bg-blue-500 h-4 rounded-full flex items-center justify-end pr-1"
+                                                     style="width: {{ percentage }}%">
+                                                    {% if percentage > 0 %}
+                                                        <span class="text-xs text-white font-medium">{{ percentage }}%</span>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <span class="w-8 text-xs text-right text-gray-600">{{ count }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
-            {% endif %}
+            {% endfor %}
         {% else %}
             <p class="text-gray-500">No exhibition feedback has been submitted yet.</p>
         {% endif %}
@@ -219,62 +187,31 @@
         <h2 class="text-2xl font-bold mb-6">Exhibit Questionnaire Statistics</h2>
 
         {% if exhibit_question_stats %}
-            <div class="space-y-8">
-                {% for exhibit in exhibit_question_stats %}
-                    <div class="border rounded-lg p-6 bg-gray-50">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800">{{ exhibit.exhibit_title }}</h3>
-                                <p class="text-sm text-gray-500">Slug: {{ exhibit.exhibit_slug }}</p>
-                            </div>
-                            <div class="bg-blue-100 px-4 py-2 rounded-lg text-center">
-                                <div class="text-2xl font-bold text-blue-700">{{ exhibit.sessions_answered }}</div>
-                                <div class="text-xs text-gray-600">Visitors</div>
-                            </div>
-                        </div>
-
-                        {% if exhibit.questions %}
-                            <div class="space-y-4 mt-4">
-                                {% for question in exhibit.questions %}
-                                    <div class="bg-white p-4 rounded-lg border">
-                                        <div class="mb-2">
-                                            <span class="text-xs font-semibold text-gray-500 uppercase">{{ question.question_type }}</span>
-                                            <h4 class="font-semibold text-gray-800">{{ question.question_text }}</h4>
-                                            <p class="text-sm text-gray-500 mt-1">{{ question.response_count }} responses</p>
-                                        </div>
-
-                                        {% if question.value_distribution %}
-                                            <div class="mt-3 bg-gray-50 p-3 rounded">
-                                                <h5 class="text-xs font-semibold text-gray-600 mb-2">RESPONSE DISTRIBUTION:</h5>
-
-                                                {% if question.question_type == "TEXT" %}
-                                                    <p class="text-sm text-gray-600">{{ question.response_count }} text responses</p>
-
-                                                {% elif question.question_type in ["SINGLE", "LIKERT", "MULTI"] %}
-                                                    <div class="space-y-1">
-                                                        {% for value, count in question.value_distribution.items() %}
-                                                            <div class="flex justify-between items-center text-sm">
-                                                                <span class="text-gray-700">{{ value }}:</span>
-                                                                <div class="flex items-center gap-2">
-                                                                    <div class="bg-blue-500 h-4 rounded"
-                                                                         style="width: {{ (count / question.response_count * 100) | round(0) }}px; min-width: 20px;">
-                                                                    </div>
-                                                                    <span class="font-semibold w-12 text-right">{{ count }}</span>
-                                                                </div>
-                                                            </div>
-                                                        {% endfor %}
-                                                    </div>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-gray-500 text-sm">No questions configured for this exhibit.</p>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100 border-b-2 border-gray-300">
+                            <th class="text-left p-3 font-semibold text-gray-700">#</th>
+                            <th class="text-left p-3 font-semibold text-gray-700">Slug</th>
+                            <th class="text-left p-3 font-semibold text-gray-700">Exhibit Title</th>
+                            <th class="text-center p-3 font-semibold text-gray-700">Sessions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exhibit in exhibit_question_stats %}
+                            <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                <td class="p-3 text-gray-600">{{ loop.index }}</td>
+                                <td class="p-3 text-gray-700 font-mono text-sm">{{ exhibit.exhibit_slug }}</td>
+                                <td class="p-3 text-gray-800 font-medium">{{ exhibit.exhibit_title }}</td>
+                                <td class="p-3 text-center">
+                                    <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                                        {{ exhibit.sessions_answered }}
+                                    </span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         {% else %}
             <p class="text-gray-500">No exhibit question data available yet.</p>

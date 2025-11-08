@@ -76,8 +76,10 @@ async def load_content_from_dir(
         # English-only: use top-level data directly
         lang_data = data
 
-        if slug in existing_exhibits:
-            # Update existing exhibit
+        is_new_exhibit = slug not in existing_exhibits
+
+        if not is_new_exhibit:
+            # Update existing exhibit (metadata only - keep questions intact)
             exhibit = existing_exhibits[slug]
             exhibit.title = lang_data.get("title", "")
             exhibit.text_md = lang_data.get("text_md", "")
@@ -87,12 +89,23 @@ async def load_content_from_dir(
             exhibit.order_index = order_index
             session.add(exhibit)
 
-            # Delete existing images and questions to replace them
+            # Only update images (safe to delete/recreate)
             await session.execute(delete(Image).where(Image.exhibit_id == exhibit.id))
-            await session.execute(
-                delete(Question).where(Question.exhibit_id == exhibit.id)
+
+            # Check if questions changed in YAML and warn
+            existing_questions_result = await session.execute(
+                select(Question).where(Question.exhibit_id == exhibit.id)
             )
-            content_logger.debug(f"Updated existing exhibit: {slug}")
+            existing_questions_count = len(existing_questions_result.scalars().all())
+            yaml_questions_count = len(lang_data.get("questions", []))
+            if existing_questions_count != yaml_questions_count:
+                content_logger.warning(
+                    f"⚠️  QUESTION MISMATCH for '{slug}': "
+                    f"DB has {existing_questions_count} questions, YAML has {yaml_questions_count}. "
+                    f"Questions are STATIC - to update them, backup and reset the database!"
+                )
+
+            content_logger.debug(f"Updated existing exhibit: {slug} (questions preserved)")
         else:
             # Create new exhibit
             exhibit = Exhibit(
@@ -109,7 +122,7 @@ async def load_content_from_dir(
 
         await session.flush()  # Flush to get exhibit.id
 
-        # Add images from YAML
+        # Add images from YAML (always recreate)
         for idx, img_data in enumerate(data.get("images", [])):
             image = Image(
                 exhibit_id=exhibit.id,
@@ -119,30 +132,31 @@ async def load_content_from_dir(
             )
             session.add(image)
 
-        # Add questions from YAML
-        for idx, q_data in enumerate(lang_data.get("questions", [])):
-            q_type = _parse_question_type(q_data["type"])
-            options = q_data.get("options")
-            # Pass layout as part of options_json if present
-            if options is not None:
-                if isinstance(options, list):
-                    options_json = {
-                        "options": options,
-                        "layout": q_data.get("layout", "vertical"),
-                    }
+        # Add questions from YAML - ONLY for NEW exhibits
+        if is_new_exhibit:
+            for idx, q_data in enumerate(lang_data.get("questions", [])):
+                q_type = _parse_question_type(q_data["type"])
+                options = q_data.get("options")
+                # Pass layout as part of options_json if present
+                if options is not None:
+                    if isinstance(options, list):
+                        options_json = {
+                            "options": options,
+                            "layout": q_data.get("layout", "vertical"),
+                        }
+                    else:
+                        options_json = options
                 else:
-                    options_json = options
-            else:
-                options_json = None
-            question = Question(
-                exhibit_id=exhibit.id,
-                text=q_data["text"],
-                type=q_type,
-                options_json=options_json,
-                required=bool(q_data.get("required", False)),
-                sort_order=idx,
-            )
-            session.add(question)
+                    options_json = None
+                question = Question(
+                    exhibit_id=exhibit.id,
+                    text=q_data["text"],
+                    type=q_type,
+                    options_json=options_json,
+                    required=bool(q_data.get("required", False)),
+                    sort_order=idx,
+                )
+                session.add(question)
 
         processed += 1
 

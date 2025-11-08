@@ -6,16 +6,13 @@ Efficient analytics services for Gallery Twin dashboard.
 """
 
 import asyncio
-from collections import defaultdict
-from datetime import date, datetime
 from typing import Any, Dict, List
 
-from sqlalchemy import Integer, case, desc, func, select
+from sqlalchemy import Integer, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import aliased
 from sqlalchemy.sql.functions import coalesce
 
-from app.models import Answer, Event, EventType, Exhibit, Question, Session
+from app.models import Answer, Exhibit, Question, Session
 
 
 # ============================================================================
@@ -163,124 +160,68 @@ async def get_avg_exhibits_per_visitor(db_session: AsyncSession) -> float:
 
 
 async def get_detailed_selfeval_stats(db_session: AsyncSession) -> Dict[str, Any]:
-    """Get comprehensive statistics from self-evaluation forms."""
-    # Extract JSON fields
-    gender_key = func.json_extract(Session.selfeval_json, "$.gender")
-    education_key = func.json_extract(Session.selfeval_json, "$.education")
-    age_key = func.json_extract(Session.selfeval_json, "$.age")
+    """Get comprehensive statistics from ALL self-evaluation form fields."""
+    # Define all selfeval fields
+    fields = {
+        "gender": func.json_extract(Session.selfeval_json, "$.gender"),
+        "age": func.json_extract(Session.selfeval_json, "$.age"),
+        "education": func.json_extract(Session.selfeval_json, "$.education"),
+        "work_status": func.json_extract(Session.selfeval_json, "$.work_status"),
+        "ai_fan": func.json_extract(Session.selfeval_json, "$.ai_fan"),
+        "artist": func.json_extract(Session.selfeval_json, "$.artist"),
+        "art_field": func.json_extract(Session.selfeval_json, "$.art_field"),
+        "ai_user": func.json_extract(Session.selfeval_json, "$.ai_user"),
+    }
+
+    # Base where clause for valid selfeval
+    valid_selfeval_where = [
+        Session.selfeval_json.is_not(None),
+        Session.selfeval_json != "null",
+        Session.selfeval_json != "{}",
+        Session.selfeval_json != "",
+    ]
 
     # Count total selfeval forms
     total_result = await db_session.execute(
-        select(func.count(Session.id)).where(
-            Session.selfeval_json.is_not(None),
-            Session.selfeval_json != "null",
-            Session.selfeval_json != "{}",
-            Session.selfeval_json != "",
-        )
+        select(func.count(Session.id)).where(*valid_selfeval_where)
     )
     total_count = total_result.scalar_one()
 
     if total_count == 0:
         return {
             "total_selfeval": 0,
-            "gender_counts": {},
-            "gender_percentages": {},
-            "education_counts": {},
-            "education_percentages": {},
-            "age_avg": None,
-            "age_min": None,
-            "age_max": None,
-            "age_distribution": {},
+            "fields": {},
         }
 
-    # Gender distribution
-    gender_stmt = (
-        select(
-            coalesce(gender_key, "N/A").label("gender"),
+    # Build queries for all fields
+    field_queries = {}
+    for field_name, field_key in fields.items():
+        field_queries[field_name] = select(
+            coalesce(field_key, "N/A").label("value"),
             func.count(Session.id).label("count")
-        )
-        .where(
-            Session.selfeval_json.is_not(None),
-            Session.selfeval_json != "null",
-            Session.selfeval_json != "{}",
-            Session.selfeval_json != "",
-        )
-        .group_by(coalesce(gender_key, "N/A"))
-    )
-
-    # Education distribution
-    education_stmt = (
-        select(
-            coalesce(education_key, "N/A").label("education"),
-            func.count(Session.id).label("count")
-        )
-        .where(
-            Session.selfeval_json.is_not(None),
-            Session.selfeval_json != "null",
-            Session.selfeval_json != "{}",
-            Session.selfeval_json != "",
-        )
-        .group_by(coalesce(education_key, "N/A"))
-    )
-
-    # Age statistics
-    age_numeric = func.cast(age_key, Integer)
-    age_stats_stmt = select(
-        func.avg(age_numeric),
-        func.min(age_numeric),
-        func.max(age_numeric),
-    ).where(age_key.is_not(None))
-
-    # Age distribution (group by decade)
-    age_dist_stmt = (
-        select(
-            (func.cast(age_key, Integer) / 10 * 10).label("age_group"),
-            func.count(Session.id).label("count")
-        )
-        .where(age_key.is_not(None))
-        .group_by((func.cast(age_key, Integer) / 10 * 10))
-        .order_by((func.cast(age_key, Integer) / 10 * 10))
-    )
+        ).where(*valid_selfeval_where).group_by(coalesce(field_key, "N/A"))
 
     # Execute all queries in parallel
-    gender_res, education_res, age_stats_res, age_dist_res = await asyncio.gather(
-        db_session.execute(gender_stmt),
-        db_session.execute(education_stmt),
-        db_session.execute(age_stats_stmt),
-        db_session.execute(age_dist_stmt),
+    results = await asyncio.gather(
+        *[db_session.execute(query) for query in field_queries.values()]
     )
 
     # Process results
-    gender_counts = {row.gender: row.count for row in gender_res}
-    education_counts = {row.education: row.count for row in education_res}
+    field_stats = {}
+    for field_name, result in zip(field_queries.keys(), results):
+        counts = {row.value: row.count for row in result}
+        percentages = {
+            k: round((v / total_count) * 100, 1) for k, v in counts.items()
+        }
 
-    # Calculate percentages
-    gender_percentages = {
-        k: round((v / total_count) * 100, 1) for k, v in gender_counts.items()
-    }
-    education_percentages = {
-        k: round((v / total_count) * 100, 1) for k, v in education_counts.items()
-    }
-
-    # Age stats
-    avg_age, min_age, max_age = age_stats_res.first() or (None, None, None)
-
-    # Age distribution (format as "20-29": count)
-    age_distribution = {
-        f"{row.age_group}-{row.age_group + 9}": row.count
-        for row in age_dist_res
-    }
+        field_stats[field_name] = {
+            "counts": counts,
+            "percentages": percentages,
+        }
 
     return {
         "total_selfeval": total_count,
-        "gender_counts": gender_counts,
-        "gender_percentages": gender_percentages,
-        "education_counts": education_counts,
-        "education_percentages": education_percentages,
-        "age_avg": round(avg_age, 1) if avg_age else None,
-        "age_min": min_age,
-        "age_max": max_age,
-        "age_distribution": age_distribution,
+        "fields": field_stats,
     }
 
 
@@ -290,7 +231,7 @@ async def get_detailed_selfeval_stats(db_session: AsyncSession) -> Dict[str, Any
 
 
 async def get_enhanced_exhibition_feedback_stats(db_session: AsyncSession) -> Dict[str, Any]:
-    """Get comprehensive exhibition feedback statistics."""
+    """Get comprehensive exhibition feedback statistics for all 17 questions."""
     # Count total feedback (filter out null strings)
     feedback_count_result = await db_session.execute(
         select(func.count(Session.id)).where(
@@ -305,77 +246,116 @@ async def get_enhanced_exhibition_feedback_stats(db_session: AsyncSession) -> Di
     if feedback_count == 0:
         return {
             "total_feedback": 0,
-            "avg_rating": None,
-            "rating_distribution": {},
-            "rating_percentages": {},
-            "ai_opinion_count": 0,
-            "ai_opinions": [],
+            "categories": {},
         }
 
-    # Extract rating field
-    rating_key = func.json_extract(
-        Session.exhibition_feedback_json, "$.exhibition_rating"
-    )
-
-    # Average rating
-    avg_rating_result = await db_session.execute(
-        select(func.avg(func.cast(rating_key, Integer))).where(
-            Session.exhibition_feedback_json.is_not(None),
-            Session.exhibition_feedback_json != "null",
-            Session.exhibition_feedback_json != "{}",
-            Session.exhibition_feedback_json != "",
-        )
-    )
-    avg_rating = avg_rating_result.scalar_one()
-
-    # Rating distribution
-    rating_dist_result = await db_session.execute(
-        select(
-            func.cast(rating_key, Integer).label("rating"),
-            func.count().label("count")
-        )
-        .where(
-            Session.exhibition_feedback_json.is_not(None),
-            Session.exhibition_feedback_json != "null",
-            Session.exhibition_feedback_json != "{}",
-            Session.exhibition_feedback_json != "",
-        )
-        .group_by(func.cast(rating_key, Integer))
-        .order_by(func.cast(rating_key, Integer))
-    )
-    rating_distribution = {row.rating: row.count for row in rating_dist_result}
-
-    # Calculate percentages for each rating
-    rating_percentages = {
-        rating: round((count / feedback_count) * 100, 1)
-        for rating, count in rating_distribution.items()
+    # Define all 17 questions organized by category
+    questions = {
+        "cognitive": {
+            "label": "Cognitive Component",
+            "questions": {
+                "deep_thinking": "During the exhibition I felt an urge to reflect deeply.",
+                "absorbed_content": "During the exhibition I was absorbed/immersed in the content of the paintings.",
+                "new_information": "During the exhibition I acquired new information or insights.",
+                "new_thoughts": "During the exhibition I received stimuli for new ideas.",
+                "meaning_reflection": "During the exhibition I felt compelled to think about the meaning of the exhibited works.",
+                "new_questions": "During the exhibition I felt an urge to ask new questions.",
+            }
+        },
+        "emotions": {
+            "label": "Emotions",
+            "questions": {
+                "felt_calm": "During the exhibition I felt calm.",
+                "felt_good": "During the exhibition I felt good.",
+                "colors_vitality": "During the exhibition I had the impression that the colors and compositions evoked a sense of vitality in me.",
+                "positive_emotions": "During the exhibition I felt positive or pleasant emotions.",
+            }
+        },
+        "self_reflection": {
+            "label": "Self-Reflection",
+            "questions": {
+                "reconsider_life": "The exhibited paintings made me reconsider certain aspects of my personal life.",
+                "discover_self": "The exhibited paintings made me discover new aspects of myself.",
+                "personally_meaningful": "The exhibited paintings made me realize that they are personally meaningful to me.",
+                "common_identity": "The exhibited paintings made me realize that they have something in common with who I am.",
+            }
+        },
+        "ai_role": {
+            "label": "AI Future Role",
+            "questions": {
+                "ai_future_role": "What role do you think artificial intelligence could play in the future in creating original art?",
+            }
+        },
+        "more_exhibitions": {
+            "label": "Interest in Similar Exhibitions",
+            "questions": {
+                "more_exhibitions": "Would you like to see more exhibitions that combine traditional art and modern technologies such as AI?",
+            }
+        },
+        "attitude_change": {
+            "label": "Attitude Change",
+            "questions": {
+                "attitude_change": "Did the exhibition change your attitude toward the use of AI in artistic creation?",
+            }
+        },
     }
 
-    # AI opinions - get ALL opinions (not just 10)
-    ai_opinion_key = func.json_extract(
-        Session.exhibition_feedback_json, "$.ai_art_opinion"
-    )
-    ai_opinions_result = await db_session.execute(
-        select(ai_opinion_key, Session.created_at)
-        .where(
-            Session.exhibition_feedback_json.is_not(None),
-            Session.exhibition_feedback_json != "null",
-            Session.exhibition_feedback_json != "{}",
-            Session.exhibition_feedback_json != "",
-            ai_opinion_key.is_not(None),
-            ai_opinion_key != "",
-        )
-        .order_by(Session.created_at.desc())
-    )
-    ai_opinions = [row[0] for row in ai_opinions_result if row[0]]
+    # Base where clause for valid feedback
+    valid_feedback_where = [
+        Session.exhibition_feedback_json.is_not(None),
+        Session.exhibition_feedback_json != "null",
+        Session.exhibition_feedback_json != "{}",
+        Session.exhibition_feedback_json != "",
+    ]
+
+    # Build queries for all questions
+    category_stats = {}
+
+    for category_id, category_data in questions.items():
+        category_stats[category_id] = {
+            "label": category_data["label"],
+            "questions": {}
+        }
+
+        for question_id, question_text in category_data["questions"].items():
+            question_key = func.json_extract(
+                Session.exhibition_feedback_json, f"$.{question_id}"
+            )
+
+            # Get distribution (count per rating 1-5)
+            dist_result = await db_session.execute(
+                select(
+                    func.cast(question_key, Integer).label("rating"),
+                    func.count().label("count")
+                )
+                .where(*valid_feedback_where)
+                .group_by(func.cast(question_key, Integer))
+                .order_by(func.cast(question_key, Integer))
+            )
+            distribution = {row.rating: row.count for row in dist_result if row.rating is not None}
+
+            # Calculate average
+            avg_result = await db_session.execute(
+                select(func.avg(func.cast(question_key, Integer))).where(*valid_feedback_where)
+            )
+            avg_rating = avg_result.scalar_one()
+
+            # Calculate percentages
+            percentages = {
+                rating: round((count / feedback_count) * 100, 1)
+                for rating, count in distribution.items()
+            }
+
+            category_stats[category_id]["questions"][question_id] = {
+                "text": question_text,
+                "avg": round(avg_rating, 2) if avg_rating else None,
+                "distribution": distribution,
+                "percentages": percentages,
+            }
 
     return {
         "total_feedback": feedback_count,
-        "avg_rating": round(avg_rating, 2) if avg_rating else None,
-        "rating_distribution": rating_distribution,
-        "rating_percentages": rating_percentages,
-        "ai_opinion_count": len(ai_opinions),
-        "ai_opinions": ai_opinions,
+        "categories": category_stats,
     }
 
 
@@ -385,102 +365,36 @@ async def get_enhanced_exhibition_feedback_stats(db_session: AsyncSession) -> Di
 
 
 async def get_exhibit_question_stats(db_session: AsyncSession) -> List[Dict[str, Any]]:
-    """Get detailed statistics for each exhibit's questions with response distributions.
+    """Get simplified exhibit statistics: just exhibit info and session count.
 
-    Returns list of exhibits with their questions and answer breakdowns.
+    Returns list of exhibits with count of sessions that answered at least one question.
     """
-    # First, get all exhibits with their questions
-    exhibits_result = await db_session.execute(
-        select(Exhibit).order_by(Exhibit.order_index)
+    # Get all exhibits with session counts in one optimized query
+    stmt = (
+        select(
+            Exhibit.id,
+            Exhibit.slug,
+            Exhibit.title,
+            Exhibit.order_index,
+            func.count(func.distinct(Answer.session_id)).label("sessions_answered")
+        )
+        .outerjoin(Question, Exhibit.id == Question.exhibit_id)
+        .outerjoin(Answer, Question.id == Answer.question_id)
+        .group_by(Exhibit.id, Exhibit.slug, Exhibit.title, Exhibit.order_index)
+        .order_by(Exhibit.order_index)
     )
-    exhibits = exhibits_result.scalars().all()
 
-    exhibit_stats = []
+    result = await db_session.execute(stmt)
 
-    for exhibit in exhibits:
-        # Get questions for this exhibit
-        questions_result = await db_session.execute(
-            select(Question)
-            .where(Question.exhibit_id == exhibit.id)
-            .order_by(Question.sort_order)
-        )
-        questions = questions_result.scalars().all()
-
-        question_stats = []
-
-        for question in questions:
-            # Count total responses for this question
-            response_count_result = await db_session.execute(
-                select(func.count(Answer.id))
-                .where(Answer.question_id == question.id)
-            )
-            response_count = response_count_result.scalar_one()
-
-            # Get answer distribution based on question type
-            value_distribution = {}
-
-            if question.type in ["SINGLE", "LIKERT"]:
-                # For single choice and Likert, count value_text
-                dist_result = await db_session.execute(
-                    select(
-                        Answer.value_text,
-                        func.count(Answer.id).label("count")
-                    )
-                    .where(Answer.question_id == question.id)
-                    .group_by(Answer.value_text)
-                    .order_by(desc(func.count(Answer.id)))
-                )
-                value_distribution = {
-                    row.value_text: row.count for row in dist_result
-                }
-
-            elif question.type == "MULTI":
-                # For multi-choice, we need to unpack JSON arrays
-                # This is complex - get all answers and process in Python
-                answers_result = await db_session.execute(
-                    select(Answer.value_json)
-                    .where(
-                        Answer.question_id == question.id,
-                        Answer.value_json.is_not(None)
-                    )
-                )
-
-                value_counts = defaultdict(int)
-                for row in answers_result:
-                    if row.value_json and isinstance(row.value_json, list):
-                        for value in row.value_json:
-                            value_counts[value] += 1
-
-                value_distribution = dict(value_counts)
-
-            elif question.type == "TEXT":
-                # For text, just show count (distribution not meaningful)
-                value_distribution = {"responses": response_count}
-
-            question_stats.append({
-                "question_id": question.id,
-                "question_text": question.text,
-                "question_type": question.type,
-                "response_count": response_count,
-                "value_distribution": value_distribution,
-                "options": question.options_json if question.options_json else None,
-            })
-
-        # Count sessions that answered at least one question for this exhibit
-        sessions_count_result = await db_session.execute(
-            select(func.count(func.distinct(Answer.session_id)))
-            .join(Question, Answer.question_id == Question.id)
-            .where(Question.exhibit_id == exhibit.id)
-        )
-        sessions_count = sessions_count_result.scalar_one()
-
-        exhibit_stats.append({
-            "exhibit_id": exhibit.id,
-            "exhibit_slug": exhibit.slug,
-            "exhibit_title": exhibit.title,
-            "sessions_answered": sessions_count,
-            "questions": question_stats,
-        })
+    exhibit_stats = [
+        {
+            "exhibit_id": row.id,
+            "exhibit_slug": row.slug,
+            "exhibit_title": row.title,
+            "sessions_answered": row.sessions_answered,
+        }
+        for row in result
+    ]
 
     return exhibit_stats
 

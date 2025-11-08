@@ -1,19 +1,13 @@
-import io
-import json
-import csv
-from typing import Annotated, AsyncGenerator, Optional
+from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, Request
-from fastapi.responses import HTMLResponse, StreamingResponse
-from sqlalchemy import select
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import HTMLResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from app.auth import get_admin_user
 from app.db import get_async_session
-from app.models import Answer, Exhibit, Question, Session
 from app.services import analytics
-from app.logging_config import log_admin_access, logger
+from app.logging_config import log_admin_access
 
 from app.main import templates
 
@@ -30,7 +24,7 @@ async def admin_dashboard(
     db_session: Annotated[AsyncSession, Depends(get_async_session)],
     admin_user: Annotated[str, Depends(get_admin_user)],
 ):
-    """Admin dashboard with KPIs and self-eval stats."""
+    """Comprehensive admin dashboard with all statistics."""
     # Log admin dashboard access
     log_admin_access(
         username=admin_user,
@@ -40,264 +34,16 @@ async def admin_dashboard(
         user_agent=request.headers.get("user-agent"),
     )
 
-    stats = await analytics.get_full_dashboard_stats(db_session)
+    # Get all dashboard statistics
+    stats = await analytics.get_new_dashboard_stats(db_session)
+
     return templates.TemplateResponse(
         request,
         "admin/dashboard.html",
         {
-            "kpis": stats["kpis"],
+            "basic_dashboard": stats["basic_dashboard"],
             "selfeval_stats": stats["selfeval_stats"],
-            "exhibit_times": stats["exhibit_times"],
-            "exhibition_feedback": stats["exhibition_feedback"],
-        },
-    )
-
-
-@router.get("/responses", response_class=HTMLResponse)
-async def admin_responses(
-    request: Request,
-    db_session: Annotated[AsyncSession, Depends(get_async_session)],
-    admin_user: Annotated[str, Depends(get_admin_user)],
-    exhibit_id: Optional[int] = Query(None),
-    question_id: Optional[int] = Query(None),
-):
-    """Paginated and filtered table of user responses."""
-    # Log admin responses access
-    log_admin_access(
-        username=admin_user,
-        action="responses_viewed",
-        level="DEBUG",
-        exhibit_filter=exhibit_id,
-        question_filter=question_id,
-        ip_address=request.client.host if request.client else None,
-        user_agent=request.headers.get("user-agent"),
-    )
-
-    # Base query remains the same, it's efficient enough for this view
-    stmt = (
-        select(Answer)
-        .join(Session)
-        .join(Question)
-        .options(
-            selectinload(Answer.session),
-            selectinload(Answer.question).selectinload(Question.exhibit),
-        )
-        .order_by(Answer.created_at.desc())
-    )
-
-    if exhibit_id:
-        stmt = stmt.where(Question.exhibit_id == exhibit_id)
-    if question_id:
-        stmt = stmt.where(Answer.question_id == question_id)
-
-    result = await db_session.execute(stmt)
-    responses = result.scalars().all()
-
-    # For filter dropdowns - this is fine as the number of exhibits/questions is small
-    exhibits_res, questions_res = await asyncio.gather(
-        db_session.execute(select(Exhibit).order_by(Exhibit.order_index)),
-        db_session.execute(select(Question).order_by(Question.text)),
-    )
-    exhibits = exhibits_res.scalars().all()
-    questions = questions_res.scalars().all()
-
-    return templates.TemplateResponse(
-        request,
-        "admin/responses.html",
-        {
-            "responses": responses,
-            "exhibits": exhibits,
-            "questions": questions,
-            "selected_exhibit": exhibit_id,
-            "selected_question": question_id,
-        },
-    )
-
-
-async def stream_csv(responses: list[Answer]) -> AsyncGenerator[str, None]:
-    """Generator to stream CSV rows using Python's built-in csv module."""
-    output = io.StringIO()
-    writer = csv.writer(output)
-
-    header = [
-        "session_uuid",
-        "ts",
-        "exhibit_slug",
-        "question_id",
-        "question_text",
-        "answer_value",
-        "selfeval_json",
-    ]
-    writer.writerow(header)
-    yield output.getvalue()
-
-    for r in responses:
-        output.seek(0)
-        output.truncate(0)
-        row = [
-            r.session.uuid,
-            r.created_at.isoformat(),
-            r.question.exhibit.slug if r.question.exhibit else None,
-            r.question.id,
-            r.question.text,
-            json.dumps(r.value_json, ensure_ascii=False),
-            (
-                json.dumps(r.session.selfeval_json, ensure_ascii=False)
-                if r.session.selfeval_json
-                else None
-            ),
-        ]
-        writer.writerow(row)
-        yield output.getvalue()
-
-
-@router.get("/export.csv")
-async def export_responses_csv(
-    db_session: Annotated[AsyncSession, Depends(get_async_session)],
-    admin_user: Annotated[str, Depends(get_admin_user)],
-):
-    """Export all responses to a CSV file using a streaming response."""
-    # Log CSV export action
-    log_admin_access(
-        username=admin_user,
-        action="csv_export",
-        level="DEBUG",
-        export_format="csv",
-    )
-
-    stmt = (
-        select(Answer)
-        .options(
-            selectinload(Answer.session),
-            selectinload(Answer.question).selectinload(Question.exhibit),
-        )
-        .order_by(Answer.created_at.desc())
-    )
-    result = await db_session.execute(stmt)
-    responses = result.scalars().all()  # Still loads all, but streams the output
-
-    # Log export completion with record count
-    logger.info(
-        "CSV export completed",
-        extra={
-            "admin_user": admin_user,
-            "total_records": len(responses),
-            "export_format": "csv",
-        },
-    )
-
-    return StreamingResponse(
-        stream_csv(responses),
-        media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=export.csv"},
-    )
-
-
-# Need to import asyncio to use asyncio.gather
-import asyncio
-
-
-@router.get("/export-feedback.csv")
-async def export_exhibition_feedback_csv(
-    db_session: Annotated[AsyncSession, Depends(get_async_session)],
-    admin_user: Annotated[str, Depends(get_admin_user)],
-):
-    """Export exhibition feedback to a CSV file."""
-    # Log CSV export action
-    log_admin_access(
-        username=admin_user,
-        action="feedback_csv_export",
-        level="DEBUG",
-        export_format="csv",
-    )
-
-    # Get sessions with exhibition feedback
-    stmt = (
-        select(Session)
-        .where(Session.exhibition_feedback_json.is_not(None))
-        .order_by(Session.created_at.desc())
-    )
-    result = await db_session.execute(stmt)
-    sessions = result.scalars().all()
-
-    logger.info(
-        "Exhibition feedback CSV export completed",
-        extra={
-            "admin_user": admin_user,
-            "total_records": len(sessions),
-            "export_format": "csv",
-        },
-    )
-
-    return StreamingResponse(
-        stream_feedback_csv(sessions),
-        media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=exhibition_feedback.csv"},
-    )
-
-
-async def stream_feedback_csv(sessions: list[Session]) -> AsyncGenerator[str, None]:
-    """Generator to stream exhibition feedback CSV rows."""
-    output = io.StringIO()
-    writer = csv.writer(output)
-
-    header = [
-        "session_uuid",
-        "submitted_at",
-        "exhibition_rating",
-        "ai_art_opinion",
-        "has_selfeval",
-        "session_completed",
-    ]
-    writer.writerow(header)
-    yield output.getvalue()
-
-    for session in sessions:
-        output.seek(0)
-        output.truncate(0)
-
-        feedback = session.exhibition_feedback_json or {}
-
-        row = [
-            session.uuid,
-            feedback.get("submitted_at", session.last_activity.isoformat()),
-            feedback.get("exhibition_rating", ""),
-            feedback.get("ai_art_opinion", ""),
-            "Yes" if session.selfeval_json else "No",
-            "Yes" if session.completed else "No",
-        ]
-        writer.writerow(row)
-        yield output.getvalue()
-
-
-@router.get("/feedbacks", response_class=HTMLResponse)
-async def admin_feedbacks(
-    request: Request,
-    db_session: Annotated[AsyncSession, Depends(get_async_session)],
-    admin_user: Annotated[str, Depends(get_admin_user)],
-):
-    """List sessions that submitted exhibition feedback."""
-    # Log admin feedbacks access
-    log_admin_access(
-        username=admin_user,
-        action="feedbacks_viewed",
-        level="DEBUG",
-        ip_address=request.client.host if request.client else None,
-        user_agent=request.headers.get("user-agent"),
-    )
-
-    stmt = (
-        select(Session)
-        .where(Session.exhibition_feedback_json.is_not(None))
-        .order_by(Session.created_at.desc())
-    )
-    result = await db_session.execute(stmt)
-    sessions = result.scalars().all()
-
-    return templates.TemplateResponse(
-        request,
-        "admin/feedbacks.html",
-        {
-            "sessions": sessions,
+            "exhibition_feedback_stats": stats["exhibition_feedback_stats"],
+            "exhibit_question_stats": stats["exhibit_question_stats"],
         },
     )

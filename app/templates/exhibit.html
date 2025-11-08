@@ -53,7 +53,7 @@
             {{ site_copy.exhibit.next_button if site_copy and site_copy.exhibit else 'Next' }} &raquo;
         </a>
         {% else %}
-        <a href="{{ url_for('thanks') }}"
+        <a href="{{ url_for('exhibition_feedback_get') }}"
             class="cta-button w-full sm:w-auto justify-center">
             {{ site_copy.exhibit.finish_button if site_copy and site_copy.exhibit else 'Finish' }} ✓
         </a>
@@ -306,7 +306,7 @@
             {{ site_copy.exhibit.next_button if site_copy and site_copy.exhibit else 'Next' }} &raquo;
         </a>
         {% else %}
-        <a href="{{ url_for('thanks') }}"
+        <a href="{{ url_for('exhibition_feedback_get') }}"
             class="cta-button w-full sm:w-auto justify-center">
             {{ site_copy.exhibit.finish_button if site_copy and site_copy.exhibit else 'Finish' }} ✓
         </a>

@@ -392,7 +392,7 @@ async def save_answer(
             total_exhibits_completed=current_exhibit.order_index,
         )
 
-        # Redirect to exhibition feedback before thanks page
+        # Always redirect to exhibition feedback before thanks page
         return RedirectResponse(url="/exhibition-feedback", status_code=303)
 
 
@@ -403,10 +403,6 @@ async def exhibition_feedback_get(
 ):
     """Show exhibition feedback form."""
     session, db_session = tracked_session
-
-    # Check if session is completed
-    if not session.completed:
-        return RedirectResponse(url="/", status_code=303)
 
     # Check if feedback already submitted
     if session.exhibition_feedback_json:
@@ -440,10 +436,6 @@ async def submit_exhibition_feedback(
 ):
     """Submit exhibition feedback."""
     session, db_session = tracked_session
-
-    # Check if session is completed
-    if not session.completed:
-        raise HTTPException(status_code=400, detail="Session not completed")
 
     # Check if feedback already submitted
     if session.exhibition_feedback_json:

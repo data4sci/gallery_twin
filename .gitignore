@@ -219,3 +219,6 @@ __marimo__/
 db/gallery.db
 db/gallery.db.backup
 *.db
+
+# logs
+logs/

@@ -1,0 +1,59 @@
+# Prevent large/unnecessary files from inflating the Docker build context
+
+# Version control
+.git
+.gitignore
+.github
+
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.hypothesis/
+.nox/
+.tox/
+.coverage*
+
+# Virtual environments & tool directories
+.venv/
+env/
+venv/
+ENV/
+.pdm-python
+.pdm-build/
+.pixi
+.pybuilder/
+.pyre/
+.pytype/
+
+# Build/distribution outputs
+build/
+dist/
+eggs/
+.eggs/
+wheels/
+*.manifest
+*.spec
+htmlcov/
+
+# Local databases & logs
+db/
+*.db
+logs/
+tmp/
+tmp.db
+
+# Secrets & local overrides
+.env
+.envrc
+.env.*
+!.env.example
+
+# OS/editor files
+.DS_Store
+*.swp
+*.swo

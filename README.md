@@ -36,6 +36,7 @@ Aplikace běží na `http://localhost:8000`
 docker build -t gallery-twin .
 
 # 2. Spuštění kontejneru
+mkdir -p db # Vytvoření adresáře pro databázi (nepovinné, aplikace vytvoří databázi i bez něj)
 docker run -d -p 8000:8000 \
   -v $(pwd)/db:/app/db \
   -e SECRET_KEY="your-secret-key" \
@@ -47,9 +48,12 @@ docker run -d -p 8000:8000 \
 # 3. Zobrazení logů
 docker logs -f gallery-twin-app
 
-# 4. Zastavení a smazání kontejneru
+# 4. Zastavení (a smazání kontejneru)
 docker stop gallery-twin-app
-docker rm gallery-twin-app
+# docker rm gallery-twin-app
+
+# 5. Znovu spuštění
+docker start gallery-twin-app
 ```
 
 **Poznámky:**

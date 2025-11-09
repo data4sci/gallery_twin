@@ -38,7 +38,8 @@ docker build -t gallery-twin .
 # 2. Spuštění kontejneru
 mkdir -p db # Vytvoření adresáře pro databázi (nepovinné, aplikace vytvoří databázi i bez něj)
 docker run -d -p 8000:8000 \
-  -v $(pwd)/db:/app/db \
+  -v $(pwd)/db:/home/data/db \
+  -e DATABASE_URL="sqlite+aiosqlite:///home/data/db/gallery.db" \
   -e SECRET_KEY="your-secret-key" \
   -e ADMIN_USERNAME="admin" \
   -e ADMIN_PASSWORD="secure-password" \

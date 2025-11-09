@@ -26,14 +26,20 @@ COPY ./content ./content
 COPY ./static ./static
 COPY ./alembic ./alembic
 
-# 8. Set non-sensitive default environment variables
-ENV DATABASE_URL="sqlite+aiosqlite:///./db/gallery.db"
+# 8. Create database directory PŘED nastavením ENV
+RUN mkdir -p /home/data/db
+
+# 9. Set environment variables for Azure
+ENV DATABASE_URL="sqlite+aiosqlite:///home/data/db/gallery.db"
 ENV DEBUG="false"
 ENV SESSION_TTL="2592000"
 ENV ALLOWED_ORIGINS='["*"]'
 
-# 9. Expose port where application will run
+# 10. Expose port where application will run
 EXPOSE 8000
 
-# 10. Run migrations and start application
-CMD uv run alembic -c alembic/alembic.ini upgrade head && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000
+# 11. Create startup script
+COPY startup.sh /startup.sh
+RUN chmod +x /startup.sh
+
+CMD ["/startup.sh"]

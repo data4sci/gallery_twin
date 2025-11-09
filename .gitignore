@@ -222,3 +222,6 @@ db/gallery.db.backup
 
 # logs
 logs/
+
+# Azure
+AZURE.md 

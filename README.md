@@ -38,8 +38,8 @@ docker build -t gallery-twin .
 # 2. Spuštění kontejneru
 mkdir -p db # Vytvoření adresáře pro databázi (nepovinné, aplikace vytvoří databázi i bez něj)
 docker run -d -p 8000:8000 \
-  -v $(pwd)/db:/home/data/db \
-  -e DATABASE_URL="sqlite+aiosqlite:///home/data/db/gallery.db" \
+  -v $(pwd)/db:/home/site/wwwroot/db \
+  -e DATABASE_URL="sqlite+aiosqlite:////home/site/wwwroot/db/gallery.db" \
   -e SECRET_KEY="your-secret-key" \
   -e ADMIN_USERNAME="admin" \
   -e ADMIN_PASSWORD="secure-password" \
@@ -59,7 +59,7 @@ docker start gallery-twin-app
 
 **Poznámky:**
 
-- `-v $(pwd)/db:/app/db` - persistentní databáze (přežije restart kontejneru)
+- `-v $(pwd)/db:/home/site/wwwroot/db` - persistentní databáze (přežije restart kontejneru)
 - Citlivé proměnné (`SECRET_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`) musíte předat jako argumenty
 - Ne-citlivé proměnné mají výchozí hodnoty v Dockerfile a lze je přepsat pomocí `-e`
 
@@ -182,7 +182,7 @@ docker exec -it gallery-twin-app /bin/bash
 docker stop gallery-twin-app
 docker rm gallery-twin-app
 docker build -t gallery-twin .
-docker run -d -p 8000:8000 -v $(pwd)/db:/app/db --env-file .env --name gallery-twin-app gallery-twin
+docker run -d -p 8000:8000 -v $(pwd)/db:/home/site/wwwroot/db --env-file .env --name gallery-twin-app gallery-twin
 ```
 
 ### Použití .env souboru
@@ -192,7 +192,7 @@ Místo předávání jednotlivých proměnných můžete použít `.env` soubor:
 ```bash
 mkdir -p db
 docker run -d -p 8000:8000 \
-  -v $(pwd)/db:/app/db \
+  -v $(pwd)/db:/home/site/wwwroot/db \
   --env-file .env \
   --name gallery-twin-app \
   gallery-twin
@@ -256,7 +256,7 @@ docker restart gallery-twin-app
 docker stop gallery-twin-app
 docker rm gallery-twin-app
 docker build -t gallery-twin .
-docker run -d -p 8000:8000 -v $(pwd)/db:/app/db --env-file .env --name gallery-twin-app gallery-twin
+docker run -d -p 8000:8000 -v $(pwd)/db:/home/site/wwwroot/db --env-file .env --name gallery-twin-app gallery-twin
 
 # Změna portu
 docker run -d -p 8001:8000 ...  # Aplikace dostupná na portu 8001

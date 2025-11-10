@@ -4,10 +4,10 @@ set -e
 echo "Starting application..."
 
 # Ensure database directory exists
-mkdir -p /home/data/db
+mkdir -p /home/site/wwwroot/db
 
 # Update DATABASE_URL to point to persistent storage
-export DATABASE_URL="sqlite+aiosqlite:////home/data/db/gallery.db"
+export DATABASE_URL="sqlite+aiosqlite:////home/site/wwwroot/db/gallery.db"
 
 # Start the application
 echo "Starting uvicorn..."

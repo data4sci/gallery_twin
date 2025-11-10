@@ -26,11 +26,11 @@ COPY ./content ./content
 COPY ./static ./static
 COPY ./alembic ./alembic
 
-# 8. Create database directory PŘED nastavením ENV
-RUN mkdir -p /home/data/db
+# 8. Create database directory in správné cestě
+RUN mkdir -p /home/site/wwwroot/db
 
-# 9. Set environment variables for Azure
-ENV DATABASE_URL="sqlite+aiosqlite:///home/data/db/gallery.db"
+# 9. Set environment variables
+ENV DATABASE_URL="sqlite+aiosqlite:////home/site/wwwroot/db/gallery.db"
 ENV DEBUG="false"
 ENV SESSION_TTL="2592000"
 ENV ALLOWED_ORIGINS='["*"]'

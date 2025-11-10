@@ -5,11 +5,13 @@ load_dotenv()
 
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 from sqlalchemy import text
 
-from app.middleware import SessionMiddleware, RequestLoggingMiddleware
+from app.middleware import SessionMiddleware, RequestLoggingMiddleware, ProxyHeadersMiddleware
 from app.services.startup_tasks import run_startup_tasks
 from app.services.site_copy import load_site_copy
 from app.db import get_async_session
@@ -44,7 +46,9 @@ async def lifespan(app):
 
 app = FastAPI(title="Gallery Twin", lifespan=lifespan)
 
-# Middleware is added before routers
+# Middleware is added before routers (order matters: last added = first executed)
+# ProxyHeadersMiddleware must be first to properly detect HTTPS from Azure
+app.add_middleware(ProxyHeadersMiddleware)
 app.add_middleware(RequestLoggingMiddleware)
 app.add_middleware(SessionMiddleware)
 

@@ -9,6 +9,32 @@ from app.logging_config import log_request
 SESSION_COOKIE_NAME = "gallery_session_id"
 
 
+class ProxyHeadersMiddleware(BaseHTTPMiddleware):
+    """
+    Middleware to handle X-Forwarded-* headers from reverse proxies like Azure App Service.
+
+    Azure terminates SSL and forwards HTTP to the container, but sets X-Forwarded-Proto: https.
+    This middleware updates the request scope so FastAPI/Starlette correctly recognizes HTTPS.
+    """
+
+    async def dispatch(
+        self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
+        # Check if the request came through a proxy with X-Forwarded-Proto header
+        forwarded_proto = request.headers.get("X-Forwarded-Proto")
+        if forwarded_proto:
+            # Update the request scope to reflect the original protocol
+            request.scope["scheme"] = forwarded_proto
+
+        # Also handle X-Forwarded-Host if present (for correct URL generation)
+        forwarded_host = request.headers.get("X-Forwarded-Host")
+        if forwarded_host:
+            request.scope["server"] = (forwarded_host, None)
+
+        response = await call_next(request)
+        return response
+
+
 class RequestLoggingMiddleware(BaseHTTPMiddleware):
     """Middleware to log incoming HTTP requests."""
 
@@ -52,10 +78,13 @@ class SessionMiddleware(BaseHTTPMiddleware):
         max_age = int(os.getenv("SESSION_TTL", "60"))
         # Always set the cookie with the definitive session id so the
         # browser receives a refreshed expiry (sliding expiration behavior).
+        # Use secure flag when request is over HTTPS (detected via X-Forwarded-Proto)
+        is_secure = request.url.scheme == "https"
         response.set_cookie(
             key=SESSION_COOKIE_NAME,
             value=final_session_id,
             httponly=True,
+            secure=is_secure,
             samesite="lax",
             max_age=max_age,
             expires=max_age,

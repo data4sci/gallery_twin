@@ -26,11 +26,11 @@ COPY ./content ./content
 COPY ./static ./static
 COPY ./alembic ./alembic
 
-# 8. Create database directory in správné cestě
-RUN mkdir -p /home/site/wwwroot/db
+# 8. Create database directory in /home for persistent storage
+RUN mkdir -p /home/database
 
 # 9. Set environment variables
-ENV DATABASE_URL="sqlite+aiosqlite:////home/site/wwwroot/db/gallery.db"
+ENV DATABASE_URL="sqlite+aiosqlite:////home/database/gallery.db"
 ENV DEBUG="false"
 ENV SESSION_TTL="2592000"
 ENV ALLOWED_ORIGINS='["*"]'

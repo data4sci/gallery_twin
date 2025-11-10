@@ -3,11 +3,11 @@ set -e
 
 echo "Starting application..."
 
-# Ensure database directory exists
-mkdir -p /home/site/wwwroot/db
+# Ensure database directory exists in /home for persistent storage
+mkdir -p /home/database
 
 # Update DATABASE_URL to point to persistent storage
-export DATABASE_URL="sqlite+aiosqlite:////home/site/wwwroot/db/gallery.db"
+export DATABASE_URL="sqlite+aiosqlite:////home/database/gallery.db"
 
 # Start the application
 echo "Starting uvicorn..."

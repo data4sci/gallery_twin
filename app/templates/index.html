@@ -62,9 +62,11 @@
                     {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name' }}
                 </li>
                 <li>
-                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
-                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}<br>
-                    {{ site_copy.index.human_reproductions2 if site_copy and site_copy.index and site_copy.index.human_reproductions2 else '' }}
+                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong></p>
+                    <p>{{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}</p>
+                    <p>{{ site_copy.index.human_reproductions2 if site_copy and site_copy.index and site_copy.index.human_reproductions2 else '' }}</p>
+                    <p>{{ site_copy.index.human_reproductions3 if site_copy and site_copy.index and site_copy.index.human_reproductions3 else '' }}</p>
+                    <p>{{ site_copy.index.human_reproductions4 if site_copy and site_copy.index and site_copy.index.human_reproductions4 else '' }}</p>
                 </li>
             </ul>
         </div>

@@ -51,22 +51,32 @@
             <ul class="space-y-3 credits-list">
                 <li>
                     <strong>{{ site_copy.index.project_sponsor_label if site_copy and site_copy.index and site_copy.index.project_sponsor_label else 'Project Sponsor:' }}</strong><br>
-                    {{ site_copy.index.project_sponsor if site_copy and site_copy.index and site_copy.index.project_sponsor else 'Radek Martinek' }}
+                    {{ (site_copy.index.project_sponsor if site_copy and site_copy.index and site_copy.index.project_sponsor else 'Radek Martinek') | safe }}
                 </li>
                 <li>
                     <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
-                    {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name' }}
+                    {{ (site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name') | safe }}
                 </li>
                 <li>
                     <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong><br>
-                    {{ site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name' }}
+                    {{ (site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name') | safe }}
                 </li>
                 <li>
-                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong></p>
-                    <p>{{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}</p>
-                    <p>{{ site_copy.index.human_reproductions2 if site_copy and site_copy.index and site_copy.index.human_reproductions2 else '' }}</p>
-                    <p>{{ site_copy.index.human_reproductions3 if site_copy and site_copy.index and site_copy.index.human_reproductions3 else '' }}</p>
-                    <p>{{ site_copy.index.human_reproductions4 if site_copy and site_copy.index and site_copy.index.human_reproductions4 else '' }}</p>
+                    <strong>{{ site_copy.index.questionnaire_architect_label if site_copy and site_copy.index and site_copy.index.questionnaire_architect_label else 'Behavioral Research Lead:' }}</strong><br>
+                    {{ (site_copy.index.questionnaire_architect if site_copy and site_copy.index and site_copy.index.questionnaire_architect else 'Vojtěch Koňařík') | safe }}
+                </li>
+                <li>
+                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
+                    {{ (site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name') | safe }}<br>
+                    {% if site_copy and site_copy.index and site_copy.index.human_reproductions2 %}
+                        {{ site_copy.index.human_reproductions2 | safe }}<br>
+                    {% endif %}
+                    {% if site_copy and site_copy.index and site_copy.index.human_reproductions3 %}
+                        {{ site_copy.index.human_reproductions3 | safe }}<br>
+                    {% endif %}
+                    {% if site_copy and site_copy.index and site_copy.index.human_reproductions4 %}
+                        {{ site_copy.index.human_reproductions4 | safe }}
+                    {% endif %}
                 </li>
             </ul>
         </div>

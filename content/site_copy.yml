@@ -45,16 +45,18 @@ index:
   # Credits section
   credits_title: "Credits"
   project_sponsor_label: "Project Sponsor:"
-  project_sponsor: "Radek Martinek"
+  project_sponsor: '<a href="https://www.linkedin.com/in/radek-martinek-placeholder/">Radek Martinek</a>'
   original_artist_label: "Original Artworks:"
-  original_artist: "Klára Sedlo"
-  ai_reproductions_label: "AI Reproductions:"
-  ai_reproductions: "Robert Šamárek"
+  original_artist: '<a href="https://www.linkedin.com/in/klara-sedlo-placeholder/">Klára Sedlo</a>'
+  ai_reproductions_label: "AI Reproductions & Gallery Twin:"
+  ai_reproductions: '<a href="https://www.linkedin.com/in/robert-samarek-placeholder/">Robert Šamárek</a>'
+  questionnaire_architect_label: "Behavioral Research Lead:"
+  questionnaire_architect: '<a href="https://www.linkedin.com/in/vojtech-konarik-placeholder/">Vojtěch Koňařík</a>'
   human_reproductions_label: "Human Reproductions:"
   human_reproductions: "ZUŠ Háj ve Slezsku"
   human_reproductions2: "Fakulta umění Ostravské univerzity"
-  human_reproductions3: "Amélie Šamárková"
-  human_reproductions4: "Lucie Šamárková"
+  human_reproductions3: '<a href="https://www.linkedin.com/in/amelie-samarkova-placeholder/">Amélie Šamárková</a>'
+  human_reproductions4: '<a href="https://www.linkedin.com/in/lucie-samarkova-placeholder/">Lucie Šamárková</a>'
 
   # Visit in Prague section
   visit_title: "Visit the Exhibition in Prague"

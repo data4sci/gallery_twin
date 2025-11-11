@@ -35,10 +35,13 @@
                 {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
             </h2>
             <p class="mb-4">
-                {{ site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'First paragraph describing the exhibition concept and main themes.' }}
+                {{ (site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'First paragraph describing the exhibition concept and main themes.') | safe }}
             </p>
             <p>
                 {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'Second paragraph with additional context about the artistic approach.' }}
+            </p>
+            <p>
+                {{ site_copy.index.about_text3 if site_copy and site_copy.index and site_copy.index.about_text3 else 'Third paragraph elaborating on the collaboration between human artists and AI.' }}
             </p>
         </div>
         <div class="gallery-card card-padding">
@@ -56,7 +59,8 @@
                 </li>
                 <li>
                     <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
-                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}
+                    {{ site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name' }}<br>
+                    {{ site_copy.index.human_reproductions2 if site_copy and site_copy.index and site_copy.index.human_reproductions2 else '' }}
                 </li>
             </ul>
         </div>

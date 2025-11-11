@@ -31,8 +31,10 @@ index:
 
   # About section
   about_title: "About the Exhibition"
-  about_text: "Metamorphoses 2.0 presents a dialogue between human imagination and machine perception. Each piece embodies a digital metamorphosis—where code becomes canvas and data becomes emotion."
-  about_text2: "The collection investigates aesthetic concepts such as transformation, ambiguity, and emergence through contemporary AI models and algorithmic processes."
+  about_text: |-
+    Metamorphoses of Art 2.0 is a collaborative effort by the <a href="https://www.fei.vsb.cz/en/">Faculty of Electrical Engineering and Computer Science at VŠB–Technical University of Ostrava</a>, the <a href="https://www.ekf.vsb.cz/en/">Faculty of Economics at VŠB–TUO</a>, the <a href="https://www.ciirc.cvut.cz/en/">Czech Institute of Informatics, Robotics and Cybernetics at CTU</a>, the <a href="https://www.zushaj.cz/">Vladislav Vančura Elementary Art School in Háj ve Slezsku</a>, and the <a href="https://fu.osu.cz/en/">Faculty of Fine Arts at the University of Ostrava</a>.
+  about_text2: "The Exhibition presents a dialogue between human imagination and machine perception. Each piece embodies a digital metamorphosis—where code becomes canvas and data becomes emotion."
+  about_text3: "The collection investigates aesthetic concepts such as transformation, ambiguity, and emergence through contemporary AI models and algorithmic processes."
 
   # Credits section
   credits_title: "Credits"
@@ -42,6 +44,7 @@ index:
   ai_reproductions: "Robert Šamárek"
   human_reproductions_label: "Human Reproductions:"
   human_reproductions: "ZUŠ Háj ve Slezsku"
+  human_reproductions2: "Fakulta umění Ostravské univerzity"
 
   # Visit in Prague section
   visit_title: "Visit the Exhibition in Prague"
@@ -55,7 +58,7 @@ index:
   exhibition_duration_label: "Duration"
   exhibition_duration: "November 13, 2025 – January 4, 2026"
   exhibition_hours_label: "Opening Hours"
-  exhibition_hours: "TODO: Specify opening hours"
+  exhibition_hours: "Monday – Friday: 8:00 – 18:00"
   exhibition_admission_label: "Admission"
   exhibition_admission: "Free and open to the public"
 
@@ -64,7 +67,7 @@ index:
   vernissage_date_label: "Date"
   vernissage_date: "November 13, 2025"
   vernissage_time_label: "Time"
-  vernissage_time: "TODO: Specify time"
+  vernissage_time: "17:00 – 20:00"
   vernissage_description: "TODO: specify... You are cordially invited to the opening reception of this unique exhibition. Join us for a guided tour, discussion with the creators, and light refreshments."
 
 thanks:

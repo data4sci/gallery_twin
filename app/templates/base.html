@@ -50,6 +50,22 @@
             line-height: 1.2;
         }
 
+        body a:not(.cta-button):not(.secondary-button):not(.header-logo) {
+            color: var(--link-color);
+            transition: color 0.2s ease;
+        }
+
+        body a:not(.cta-button):not(.secondary-button):not(.header-logo):visited {
+            color: var(--link-color);
+        }
+
+        body a:not(.cta-button):not(.secondary-button):not(.header-logo):hover,
+        body a:not(.cta-button):not(.secondary-button):not(.header-logo):focus,
+        body a:not(.cta-button):not(.secondary-button):not(.header-logo):visited:hover,
+        body a:not(.cta-button):not(.secondary-button):not(.header-logo):visited:focus {
+            color: var(--link-hover);
+        }
+
         /* Cards */
         .gallery-card {
             background: var(--color-highlight);
@@ -112,6 +128,11 @@
             border-radius: 9999px;
             transition: all 0.3s ease;
             text-decoration: none;
+        }
+
+        .header-logo {
+            text-decoration: none;
+            color: var(--color-dark);
         }
 
         .secondary-button:hover {

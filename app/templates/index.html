@@ -50,6 +50,10 @@
             </h2>
             <ul class="space-y-3 credits-list">
                 <li>
+                    <strong>{{ site_copy.index.project_sponsor_label if site_copy and site_copy.index and site_copy.index.project_sponsor_label else 'Project Sponsor:' }}</strong><br>
+                    {{ site_copy.index.project_sponsor if site_copy and site_copy.index and site_copy.index.project_sponsor else 'Radek Martinek' }}
+                </li>
+                <li>
                     <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
                     {{ site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name' }}
                 </li>

@@ -29,7 +29,7 @@
     </header>
 
     <!-- About Section -->
-    <section class="grid md:grid-cols-2 gap-8 my-12 md:my-16">
+    <section class="grid md:grid-cols-2 xl:grid-cols-3 gap-8 my-12 md:my-16">
         <div class="gallery-card card-padding">
             <h2 class="section-heading">
                 {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
@@ -69,6 +69,14 @@
                     <p>{{ site_copy.index.human_reproductions4 if site_copy and site_copy.index and site_copy.index.human_reproductions4 else '' }}</p>
                 </li>
             </ul>
+        </div>
+        <div class="gallery-card card-padding">
+            <h2 class="section-heading">
+                {{ site_copy.index.technology_title if site_copy and site_copy.index and site_copy.index.technology_title else 'Technical Stack' }}
+            </h2>
+            <p>
+                {{ (site_copy.index.technology_text if site_copy and site_copy.index and site_copy.index.technology_text else 'Brief overview of the technical workflow.') | safe }}
+            </p>
         </div>
     </section>
 

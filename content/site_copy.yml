@@ -33,8 +33,8 @@ index:
   about_title: "About the Exhibition"
   about_text: |-
     Metamorphoses of Art 2.0 is a collaborative effort by the <a href="https://www.fei.vsb.cz/en/">Faculty of Electrical Engineering and Computer Science at VŠB–Technical University of Ostrava</a>, the <a href="https://www.ekf.vsb.cz/en/">Faculty of Economics at VŠB–TUO</a>, the <a href="https://www.ciirc.cvut.cz/en/">Czech Institute of Informatics, Robotics and Cybernetics at CTU</a>, the <a href="https://www.zushaj.cz/">Vladislav Vančura Elementary Art School in Háj ve Slezsku</a>, and the <a href="https://fu.osu.cz/en/">Faculty of Fine Arts at the University of Ostrava</a>.
-  about_text2: "The Exhibition presents a dialogue between human imagination and machine perception. Each piece embodies a digital metamorphosis—where code becomes canvas and data becomes emotion."
-  about_text3: "The collection investigates aesthetic concepts such as transformation, ambiguity, and emergence through contemporary AI models and algorithmic processes."
+  about_text2: "Klára Sedlo’s surreal oil paintings—shaped by imagination, dreams, and subconscious impressions—serve as the control layer for the experiment. Each canvas was described by an AI model, its prose prompt guiding several image generators whose printed “copies” hang beside the originals so visitors can judge composition, gesture, and emotional fidelity."
+  about_text3: "The same prompt reached students from partnering art schools, without revealing Klára’s source material, and their responses were scanned and printed at gallery scale. The exhibition now places originals, AI reproductions, and student interpretations in dialogue, revealing how human and artificial neural networks notice different signals—and challenging you to guess which versions were born of silicon or a young hand."
 
   # Credits section
   credits_title: "Credits"

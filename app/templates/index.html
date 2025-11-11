@@ -37,7 +37,7 @@
             <p class="mb-4">
                 {{ (site_copy.index.about_text if site_copy and site_copy.index and site_copy.index.about_text else 'First paragraph describing the exhibition concept and main themes.') | safe }}
             </p>
-            <p>
+            <p class="mb-4">
                 {{ site_copy.index.about_text2 if site_copy and site_copy.index and site_copy.index.about_text2 else 'Second paragraph with additional context about the artistic approach.' }}
             </p>
             <p>

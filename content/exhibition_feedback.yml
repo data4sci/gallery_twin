@@ -10,7 +10,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 1
+    sort_order: 4
   - id: absorbed_content
     type: likert
     text: "During the exhibition I was absorbed/immersed in the content of the paintings."
@@ -21,7 +21,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 2
+    sort_order: 5
   - id: new_information
     type: likert
     text: "During the exhibition I acquired new information or insights."
@@ -32,7 +32,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 3
+    sort_order: 6
   - id: new_thoughts
     type: likert
     text: "During the exhibition I received stimuli for new ideas."
@@ -43,7 +43,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 4
+    sort_order: 7
   - id: meaning_reflection
     type: likert
     text: "During the exhibition I felt compelled to think about the meaning of the exhibited works."
@@ -54,7 +54,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 5
+    sort_order: 8
   - id: new_questions
     type: likert
     text: "During the exhibition I felt an urge to ask new questions."
@@ -65,7 +65,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 6
+    sort_order: 9
 
   # 2) Emotions
   - id: felt_calm
@@ -78,7 +78,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 7
+    sort_order: 10
   - id: felt_good
     type: likert
     text: "During the exhibition I felt good."
@@ -89,7 +89,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 8
+    sort_order: 11
   - id: colors_vitality
     type: likert
     text: "During the exhibition I had the impression that the colors and compositions evoked a sense of vitality in me."
@@ -100,7 +100,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 9
+    sort_order: 12
   - id: positive_emotions
     type: likert
     text: "During the exhibition I felt positive or pleasant emotions."
@@ -111,7 +111,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 10
+    sort_order: 13
 
   # 3) Self-reflection
   - id: reconsider_life
@@ -124,7 +124,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 11
+    sort_order: 14
   - id: discover_self
     type: likert
     text: "The exhibited paintings made me discover new aspects of myself."
@@ -135,7 +135,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 12
+    sort_order: 15
   - id: personally_meaningful
     type: likert
     text: "The exhibited paintings made me realize that they are personally meaningful to me."
@@ -146,7 +146,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 13
+    sort_order: 16
   - id: common_identity
     type: likert
     text: "The exhibited paintings made me realize that they have something in common with who I am."
@@ -157,7 +157,7 @@ questions:
         1: "Strongly disagree"
         5: "Strongly agree"
     required: true
-    sort_order: 14
+    sort_order: 17
 
   # 4) AI future role
   - id: ai_future_role
@@ -170,7 +170,7 @@ questions:
         1: "No role at all"
         5: "A very significant role"
     required: true
-    sort_order: 15
+    sort_order: 1
 
   # 5) More exhibitions
   - id: more_exhibitions
@@ -183,7 +183,7 @@ questions:
         1: "Definitely no"
         5: "Definitely yes"
     required: true
-    sort_order: 16
+    sort_order: 2
 
   # 6) Attitude change
   - id: attitude_change
@@ -196,4 +196,4 @@ questions:
         1: "Definitely no"
         5: "Definitely yes"
     required: true
-    sort_order: 17
+    sort_order: 3

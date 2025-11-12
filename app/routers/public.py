@@ -370,6 +370,9 @@ async def exhibition_feedback_get(
     # Load questions from YAML config
     questions = ExhibitionFeedbackConfig.get_questions()
 
+    # Sort questions by sort_order
+    questions = sorted(questions, key=lambda q: q.get("sort_order", 999))
+
     return templates.TemplateResponse(
         request,
         "exhibition_feedback.html",

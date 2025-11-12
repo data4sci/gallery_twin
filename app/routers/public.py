@@ -35,7 +35,11 @@ async def index(
     # English-only app: no language selection step
 
     # Get first exhibit from randomized order (for display, not navigation)
-    exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+    exhibit_order = (
+        session.exhibit_order_json.get("order", [])
+        if session.exhibit_order_json
+        else []
+    )
     first_slug = get_exhibit_slug_by_index(exhibit_order, 0)
 
     return templates.TemplateResponse(
@@ -59,7 +63,11 @@ async def selfeval_get(
 
     if session.selfeval_json:
         # If self-evaluation is done, redirect to the first exhibit in randomized order
-        exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+        exhibit_order = (
+            session.exhibit_order_json.get("order", [])
+            if session.exhibit_order_json
+            else []
+        )
         first_slug = get_exhibit_slug_by_index(exhibit_order, 0)
         if first_slug:
             return RedirectResponse(url=f"/exhibit/{first_slug}", status_code=303)
@@ -96,7 +104,11 @@ async def selfeval_post(
     )
 
     # Get first exhibit from randomized order
-    exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+    exhibit_order = (
+        session.exhibit_order_json.get("order", [])
+        if session.exhibit_order_json
+        else []
+    )
     first_slug = get_exhibit_slug_by_index(exhibit_order, 0)
 
     if first_slug:
@@ -146,7 +158,11 @@ async def exhibit_detail(
     has_answered = result.scalars().first() is not None
 
     # Get prev/next exhibits from randomized order
-    exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+    exhibit_order = (
+        session.exhibit_order_json.get("order", [])
+        if session.exhibit_order_json
+        else []
+    )
     prev_slug = get_previous_exhibit_slug(exhibit_order, slug)
     next_slug = get_next_exhibit_slug(exhibit_order, slug)
 
@@ -213,7 +229,11 @@ async def save_answer(
     )
     if result.scalars().first() is not None:
         # Answers already submitted, redirect to next exhibit from randomized order
-        exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+        exhibit_order = (
+            session.exhibit_order_json.get("order", [])
+            if session.exhibit_order_json
+            else []
+        )
         next_slug = get_next_exhibit_slug(exhibit_order, slug)
         if next_slug:
             return RedirectResponse(url=f"/exhibit/{next_slug}", status_code=303)
@@ -268,7 +288,11 @@ async def save_answer(
 
     if missing_required:
         # Get prev/next from randomized order for error display
-        exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+        exhibit_order = (
+            session.exhibit_order_json.get("order", [])
+            if session.exhibit_order_json
+            else []
+        )
         prev_slug = get_previous_exhibit_slug(exhibit_order, slug)
         next_slug = get_next_exhibit_slug(exhibit_order, slug)
 
@@ -280,7 +304,7 @@ async def save_answer(
             ImageResponse.model_validate(img).model_dump() for img in exhibit.images
         ]
 
-        error_msg = "Vyplňte všechny povinné otázky: " + ", ".join(
+        error_msg = "Answer all mandatory questions: " + ", ".join(
             f"'{q.text}'" for q in missing_required
         )
 
@@ -324,7 +348,11 @@ async def save_answer(
     )
 
     # Find next exhibit from randomized order
-    exhibit_order = session.exhibit_order_json.get("order", []) if session.exhibit_order_json else []
+    exhibit_order = (
+        session.exhibit_order_json.get("order", [])
+        if session.exhibit_order_json
+        else []
+    )
     next_slug = get_next_exhibit_slug(exhibit_order, slug)
 
     if next_slug:

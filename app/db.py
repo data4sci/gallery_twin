@@ -16,7 +16,8 @@ from app.models import Session
 
 
 # Database configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./db/gallery.db")
+# Use absolute path in /home for Azure persistence, fallback for local dev
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:////home/database/gallery.db")
 
 # Convert SQLite URL to async version for SQLAlchemy
 if DATABASE_URL.startswith("sqlite:///"):

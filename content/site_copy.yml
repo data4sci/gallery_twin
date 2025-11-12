@@ -44,11 +44,11 @@ index:
 
   # Credits section
   credits_title: "Credits"
-  project_sponsor_label: "Project Sponsor:"
+  project_sponsor_label: "Project Garant:"
   project_sponsor: '<a href="https://www.linkedin.com/in/radek-martinek-placeholder/">Radek Martinek</a>'
   original_artist_label: "Original Artworks:"
   original_artist: '<a href="https://www.linkedin.com/in/klara-sedlo-placeholder/">Klára Sedlo</a>'
-  ai_reproductions_label: "AI Reproductions & Gallery Twin:"
+  ai_reproductions_label: "AI Engineering & Gallery Twin:"
   ai_reproductions: '<a href="https://www.linkedin.com/in/robert-samarek-placeholder/">Robert Šamárek</a>'
   questionnaire_architect_label: "Behavioral Research Lead:"
   questionnaire_architect: '<a href="https://www.linkedin.com/in/vojtech-konarik-placeholder/">Vojtěch Koňařík</a>'

@@ -107,6 +107,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -118,6 +119,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -130,6 +132,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -142,9 +145,10 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
-- type: multi
+- type: single
   text: Which of these reproductions do you think was definitely created by a human?
   options:
   - A
@@ -153,9 +157,10 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
-- type: multi
+- type: single
   text: Which of these reproductions do you think was definitely created by artificial
     intelligence?
   options:
@@ -165,6 +170,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -176,6 +182,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -187,6 +194,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -198,6 +206,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -209,6 +218,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -220,6 +230,7 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal
 - type: single
@@ -231,5 +242,6 @@ questions:
   - D
   - E
   - F
+  - G
   required: true
   layout: horizontal

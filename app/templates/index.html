@@ -29,8 +29,8 @@
     </header>
 
     <!-- About Section -->
-    <section class="grid md:grid-cols-2 xl:grid-cols-3 gap-8 my-12 md:my-16">
-        <div class="gallery-card card-padding">
+    <section class="about-grid my-12 md:my-16">
+        <div class="gallery-card card-padding about-card">
             <h2 class="section-heading">
                 {{ site_copy.index.about_title if site_copy and site_copy.index and site_copy.index.about_title else 'About the Exhibition' }}
             </h2>
@@ -44,49 +44,51 @@
                 {{ site_copy.index.about_text3 if site_copy and site_copy.index and site_copy.index.about_text3 else 'Third paragraph elaborating on the collaboration between human artists and AI.' }}
             </p>
         </div>
-        <div class="gallery-card card-padding">
-            <h2 class="section-heading">
-                {{ site_copy.index.credits_title if site_copy and site_copy.index and site_copy.index.credits_title else 'Credits' }}
-            </h2>
-            <ul class="space-y-3 credits-list">
-                <li>
-                    <strong>{{ site_copy.index.project_sponsor_label if site_copy and site_copy.index and site_copy.index.project_sponsor_label else 'Project Sponsor:' }}</strong><br>
-                    {{ (site_copy.index.project_sponsor if site_copy and site_copy.index and site_copy.index.project_sponsor else 'Radek Martinek') | safe }}
-                </li>
-                <li>
-                    <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
-                    {{ (site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name') | safe }}
-                </li>
-                <li>
-                    <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong><br>
-                    {{ (site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name') | safe }}
-                </li>
-                <li>
-                    <strong>{{ site_copy.index.questionnaire_architect_label if site_copy and site_copy.index and site_copy.index.questionnaire_architect_label else 'Behavioral Research Lead:' }}</strong><br>
-                    {{ (site_copy.index.questionnaire_architect if site_copy and site_copy.index and site_copy.index.questionnaire_architect else 'Vojtěch Koňařík') | safe }}
-                </li>
-                <li>
-                    <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
-                    {{ (site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name') | safe }}<br>
-                    {% if site_copy and site_copy.index and site_copy.index.human_reproductions2 %}
-                        {{ site_copy.index.human_reproductions2 | safe }}<br>
-                    {% endif %}
-                    {% if site_copy and site_copy.index and site_copy.index.human_reproductions3 %}
-                        {{ site_copy.index.human_reproductions3 | safe }}<br>
-                    {% endif %}
-                    {% if site_copy and site_copy.index and site_copy.index.human_reproductions4 %}
-                        {{ site_copy.index.human_reproductions4 | safe }}
-                    {% endif %}
-                </li>
-            </ul>
-        </div>
-        <div class="gallery-card card-padding">
-            <h2 class="section-heading">
-                {{ site_copy.index.technology_title if site_copy and site_copy.index and site_copy.index.technology_title else 'Technical Stack' }}
-            </h2>
-            <p>
-                {{ (site_copy.index.technology_text if site_copy and site_copy.index and site_copy.index.technology_text else 'Brief overview of the technical workflow.') | safe }}
-            </p>
+        <div class="side-cards">
+            <div class="gallery-card card-padding">
+                <h2 class="section-heading">
+                    {{ site_copy.index.credits_title if site_copy and site_copy.index and site_copy.index.credits_title else 'Credits' }}
+                </h2>
+                <ul class="space-y-3 credits-list">
+                    <li>
+                        <strong>{{ site_copy.index.project_sponsor_label if site_copy and site_copy.index and site_copy.index.project_sponsor_label else 'Project Sponsor:' }}</strong><br>
+                        {{ (site_copy.index.project_sponsor if site_copy and site_copy.index and site_copy.index.project_sponsor else 'Radek Martinek') | safe }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.original_artist_label if site_copy and site_copy.index and site_copy.index.original_artist_label else 'Original Artworks:' }}</strong><br>
+                        {{ (site_copy.index.original_artist if site_copy and site_copy.index and site_copy.index.original_artist else 'Artist Name') | safe }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.ai_reproductions_label if site_copy and site_copy.index and site_copy.index.ai_reproductions_label else 'AI Reproductions:' }}</strong><br>
+                        {{ (site_copy.index.ai_reproductions if site_copy and site_copy.index and site_copy.index.ai_reproductions else 'AI Artist Name') | safe }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.questionnaire_architect_label if site_copy and site_copy.index and site_copy.index.questionnaire_architect_label else 'Behavioral Research Lead:' }}</strong><br>
+                        {{ (site_copy.index.questionnaire_architect if site_copy and site_copy.index and site_copy.index.questionnaire_architect else 'Vojtěch Koňařík') | safe }}
+                    </li>
+                    <li>
+                        <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
+                        {{ (site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name') | safe }}<br>
+                        {% if site_copy and site_copy.index and site_copy.index.human_reproductions2 %}
+                            {{ site_copy.index.human_reproductions2 | safe }}<br>
+                        {% endif %}
+                        {% if site_copy and site_copy.index and site_copy.index.human_reproductions3 %}
+                            {{ site_copy.index.human_reproductions3 | safe }}<br>
+                        {% endif %}
+                        {% if site_copy and site_copy.index and site_copy.index.human_reproductions4 %}
+                            {{ site_copy.index.human_reproductions4 | safe }}
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+            <div class="gallery-card card-padding">
+                <h2 class="section-heading">
+                    {{ site_copy.index.technology_title if site_copy and site_copy.index and site_copy.index.technology_title else 'Technical Stack' }}
+                </h2>
+                <p>
+                    {{ (site_copy.index.technology_text if site_copy and site_copy.index and site_copy.index.technology_text else 'Brief overview of the technical workflow.') | safe }}
+                </p>
+            </div>
         </div>
     </section>
 
@@ -181,6 +183,30 @@
 </div>
 
 <style>
+    /* About Grid Layout */
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+        .about-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .about-card {
+            grid-row: 1 / 3;
+        }
+
+        .side-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+    }
+
     /* Hero Section */
     .hero-section {
         position: relative;

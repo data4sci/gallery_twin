@@ -218,14 +218,14 @@
                 {% elif question.type == 'single' %}
                 {% set layout = question.options_json.layout if question.options_json is mapping and 'layout' in question.options_json else 'vertical' %}
                 {% set options = question.options_json.options if question.options_json is mapping and 'options' in question.options_json else question.options_json %}
-                <div class="{% if layout == 'horizontal' %}flex flex-row space-x-4{% else %}space-y-2{% endif %}">
+                <div class="{% if layout == 'horizontal' %}flex flex-row flex-wrap gap-4{% else %}space-y-2{% endif %}">
                     {% for option in options %}
                     <label class="flex items-center">
-                        <input id="q_{{ question.id }}_{{ loop.index }}" 
-                            type="radio" 
+                        <input id="q_{{ question.id }}_{{ loop.index }}"
+                            type="radio"
                             name="q_{{ question.id }}"
-                            value="{{ option }}" 
-                            class="mr-2" 
+                            value="{{ option }}"
+                            class="mr-2"
                             {% if option == answer %}checked{% endif %}>
                         <span>{{ option }}</span>
                     </label>

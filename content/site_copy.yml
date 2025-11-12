@@ -37,26 +37,28 @@ index:
   about_text3: "The same prompt reached students from partnering art schools, without revealing Klára’s source material, and their responses were scanned and printed at gallery scale. The exhibition now places originals, AI reproductions, and student interpretations in dialogue, revealing how human and artificial neural networks notice different signals—and challenging you to guess which versions were born of silicon or a young hand."
   technology_title: "Technical Stack"
   technology_text: |-
-    <strong>Analysis & prompts:</strong> <a href="https://openai.com/index/gpt-4-1">GPT-4.1 with Vision</a> reads each digitized original, while <a href="https://openai.com/index/o-series">o4-mini</a> compresses the 4 000-character prompts used downstream.<br>
-    <strong>Image synth:</strong> parallel batches in <a href="https://openai.com/dall-e-3">DALL·E 3</a>, <a href="https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev">FLUX.1-Krea-dev</a>, <a href="https://qwenlm.github.io/">Qwen3</a>, and <a href="https://deepmind.google/technologies/imagen/">Imagen 4</a> generate the AI canvases displayed onsite.<br>
-    <strong>Voice & delivery:</strong> descriptions are voiced by <a href="https://platform.openai.com/docs/guides/text-to-speech">TTS-1 HD</a>.<br>
+    <strong>Analysis & prompts:</strong> <a href="https://openai.com/index/gpt-4-1">GPT-4.1 with Vision</a> reads each digitized original.<br><br>
+    <strong>Image synth:</strong> parallel batches in <a href="https://openai.com/dall-e-3">DALL·E 3</a>, <a href="https://huggingface.co/spaces/black-forest-labs/FLUX.1-dev">FLUX.1-Krea-dev</a>, <a href="https://qwenlm.github.io/">Qwen3</a>, and <a href="https://deepmind.google/technologies/imagen/">Imagen 4</a> generate the AI canvases displayed onsite.<br><br>
+    <strong>Voice & delivery:</strong> descriptions are voiced by <a href="https://platform.openai.com/docs/guides/text-to-speech">TTS-1 HD</a>.<br><br>
     Stitched with <a href="https://www.python.org/">Python</a> tooling that also manages this web app (Digital Twin).
 
   # Credits section
   credits_title: "Credits"
   project_sponsor_label: "Project Garant:"
-  project_sponsor: '<a href="https://www.linkedin.com/in/radek-martinek-placeholder/">Radek Martinek</a>'
+  project_sponsor: '<a href="https://www.linkedin.com/in/radek-martinek-014bb6b3/">Radek Martinek</a>'
   original_artist_label: "Original Artworks:"
-  original_artist: '<a href="https://www.linkedin.com/in/klara-sedlo-placeholder/">Klára Sedlo</a>'
+  original_artist: '<a href="https://www.linkedin.com/in/kl%C3%A1ra-sedlo-970746333/">Klára Sedlo</a>'
   ai_reproductions_label: "AI Engineering & Gallery Twin:"
-  ai_reproductions: '<a href="https://www.linkedin.com/in/robert-samarek-placeholder/">Robert Šamárek</a>'
-  questionnaire_architect_label: "Behavioral Research Lead:"
-  questionnaire_architect: '<a href="https://www.linkedin.com/in/vojtech-konarik-placeholder/">Vojtěch Koňařík</a>'
+  ai_reproductions: '<a href="https://www.linkedin.com/in/robert-s-2b05a771/">Robert Šamárek</a>'
+  questionnaire_architect_label: "Research Lead:"
+  questionnaire_architect: '<a href="https://www.linkedin.com/in/vojt%C4%9Bch-ko%C5%88a%C5%99%C3%ADk-8a9855220/">Vojtěch Koňařík</a>'
+  researcher_label: "Researcher:"
+  researcher: "Kristýna Stromská"
   human_reproductions_label: "Human Reproductions:"
   human_reproductions: "ZUŠ Háj ve Slezsku"
   human_reproductions2: "Fakulta umění Ostravské univerzity"
-  human_reproductions3: '<a href="https://www.linkedin.com/in/amelie-samarkova-placeholder/">Amélie Šamárková</a>'
-  human_reproductions4: '<a href="https://www.linkedin.com/in/lucie-samarkova-placeholder/">Lucie Šamárková</a>'
+  human_reproductions3: "Amélie Šamárková"
+  human_reproductions4: '<a href="https://www.linkedin.com/in/lucie-samarkova-4a2a48101/">Lucie Šamárková</a>'
 
   # Visit in Prague section
   visit_title: "Visit the Exhibition in Prague"

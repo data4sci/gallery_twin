@@ -67,6 +67,10 @@
                         {{ (site_copy.index.questionnaire_architect if site_copy and site_copy.index and site_copy.index.questionnaire_architect else 'Vojtěch Koňařík') | safe }}
                     </li>
                     <li>
+                        <strong>{{ site_copy.index.researcher_label if site_copy and site_copy.index and site_copy.index.researcher_label else 'Researcher:' }}</strong><br>
+                        {{ (site_copy.index.researcher if site_copy and site_copy.index and site_copy.index.researcher else 'Kristýna Stromská') | safe }}
+                    </li>
+                    <li>
                         <strong>{{ site_copy.index.human_reproductions_label if site_copy and site_copy.index and site_copy.index.human_reproductions_label else 'Human Reproductions:' }}</strong><br>
                         {{ (site_copy.index.human_reproductions if site_copy and site_copy.index and site_copy.index.human_reproductions else 'Institution Name') | safe }}<br>
                         {% if site_copy and site_copy.index and site_copy.index.human_reproductions2 %}

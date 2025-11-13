@@ -146,7 +146,7 @@
                     <li>
                         <strong>{{ site_copy.index.venue_location_label if site_copy and site_copy.index and site_copy.index.venue_location_label else 'Location:' }}</strong><br>
                         {{ site_copy.index.venue_location if site_copy and site_copy.index and site_copy.index.venue_location else 'Venue name' }},<br>
-                        {{ site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Full address' }},<br>
+                        {{ (site_copy.index.venue_address if site_copy and site_copy.index and site_copy.index.venue_address else 'Full address') | safe }},<br>
                         {{ site_copy.index.venue_room if site_copy and site_copy.index and site_copy.index.venue_room else 'Room/Building details' }}
                     </li>
                     <li>
@@ -179,7 +179,7 @@
                     </li>
                 </ul>
                 <p class="vernissage-description">
-                    {{ site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'Description of the opening reception event, invitation text.' }}
+                    {{ (site_copy.index.vernissage_description if site_copy and site_copy.index and site_copy.index.vernissage_description else 'Description of the opening reception event, invitation text.') | safe }}
                 </p>
             </div>
         </div>
@@ -389,7 +389,6 @@
         line-height: 1.75;
         padding-top: 2rem;
         border-top: 1px solid rgba(226, 184, 69, 0.2);
-        font-style: italic;
     }
 
     /* Fade-in animations */

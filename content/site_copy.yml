@@ -56,7 +56,7 @@ index:
   researcher: "Kristýna Stromská"
   human_reproductions_label: "Human Reproductions:"
   human_reproductions: "ZUŠ Háj ve Slezsku"
-  human_reproductions2: "Fakulta umění Ostravské univerzity"
+  human_reproductions2: "Faculty of Fine Arts, University of Ostrava"
   human_reproductions3: "Amélie Šamárková"
   human_reproductions4: '<a href="https://www.linkedin.com/in/lucie-samarkova-4a2a48101/">Lucie Šamárková</a>'
 
@@ -65,15 +65,15 @@ index:
 
   # Venue information
   venue_title: "Exhibition Venue"
-  venue_location_label: "Location"
+  venue_location_label: "Location:"
   venue_location: "Czech Institute of Informatics, Robotics and Cybernetics ČVUT"
   venue_address: '<a href="https://maps.app.goo.gl/TZTu8ykrdSHESM8A8">Jugoslávských partyzánů 1580/3, Praha 10</a>'
   venue_room: "Entrance B1, Atrium"
-  exhibition_duration_label: "Duration"
+  exhibition_duration_label: "Duration:"
   exhibition_duration: "November 13, 2025 – January 4, 2026"
-  exhibition_hours_label: "Opening Hours"
+  exhibition_hours_label: "Opening Hours:"
   exhibition_hours: "Monday – Friday: 8:00 – 18:00"
-  exhibition_admission_label: "Admission"
+  exhibition_admission_label: "Admission:"
   exhibition_admission: "Free and open to the public"
 
   # Opening reception
@@ -83,9 +83,9 @@ index:
   vernissage_time_label: "Time"
   vernissage_time: "17:00 – 20:00"
   vernissage_description: |-
-    The evening event not only launches the exhibition but also creates space for discussion about art, AI, and the experiment itself. Both the exhibition and the opening are open to everyone. The goal is to spark dialogue across the public.<br><br>
+    The evening event not only launches the exhibition but also creates space for discussion about art, AI, and the experiment itself. Both the exhibition and the opening are open to everyone. The goal is to spark dialogue among the public.<br><br>
     Alongside the organizers, children from <a href="https://www.zushaj.cz/">ZUŠ Háj ve Slezsku</a> who took part in the experiment by creating their own artworks based on AI descriptions will also be present. Visitors can view the original works, the AI and children's reproductions, as well as technical and artistic commentary on the experiment.<br><br>
-    The exhibition will be introduced by prof.<a href="https://www.linkedin.com/in/radek-martinek-014bb6b3/">Radek Martinek</a>, Dean of <a href="https://www.fei.vsb.cz/en/">FEI VŠB-TUO</a>, and MgA. <a href="https://www.linkedin.com/in/kl%C3%A1ra-sedlo-970746333/">Klára Sedlo</a>.
+    The exhibition will be introduced by prof. <a href="https://www.linkedin.com/in/radek-martinek-014bb6b3/">Radek Martinek</a>, Dean of <a href="https://www.fei.vsb.cz/en/">FEI VŠB-TUO</a>, and MgA. <a href="https://www.linkedin.com/in/kl%C3%A1ra-sedlo-970746333/">Klára Sedlo</a>.
 thanks:
   title: "Thank you for visiting"
   lead: "Your feedback is valuable to us."
